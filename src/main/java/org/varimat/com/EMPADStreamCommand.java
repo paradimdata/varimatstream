@@ -1,4 +1,5 @@
 package org.varimat.com;
+
 import org.apache.commons.cli.*;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.connector.kafka.source.KafkaSource;
@@ -44,7 +45,14 @@ public class EMPADStreamCommand {
     private static String GROUP_ID;
     private static String CHECKPOINT_STORAGE;
 
+    private static String KAFKA_ENV_USERNAME;
+    private static String KAFKA_ENV_PASSWORD;
+
     private static String configPath;
+
+    private static String KAFKA_TEST_CLUSTER_USERNAME;
+    private static String KAFKA_TEST_CLUSTER_PASSWORD;
+
 
     private static Options initOptions() {
 
@@ -65,7 +73,7 @@ public class EMPADStreamCommand {
     private static int processCommands(Options options, String[] args) {
         int commands = 1;
 
-        if(!Arrays.asList(args).contains("--config")) {
+        if (!Arrays.asList(args).contains("--config")) {
             System.out.println("You should specify the config command with an appropriate config file: --config <config_file_path>");
             return EMPADConstants.ERR_COMMAND;
         }
@@ -77,9 +85,7 @@ public class EMPADStreamCommand {
             if (cmd.hasOption("i")) {
                 long available = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                 System.out.println(available + " MB memory");
-            }
-
-            else if (cmd.hasOption("c")) {
+            } else if (cmd.hasOption("c")) {
                 configPath = cmd.getOptionValue("config");
                 if (configPath != null) {
                     File cf = new File(configPath);
@@ -92,6 +98,42 @@ public class EMPADStreamCommand {
 
                     Properties properties = new Properties();
                     properties.load(fis);
+
+                    KAFKA_ENV_USERNAME = properties.getProperty("KAFKA_ENV_USERNAME");
+                    if (KAFKA_ENV_USERNAME == null || KAFKA_ENV_USERNAME.length() == 0) {
+                        System.out.println("KAFKA_ENV_USERNAME needs to be provided!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
+
+                    KAFKA_ENV_PASSWORD = properties.getProperty("KAFKA_ENV_PASSWORD");
+                    if (KAFKA_ENV_PASSWORD == null || KAFKA_ENV_PASSWORD.length() == 0) {
+                        System.out.println("KAFKA_ENV_PASSWORD needs to be provided!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
+
+                    try {
+                        KAFKA_TEST_CLUSTER_USERNAME = System.getenv(KAFKA_ENV_USERNAME);
+                    } catch(Exception ex) {
+                        System.out.println(KAFKA_ENV_USERNAME + " is wrong or needs to be set in your environment variable!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
+
+                    try {
+                        KAFKA_TEST_CLUSTER_PASSWORD = System.getenv(KAFKA_ENV_PASSWORD);
+                    } catch(Exception ex) {
+                        System.out.println(KAFKA_ENV_PASSWORD + " is wrong or needs to be set in your environment variable!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
+
+                    if (KAFKA_TEST_CLUSTER_USERNAME == null || KAFKA_TEST_CLUSTER_USERNAME.length() == 0) {
+                        System.out.println(KAFKA_ENV_USERNAME + "needs to be set in your environment variable!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
+
+                    if (KAFKA_TEST_CLUSTER_PASSWORD == null || KAFKA_TEST_CLUSTER_PASSWORD.length() == 0) {
+                        System.out.println(KAFKA_ENV_PASSWORD + "needs to be set in your environment variable!");
+                        return EMPADConstants.ERR_COMMAND;
+                    }
 
                     IMAGE_TOPIC = properties.getProperty("IMAGE_TOPIC");
                     if (IMAGE_TOPIC == null || IMAGE_TOPIC.length() == 0) {
@@ -117,8 +159,7 @@ public class EMPADStreamCommand {
                         return EMPADConstants.ERR_COMMAND;
                     }
                 }
-            }
-            else {
+            } else {
                 System.out.println("no commands!");
                 return EMPADConstants.ERR_COMMAND;
             }
@@ -137,8 +178,8 @@ public class EMPADStreamCommand {
         env.setStateBackend(new EmbeddedRocksDBStateBackend());
         env.getCheckpointConfig().setCheckpointStorage("file:///" + System.getenv("EMPAD_HOME") + "/" + CHECKPOINT_STORAGE);
 
-        String KAFKA_TEST_CLUSTER_USERNAME = System.getenv("KAFKA_TEST_CLUSTER_USERNAME");
-        String KAFKA_TEST_CLUSTER_PASSWORD = System.getenv("KAFKA_TEST_CLUSTER_PASSWORD");
+//        KAFKA_TEST_CLUSTER_USERNAME = System.getenv("KAFKA_TEST_CLUSTER_USERNAME");
+//        KAFKA_TEST_CLUSTER_PASSWORD = System.getenv("KAFKA_TEST_CLUSTER_PASSWORD");
 
         KafkaSource<DataFileChunk> rawSource = KafkaSource.<DataFileChunk>builder().
                 setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
