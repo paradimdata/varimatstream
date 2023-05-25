@@ -16,6 +16,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.List;
 
+import static org.varimat.com.EMPADConstants.*;
+
 
 /*
               #######      #         #       ##########          #            #########
@@ -50,7 +52,6 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
 
         MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(message);
 
-
         if (unpacker.hasNext()) {
             try {
                 md = MessageDigest.getInstance("SHA-512");
@@ -61,15 +62,15 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
 
             List<Value> list = value.asArrayValue().list();
 
-            dataFileChunk.filename = "" + list.get(0);
-            dataFileChunk.chunk_hash = list.get(2).asBinaryValue();
-            dataFileChunk.chunk_i = Long.parseLong(String.valueOf(list.get(4)));
-            dataFileChunk.n_total_chunks = Long.parseLong(String.valueOf(list.get(5)));
-            dataFileChunk.subdir_str = "" + list.get(6);
-            dataFileChunk.filename_append = "" + list.get(7);
+            dataFileChunk.filename = String.valueOf(list.get(MSG_FILE_NAME));
+            dataFileChunk.chunk_hash = list.get(MSG_CHUNK_HASH).asBinaryValue();
+            dataFileChunk.chunk_i = Long.parseLong(String.valueOf(list.get(MSG_CHUNK_I)));
+            dataFileChunk.n_total_chunks = Long.parseLong(String.valueOf(list.get(MSG_N_TOTAL_CHUNKS)));
+            dataFileChunk.subdir_str = String.valueOf(list.get(MSG_SUBDIR_STR));
+            dataFileChunk.filename_append = String.valueOf(list.get(MSG_FILENAME_APPEND));
             dataFileChunk.file_size = dataFileChunk.n_total_chunks;
 
-            dataFileChunk.data = list.get(8).asBinaryValue();
+            dataFileChunk.data = list.get(MSG_DATA).asBinaryValue();
 
             assert md != null;
 
@@ -89,6 +90,5 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
         }
 
         return dataFileChunk;
-
     }
 }

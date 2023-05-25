@@ -46,24 +46,24 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
     @Override
     public List<double[][][]> map(Row row) throws Exception {
 
-        int chunkId = Integer.parseInt(String.valueOf(row.getField(CHUNK_IND)));
-        int image_total_chunk = Integer.parseInt(String.valueOf(row.getField(IMAGE_TOTAL_CHUNK_IND)));
-        int noise_total_chunk = Integer.parseInt(String.valueOf(row.getField(NOISE_TOTAL_CHUNK_IND)));
+        int chunkId = Integer.parseInt(String.valueOf(row.getField(ROW_CHUNK)));
+        int image_total_chunk = Integer.parseInt(String.valueOf(row.getField(ROW_IMAGE_TOTAL_CHUNK)));
+        int noise_total_chunk = Integer.parseInt(String.valueOf(row.getField(ROW_NOISE_TOTAL_CHUNK)));
 
-        BinaryValue image_data_chunk = ((BinaryValue) (row.getField(IMAGE_DATA_CHUNK_IND)));
-        BinaryValue noise_data_chunk = ((BinaryValue) (row.getField(NOISE_DATA_CHUNK_IND)));
+        BinaryValue image_data_chunk = ((BinaryValue) (row.getField(ROW_IMAGE_DATA_CHUNK)));
+        BinaryValue noise_data_chunk = ((BinaryValue) (row.getField(ROW_NOISE_DATA_CHUNK)));
 
         assert image_data_chunk != null;
         int chunk_size = image_data_chunk.asByteArray().length;
         int chunk_size_power = (int) (Math.log(chunk_size) / Math.log(2));
 
-        String imageName = (String) row.getField(IMAGE_NAME_IND);
+        String imageName = (String) row.getField(ROW_IMAGE_NAME);
 
         Integer cnt = count.value();
         if (cnt != null && cnt == 1) {
             System.out.println("============================================================");
             System.out.println("Image name: " + imageName);
-            String noiseName = (String) row.getField(NOISE_NAME_IND);
+            String noiseName = (String) row.getField(ROW_NOISE_NAME);
             System.out.println("Noise name: " + noiseName);
             System.out.println("image_total_chunk: " + image_total_chunk);
             System.out.println("noise_total_chunk: " + noise_total_chunk);
@@ -122,12 +122,12 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
                         }));
         noiseMap = getRuntimeContext().getMapState(noiseDescriptor);
 
-        ValueStateDescriptor<Integer> descriptor;
-        descriptor = new ValueStateDescriptor<Integer>(
+        ValueStateDescriptor<Integer> countDescriptor;
+        countDescriptor = new ValueStateDescriptor<Integer>(
                 "count", // the state name
                 Types.INT,
                 1);
-        count = getRuntimeContext().getState(descriptor);
+        count = getRuntimeContext().getState(countDescriptor);
     }
 
 }

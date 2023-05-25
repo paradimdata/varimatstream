@@ -18,7 +18,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static org.varimat.com.EMPADConstants.IMAGE_NAME_IND;
+import static org.varimat.com.EMPADConstants.ROW_IMAGE_NAME;
 import static org.varimat.com.EMPADConstants.UUID_LEN;
 
 /*
@@ -189,7 +189,7 @@ public class EMPADStreamCommand {
 
         DataStream<Row> join_stream = tableEnv.toDataStream(raw_table);
 
-        join_stream.keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(IMAGE_NAME_IND)).substring(4, UUID_LEN)).map(new EMPADProcessor());
+        join_stream.keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(ROW_IMAGE_NAME)).substring(4, UUID_LEN)).map(new EMPADProcessor());
 
     }
 
