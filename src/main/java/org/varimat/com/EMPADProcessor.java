@@ -26,7 +26,7 @@ import static org.varimat.com.EMPADConstants.*;
 
          version 1.1
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
-         @date: 04/03/2023
+         @date: 05/25/2023
 */
 
 public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>> {
@@ -81,10 +81,10 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>> {
             pb.stepBy(cnt + 1);
         }
 
-        double[][][] noiseFrames = EmpadBGSubtract.getInstance().process(chunkId, chunk_size_power, noise_total_chunk, noise_data_chunk);
+        double[][][] noiseFrames = EmpadBGSubtract.getInstance().process(chunk_size_power, noise_data_chunk);
         noiseMap.put(chunkId, noiseFrames);
 
-        double[][][] imageFrames = EmpadBGSubtract.getInstance().process(chunkId, chunk_size_power, image_total_chunk, image_data_chunk);
+        double[][][] imageFrames = EmpadBGSubtract.getInstance().process(chunk_size_power, image_data_chunk);
         imageMap.put(chunkId, imageFrames);
 
         if (cnt != null && image_total_chunk == cnt) {
