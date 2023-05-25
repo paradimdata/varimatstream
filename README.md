@@ -17,6 +17,8 @@
 
 ## RocksDBState Checkpint Configuration
 1. From config file you will need to specify the path for RocksDBStateBackend checkpoint. For more information please read Flink State Backends documenation: (https://nightlies.apache.org/flink/flink-docs-master/docs/ops/state/state_backends/)
+2. [Stateful Stream Processing] https://nightlies.apache.org/flink/flink-docs-master/docs/concepts/stateful-stream-processing/
+3. [Working with State] https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
 
 ## Build from MAVEN
 1. In your terminal, from the root of the project
