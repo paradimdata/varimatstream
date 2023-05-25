@@ -4,7 +4,10 @@
 
    [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
-## Set Enviroment Variable
+## Kafka Environment Variable
+Make sure that you have already set a kafka username and password in your environment. You need to modify  
+
+## EMPAD Environment Variable
 1. Create an environment variable for empad path: `export EMPAD_HOME=/from/to/empad/` on your local computer.
 2. Create an "output" directory under your EMPAD_HOME
 3. Copy [EMPAD2-calib_oct2020](https://github.com/paradimdata/pyempadcalibratescript/tree/main/related_data/EMPAD2-calib_oct2020) directory under the empad folder and make sure it contains all those eight filters
@@ -28,7 +31,7 @@ From the config file you will need to specify the path for RocksDBStateBackend c
 * Working with State https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
 
 ## Build from MAVEN
-1. From the follwoing command, modify the path of **flink-statebackend-rocksdb-1.18-SNAPSHOT.jar** `mvn install:install-file \
+1. From the following command, modify the path of **flink-statebackend-rocksdb-1.18-SNAPSHOT.jar** `mvn install:install-file \
    -Dfile=<THE_PATH>/flink-statebackend-rocksdb-1.18-SNAPSHOT.jar \
    -DgroupId=org.apache.flink \
    -DartifactId=flink-statebackend-rocksdb \
