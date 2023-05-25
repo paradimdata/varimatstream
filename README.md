@@ -5,7 +5,7 @@
    [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 ## Set Enviroment Variable
-1. Create an environment variable for empad path: `export empad_path=/from/to/EMPAD_HOME/` on your local computer.
+1. Create an environment variable for empad path: `export EMPAD_HOME=/from/to/empad/` on your local computer.
 2. Create an "output" directory under your EMPAD_HOME
 3. Copy [EMPAD2-calib_oct2020](https://github.com/paradimdata/pyempadcalibratescript/tree/main/related_data/EMPAD2-calib_oct2020) directory under the empad folder and make sure it contains all those eight filters
 * [G1A_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G1A_prelim.r32)
