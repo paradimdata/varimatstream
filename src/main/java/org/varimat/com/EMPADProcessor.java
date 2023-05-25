@@ -24,7 +24,7 @@ import static org.varimat.com.EMPADConstants.*;
               #            #         #       #              #         #       #        #
               ######       #         #       #             #           #      #########
 
-         version 1.2
+         version 1.1
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 04/03/2023
 */
@@ -87,7 +87,6 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
         imageMap.put(chunkId, imageFrames);
 
         if (cnt != null && image_total_chunk == cnt) {
-            pb.reset();
             pb.close();
             int s = noiseFrames.length;
             assert imageName != null;

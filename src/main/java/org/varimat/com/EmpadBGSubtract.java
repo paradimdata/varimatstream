@@ -376,7 +376,6 @@ public class EmpadBGSubtract {
             pb.stepBy(i);
             imageObjArray[i] = debounce_f(imageObjArray[i], 10, 3);
         }
-        pb.reset();
         pb.close();
 
         pb = new ProgressBar("Transforming Filters", (long) (nFramesBack / 2) * 128 * 128);
@@ -391,7 +390,6 @@ public class EmpadBGSubtract {
                 }
             }
         }
-        pb.reset();
         pb.close();
 
         FileWriter fstream = new FileWriter(outName, true);
@@ -411,7 +409,6 @@ public class EmpadBGSubtract {
             }
             out.newLine();
         }
-        pb.reset();
         pb.close();
 
         out.flush();
