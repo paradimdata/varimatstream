@@ -5,7 +5,7 @@
    [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 ## Kafka Environment Variable
-Make sure that you have your environment contains an appropriate username and password . From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config), you may need to modify **KAFKA_ENV_USERNAME** and **KAFKA_ENV_PASSWORD**.
+Make sure that you have your environment contains an appropriate Kafka username and password . From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config), you may need to modify **KAFKA_ENV_USERNAME** and **KAFKA_ENV_PASSWORD**.
 
 ## EMPAD Environment Variable
 1. Create an environment variable for empad path: `export EMPAD_HOME=/from/to/empad/` on your local computer.
