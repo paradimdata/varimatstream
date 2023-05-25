@@ -39,17 +39,9 @@ import static org.varimat.com.EMPADConstants.UUID_LEN;
 public class EMPADStreamCommand {
 
     private static String IMAGE_TOPIC;
-
     private static String NOISE_TOPIC;
-
     private static String GROUP_ID;
     private static String CHECKPOINT_STORAGE;
-
-    private static String KAFKA_ENV_USERNAME;
-    private static String KAFKA_ENV_PASSWORD;
-
-    private static String configPath;
-
     private static String KAFKA_TEST_CLUSTER_USERNAME;
     private static String KAFKA_TEST_CLUSTER_PASSWORD;
 
@@ -86,7 +78,7 @@ public class EMPADStreamCommand {
                 long available = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
                 System.out.println(available + " MB memory");
             } else if (cmd.hasOption("c")) {
-                configPath = cmd.getOptionValue("config");
+                String configPath = cmd.getOptionValue("config");
                 if (configPath != null) {
                     File cf = new File(configPath);
                     if (!cf.exists()) {
@@ -99,13 +91,13 @@ public class EMPADStreamCommand {
                     Properties properties = new Properties();
                     properties.load(fis);
 
-                    KAFKA_ENV_USERNAME = properties.getProperty("KAFKA_ENV_USERNAME");
+                    String KAFKA_ENV_USERNAME = properties.getProperty("KAFKA_ENV_USERNAME");
                     if (KAFKA_ENV_USERNAME == null || KAFKA_ENV_USERNAME.length() == 0) {
                         System.out.println("KAFKA_ENV_USERNAME needs to be provided!");
                         return EMPADConstants.ERR_COMMAND;
                     }
 
-                    KAFKA_ENV_PASSWORD = properties.getProperty("KAFKA_ENV_PASSWORD");
+                    String KAFKA_ENV_PASSWORD = properties.getProperty("KAFKA_ENV_PASSWORD");
                     if (KAFKA_ENV_PASSWORD == null || KAFKA_ENV_PASSWORD.length() == 0) {
                         System.out.println("KAFKA_ENV_PASSWORD needs to be provided!");
                         return EMPADConstants.ERR_COMMAND;
@@ -177,9 +169,6 @@ public class EMPADStreamCommand {
 
         env.setStateBackend(new EmbeddedRocksDBStateBackend());
         env.getCheckpointConfig().setCheckpointStorage("file:///" + System.getenv("EMPAD_HOME") + "/" + CHECKPOINT_STORAGE);
-
-//        KAFKA_TEST_CLUSTER_USERNAME = System.getenv("KAFKA_TEST_CLUSTER_USERNAME");
-//        KAFKA_TEST_CLUSTER_PASSWORD = System.getenv("KAFKA_TEST_CLUSTER_PASSWORD");
 
         KafkaSource<DataFileChunk> rawSource = KafkaSource.<DataFileChunk>builder().
                 setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
