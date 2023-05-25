@@ -13,6 +13,7 @@ package org.varimat.com;
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 05/23/2023
 */
+
 public final class EMPADConstants {
     public final static int ERR_COMMAND = -1;
 

@@ -40,8 +40,6 @@ public class EmpadBGSubtract {
     private static final String[] flat_filter = {"FFA_prelim", "FFB_prelim"};
     private static final String[] flat_shapes = {"flatfA", "flatfB"};
 
-    private final long start = System.currentTimeMillis();
-
     private static EmpadBGSubtract instance;
 
     private EmpadBGSubtract() {
@@ -416,10 +414,5 @@ public class EmpadBGSubtract {
 
         System.out.println(outName + " saved to disk.");
 
-        long finish = System.currentTimeMillis();
-
-        long timeElapsed = (finish - start) / 1000;
-
-        System.out.println("The progress took " + timeElapsed + "seconds.");
     }
 }

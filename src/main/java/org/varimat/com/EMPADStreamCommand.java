@@ -189,7 +189,8 @@ public class EMPADStreamCommand {
 
         DataStream<Row> join_stream = tableEnv.toDataStream(raw_table);
 
-        join_stream.keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(ROW_IMAGE_NAME)).substring(4, UUID_LEN)).map(new EMPADProcessor());
+        join_stream.keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(ROW_IMAGE_NAME)).substring(4, UUID_LEN)).
+                map(new EMPADProcessor());
 
     }
 

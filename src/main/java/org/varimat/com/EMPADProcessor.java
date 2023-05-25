@@ -29,11 +29,11 @@ import static org.varimat.com.EMPADConstants.*;
          @date: 04/03/2023
 */
 
-public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
-{
+public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>> {
 
     private static final String EMPAD_HOME = System.getenv("EMPAD_HOME");
 
+    private transient ValueState<Long> startTime;
     private transient ValueState<Integer> count;
     private transient MapState<Integer, double[][][]> imageMap;
     private transient MapState<Integer, double[][][]> noiseMap;
@@ -61,6 +61,7 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
 
         Integer cnt = count.value();
         if (cnt != null && cnt == 1) {
+            System.out.println("startTime: " + startTime.value());
             System.out.println("============================================================");
             System.out.println("Image name: " + imageName);
             String noiseName = (String) row.getField(ROW_NOISE_NAME);
@@ -70,7 +71,7 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
             System.out.println("chunk_size: " + chunk_size);
             System.out.println("chunk_size_power: " + chunk_size_power);
             System.out.println("============================================================");
-            pb= new ProgressBar("Processing Frames", chunk_size_power);
+            pb = new ProgressBar("Processing Frames", chunk_size_power);
         }
 
         if (cnt == null) {
@@ -95,8 +96,13 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
 
             imageMap.clear();
             imageMap.clear();
-
             count.clear();
+
+            long timeElapsed = (System.currentTimeMillis() - startTime.value()) / 1000;
+
+            startTime.clear();
+
+            System.out.println("The progress took " + timeElapsed + " seconds.");
         }
         return null;
     }
@@ -123,10 +129,17 @@ public class EMPADProcessor extends RichMapFunction<Row, List<double[][][]>>
 
         ValueStateDescriptor<Integer> countDescriptor;
         countDescriptor = new ValueStateDescriptor<Integer>(
-                "count", // the state name
+                "count",
                 Types.INT,
                 1);
         count = getRuntimeContext().getState(countDescriptor);
+
+        ValueStateDescriptor<Long> statTimerDescriptor =
+                new ValueStateDescriptor<>(
+                        "start_timer",
+                        Types.LONG,
+                        System.currentTimeMillis());
+        startTime = getRuntimeContext().getState(statTimerDescriptor);
     }
 
 }
