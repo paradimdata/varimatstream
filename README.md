@@ -5,7 +5,7 @@
    [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 ## Set Enviroment Variable
-1. Create an environment variable for empad path: `export empad_path=/from/to/empad/` on your local computer
+1. Create an environment variable for empad path: `export empad_path=/from/to/EMPAD_HOME/` on your local computer
 2. Copy [EMPAD2-calib_oct2020](https://github.com/paradimdata/pyempadcalibratescript/tree/main/related_data/EMPAD2-calib_oct2020) directory under the empad folder and make sure it contains all those eight filters
 * [G1A_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G1A_prelim.r32)
 * [G1B_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G1B_prelim.r32)
@@ -18,9 +18,13 @@
 3. Create an output folder, output under the empad folder. All your results will be place to the output folder
 
 ## RocksDBState Checkpint Configuration
-1. From config file you will need to specify the path for RocksDBStateBackend checkpoint. For more information please read Flink State Backends documenation: (https://nightlies.apache.org/flink/flink-docs-master/docs/ops/state/state_backends/)
-2. Stateful Stream Processing  https://nightlies.apache.org/flink/flink-docs-master/docs/concepts/stateful-stream-processing/
-3. Working with State https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
+From the config file you will need to specify the path for RocksDBStateBackend checkpoint. From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config) assign a folder name to your **CHECKPOINT_STORAGE** and create a folder with the same name under your EMPAD_HOME. 
+
+* For more information please read Flink State Backends documenation: (https://nightlies.apache.org/flink/flink-docs-master/docs/ops/state/state_backends/)
+
+* Stateful Stream Processing  https://nightlies.apache.org/flink/flink-docs-master/docs/concepts/stateful-stream-processing/
+ 
+* Working with State https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
 
 ## Build from MAVEN
 1. In your terminal, from the root of the project
