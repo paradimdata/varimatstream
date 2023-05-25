@@ -5,8 +5,9 @@
    [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 ## Set Enviroment Variable
-1. Create an environment variable for empad path: `export empad_path=/from/to/EMPAD_HOME/` on your local computer
-2. Copy [EMPAD2-calib_oct2020](https://github.com/paradimdata/pyempadcalibratescript/tree/main/related_data/EMPAD2-calib_oct2020) directory under the empad folder and make sure it contains all those eight filters
+1. Create an environment variable for empad path: `export empad_path=/from/to/EMPAD_HOME/` on your local computer.
+2. Create an "output" directory under your EMPAD_HOME
+3. Copy [EMPAD2-calib_oct2020](https://github.com/paradimdata/pyempadcalibratescript/tree/main/related_data/EMPAD2-calib_oct2020) directory under the empad folder and make sure it contains all those eight filters
 * [G1A_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G1A_prelim.r32)
 * [G1B_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G1B_prelim.r32)
 * [G2A_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/G2A_prelim.r32)
@@ -15,7 +16,7 @@
 * [FFB_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/FFB_prelim.r32)
 * [B2A_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/B2A_prelim.r32)
 * [B2B_prelim.r32](https://github.com/paradimdata/pyempadcalibratescript/blob/main/related_data/EMPAD2-calib_oct2020/B2B_prelim.r32)
-3. Create an output folder, output under the empad folder. All your results will be place to the output folder
+4. Create an output folder, output under the empad folder. All your results will be place to the output folder
 
 ## RocksDBState Checkpint Configuration
 From the config file you will need to specify the path for RocksDBStateBackend checkpoint. From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config) assign a folder name to your **CHECKPOINT_STORAGE** and create a folder with the same name under your EMPAD_HOME. 
