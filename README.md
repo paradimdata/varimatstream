@@ -19,17 +19,23 @@
 4. Create an output folder, output under the empad folder. All your results will be place to the output folder
 
 ## RocksDBState Checkpint Configuration
-From the config file you will need to specify the path for RocksDBStateBackend checkpoint. From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config) assign a folder name to your **CHECKPOINT_STORAGE** and create a folder with the same name under your EMPAD_HOME. 
+From the config file you will need to specify the path for RocksDBStateBackend checkpoint. From [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config) assign a folder name to your **CHECKPOINT_STORAGE** and create a folder with the same name under your EMPAD_HOME.
 
 * For more information please read Flink State Backends documenation: (https://nightlies.apache.org/flink/flink-docs-master/docs/ops/state/state_backends/)
 
 * Stateful Stream Processing  https://nightlies.apache.org/flink/flink-docs-master/docs/concepts/stateful-stream-processing/
- 
+
 * Working with State https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
 
 ## Build from MAVEN
-1. In your terminal, from the root of the project
-2. `mvn package`
+1. From the follwoing command, modify the path of **flink-statebackend-rocksdb-1.18-SNAPSHOT.jar** `mvn install:install-file \
+   -Dfile=<THE_PATH>/flink-statebackend-rocksdb-1.18-SNAPSHOT.jar \
+   -DgroupId=org.apache.flink \
+   -DartifactId=flink-statebackend-rocksdb \
+   -Dversion=1.18-SNAPSHOT \
+   -Dpackaging=jar \
+   -DgeneratePom=true`. The jar file is under [SNAPSHOT_lib](https://github.com/paradimdata/varimatstream/tree/main/src/SNAPSHOT_lib) folder
+2. In your terminal, from the root of the project, run `mvn package`
 3.  `cd target/`
 
 ## Setup Configurations
