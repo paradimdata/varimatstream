@@ -1,6 +1,7 @@
 ## Installation Application:
 1. [Java 11](https://docs.oracle.com/en/java/javase/11/install/overview-jdk-installation.html#GUID-8677A77F-231A-40F7-98B9-1FD0B48C346A)
 2. [Maven](https://maven.apache.org/install.html)
+   [For Mac users] https://www.digitalocean.com/community/tutorials/install-maven-mac-os
 
 ## Set Enviroment Variable
 1. Create an environment variable for empad path: `export empad_path=/from/to/empad/` on your local computer
