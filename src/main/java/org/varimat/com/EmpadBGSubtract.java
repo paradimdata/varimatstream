@@ -196,6 +196,7 @@ public class EmpadBGSubtract {
         int[] nVals_i;
         chunkByte = dataBinaryChunk.asByteArray();
         nVals_i = (int[]) NumericalUtils.unpack('I', chunk_size / 4, chunkByte);
+        assert nVals_i != null;
         return PAD_AB_bin2data(nVals_i, gg1A, gg1B, gg2A, gg2B, ooffA, ooffB);
     }
 
