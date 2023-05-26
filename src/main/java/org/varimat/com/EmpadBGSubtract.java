@@ -376,7 +376,6 @@ public class EmpadBGSubtract {
         pb.close();
 
         pb = new ProgressBar("Transforming Filters", (long) (nFramesBack / 2) * 128 * 128);
-        System.out.println("Debouncing...");
         int count = 0;
         for (int i = 0; i < nFramesBack; i += 2) {
             double[][] data1 = imageObjArray[i];
