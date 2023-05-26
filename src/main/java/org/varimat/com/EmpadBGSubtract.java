@@ -98,7 +98,6 @@ public class EmpadBGSubtract {
             float[] fnumbers = (float[]) NumericalUtils.unpack('f', dim, inputStream.readNBytes(4 * dim));
             double[] numbers = convertFloatsToDoubles(fnumbers);
 
-//            System.out.println(Arrays.toString(numbers));
             assert numbers != null;
             double[][] res = NumericalUtils.reshape1_to_2(numbers, 128, 128);
             calicarations.put(shape, res);
@@ -326,7 +325,6 @@ public class EmpadBGSubtract {
 
     public void combine_from_concat_EMPAD2_AB_big(int s, int raw_total_chunk, MapState<Integer, double[][][]> imageMap, MapState<Integer, double[][][]> noiseMap,
                                                   String outName) throws Exception {
-
         int nFramesBack = raw_total_chunk * s;
 
         double[][][] noiseObjArray = new double[nFramesBack][128][128];
@@ -369,7 +367,7 @@ public class EmpadBGSubtract {
             imageObjArray[i] = minus2mat(imageObjArray[i], bkgodata);
             imageObjArray[i + 1] = minus2mat(imageObjArray[i + 1], bkgedata);
         }
-//
+
         ProgressBar pb = new ProgressBar("Debouncing", nFramesBack);
         for (int i = 0; i < nFramesBack; i++) {
             pb.stepBy(i);
