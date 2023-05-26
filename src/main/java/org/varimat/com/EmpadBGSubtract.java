@@ -179,7 +179,7 @@ public class EmpadBGSubtract {
         return npFrames;
     }
 
-    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunkId, int chunk_size_power, int total_chunks, ConcurrentHashMap<String, double[][]> calicarations, BinaryValue dataBinaryChunk) {
+    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunk_size_power, ConcurrentHashMap<String, double[][]> calicarations, BinaryValue dataBinaryChunk) {
         double[][] gg1A, gg1B, gg2A, gg2B, ooffA, ooffB;
 
         gg1A = calicarations.get("g1A");
@@ -199,9 +199,9 @@ public class EmpadBGSubtract {
         return PAD_AB_bin2data(nVals_i, gg1A, gg1B, gg2A, gg2B, ooffA, ooffB);
     }
 
-    public double[][][] process(int chunkId, int chunk_size_power, int total_chunks, BinaryValue dataBinaryChunk) throws IOException {
+    public double[][][] process(int chunk_size_power, BinaryValue dataBinaryChunk) throws IOException {
         ConcurrentHashMap<String, double[][]> calicarations = loadCalibrationData();
-        return combineConcatenatedEMPAD2ABLarge(chunkId, chunk_size_power, total_chunks, calicarations, dataBinaryChunk);
+        return combineConcatenatedEMPAD2ABLarge(chunk_size_power, calicarations, dataBinaryChunk);
     }
 
     private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
