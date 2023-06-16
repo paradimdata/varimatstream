@@ -9,22 +9,34 @@ package org.varimat.com;
               #            #         #       #              #         #       #        #
               ######       #         #       #             #           #      #########
 
-         version 1.2
+         version 1.3
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 05/23/2023
 */
 
-public final class EMPADConstants {
+    public final class EMPADConstants {
     public final static int ERR_COMMAND = -1;
 
     /**** Map constants***/
-    public final static int ROW_CHUNK = 0;
-    public final static int ROW_IMAGE_TOTAL_CHUNK = 1;
-    public final static int ROW_IMAGE_NAME = 2;
-    public final static int ROW_IMAGE_DATA_CHUNK = 3;
-    public final static int ROW_NOISE_TOTAL_CHUNK = 5;
-    public final static int ROW_NOISE_NAME = 6;
-    public final static int ROW_NOISE_DATA_CHUNK = 7;
+    public final static int CHUNK_ID = 0;
+    public final static int TOTAL_CHUNK = 1;
+
+    public final static int SUBDIR_STR = 2;
+
+    public final static int FILE_NAME = 3;
+    public final static int DATA = 4;
+
+    public final static int CHUNK_HASH = 5;
+    public final static int PROTECTED_KEY_ID = 7;
+
+    public final static String RAW_NAME = "scan_x256_y256.raw";
+
+    public final static String NOISE_EXT = "bkg";
+    public final static String OPERATION_EXT = ".xml";
+    public final static String RAW_EXT = ".raw";
+    public final static String PROTECTED_KEY = "EMAPD_EXP";
+
+    public final static String[] EXCLUSIVE_VARS = {"even", "odd", ".tif", ".log", "stream_operations"};
 
 
     /**** MessageUnpacker constants***/

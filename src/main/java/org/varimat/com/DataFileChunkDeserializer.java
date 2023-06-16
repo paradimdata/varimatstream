@@ -9,6 +9,8 @@ import org.msgpack.core.MessageUnpacker;
 import org.msgpack.value.ImmutableValue;
 import org.msgpack.value.Value;
 import org.varimat.dto.DataFileChunk;
+import org.varimat.dto.OperationTO;
+import org.varimat.util.OperationalUtil;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -64,13 +66,18 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
 
             dataFileChunk.filename = String.valueOf(list.get(MSG_FILE_NAME));
             dataFileChunk.chunk_hash = list.get(MSG_CHUNK_HASH).asBinaryValue();
+
             dataFileChunk.chunk_i = Long.parseLong(String.valueOf(list.get(MSG_CHUNK_I)));
             dataFileChunk.n_total_chunks = Long.parseLong(String.valueOf(list.get(MSG_N_TOTAL_CHUNKS)));
+
             dataFileChunk.subdir_str = String.valueOf(list.get(MSG_SUBDIR_STR));
+
             dataFileChunk.filename_append = String.valueOf(list.get(MSG_FILENAME_APPEND));
             dataFileChunk.file_size = dataFileChunk.n_total_chunks;
 
             dataFileChunk.data = list.get(MSG_DATA).asBinaryValue();
+
+            dataFileChunk.experiment = PROTECTED_KEY;
 
             assert md != null;
 

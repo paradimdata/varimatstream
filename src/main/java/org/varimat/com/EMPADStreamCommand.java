@@ -19,8 +19,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Properties;
 
-import static org.varimat.com.EMPADConstants.ROW_IMAGE_NAME;
-import static org.varimat.com.EMPADConstants.UUID_LEN;
+import static org.varimat.com.EMPADConstants.*;
 
 /*
               #######      #         #       ##########          #            #########
@@ -31,15 +30,14 @@ import static org.varimat.com.EMPADConstants.UUID_LEN;
               #            #         #       #              #         #       #        #
               ######       #         #       #             #           #      #########
 
-         version 1.2
+         version 1.3
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 05/25/2023
 */
 
 public class EMPADStreamCommand {
 
-    private static String IMAGE_TOPIC;
-    private static String NOISE_TOPIC;
+    private static String EMPAD_TOPIC;
     private static String GROUP_ID;
     private static String CHECKPOINT_STORAGE;
     private static String KAFKA_TEST_CLUSTER_USERNAME;
@@ -105,14 +103,14 @@ public class EMPADStreamCommand {
 
                     try {
                         KAFKA_TEST_CLUSTER_USERNAME = System.getenv(KAFKA_ENV_USERNAME);
-                    } catch(Exception ex) {
+                    } catch (Exception ex) {
                         System.out.println(KAFKA_ENV_USERNAME + " is wrong or needs to be set in your environment variable!");
                         return EMPADConstants.ERR_COMMAND;
                     }
 
                     try {
                         KAFKA_TEST_CLUSTER_PASSWORD = System.getenv(KAFKA_ENV_PASSWORD);
-                    } catch(Exception ex) {
+                    } catch (Exception ex) {
                         System.out.println(KAFKA_ENV_PASSWORD + " is wrong or needs to be set in your environment variable!");
                         return EMPADConstants.ERR_COMMAND;
                     }
@@ -127,15 +125,9 @@ public class EMPADStreamCommand {
                         return EMPADConstants.ERR_COMMAND;
                     }
 
-                    IMAGE_TOPIC = properties.getProperty("IMAGE_TOPIC");
-                    if (IMAGE_TOPIC == null || IMAGE_TOPIC.length() == 0) {
-                        System.out.println("Image topic needs to be provided!");
-                        return EMPADConstants.ERR_COMMAND;
-                    }
-
-                    NOISE_TOPIC = properties.getProperty("NOISE_TOPIC");
-                    if (NOISE_TOPIC == null || NOISE_TOPIC.length() == 0) {
-                        System.out.println("Noise topic needs to be provided!");
+                    EMPAD_TOPIC = properties.getProperty("EMPAD_TOPIC");
+                    if (EMPAD_TOPIC == null || EMPAD_TOPIC.length() == 0) {
+                        System.out.println("EMPAD topic needs to be provided!");
                         return EMPADConstants.ERR_COMMAND;
                     }
 
@@ -162,17 +154,17 @@ public class EMPADStreamCommand {
         return commands;
     }
 
-    private static void processFromStream() throws Exception {
+    private static void processStream() throws Exception {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
         env.setStateBackend(new EmbeddedRocksDBStateBackend());
-        env.getCheckpointConfig().setCheckpointStorage("file:///" + System.getenv("EMPAD_HOME") + "/" + CHECKPOINT_STORAGE);
+        env.getCheckpointConfig().setCheckpointStorage("file:///" + System.getenv("EMPAD_HOME") + CHECKPOINT_STORAGE);
 
         KafkaSource<DataFileChunk> rawSource = KafkaSource.<DataFileChunk>builder().
                 setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
-                setTopics(IMAGE_TOPIC).
+                setTopics(EMPAD_TOPIC).
                 setGroupId(GROUP_ID).
                 setProperty("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule" + " required username=\"" +
                         KAFKA_TEST_CLUSTER_USERNAME + "\" password=\"" +
@@ -183,61 +175,71 @@ public class EMPADStreamCommand {
                 setStartingOffsets(OffsetsInitializer.earliest()).
                 setValueOnlyDeserializer(new DataFileChunkDeserializer()).build();
 
-        KafkaSource<DataFileChunk> bkgdSource = KafkaSource.<DataFileChunk>builder().
-                setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
-                setTopics(NOISE_TOPIC).
-                setGroupId(GROUP_ID).
-                setProperty("sasl.jaas.config", "org.apache.kafka.common.security.scram.ScramLoginModule" + " required username=\"" +
-                        KAFKA_TEST_CLUSTER_USERNAME + "\" password=\"" +
-                        KAFKA_TEST_CLUSTER_PASSWORD + "\";").
-                setProperty("security.protocol", "SASL_SSL").
-                setProperty("sasl.mechanism", "PLAIN").
-                setProperty("enable.auto.commit", "False").
-                setStartingOffsets(OffsetsInitializer.earliest()).
-                setValueOnlyDeserializer(new DataFileChunkDeserializer()).build();
-
-        DataStream<DataFileChunk> rawDataStream = env.fromSource(rawSource, WatermarkStrategy.noWatermarks(), "EMPAD_RAW_TBL");
-
-        DataStream<DataFileChunk> bkgdDataStream = env.fromSource(bkgdSource, WatermarkStrategy.noWatermarks(), "EMPAD_BKGD_TBL");
-
-        processWorkflow(tableEnv, rawDataStream, bkgdDataStream);
+        DataStream<DataFileChunk> rawDataStream = env.fromSource(rawSource, WatermarkStrategy.noWatermarks(), "EMPAD_TBL");
+        processWorkflow(tableEnv, rawDataStream);
 
         env.execute();
     }
 
+    private static String trimSubDirString(String subDirStr) {
+        subDirStr = subDirStr.toLowerCase();
+        if (subDirStr.endsWith(EMPADConstants.NOISE_EXT)) {
+            return subDirStr.substring(EMPADConstants.NOISE_EXT.length() - 1);
+        }
+        return subDirStr;
+    }
 
-    private static void processWorkflow(StreamTableEnvironment tableEnv, DataStream<DataFileChunk> rawDataStream, DataStream<DataFileChunk> bkgdDataStream) throws Exception {
+    private static String exclusiveQuery(String column) {
+        StringBuilder query_param = new StringBuilder();
+        for (int i = 1; i < EXCLUSIVE_VARS.length; i++) {
+            query_param.append(column).append(" not like '%").append(EXCLUSIVE_VARS[i]).append("%' and ");
+        }
 
-        tableEnv.createTemporaryView("EMPAD_RAW_TBL", rawDataStream);
-        tableEnv.createTemporaryView("EMPAD_BKGD_TBL", bkgdDataStream);
+        query_param.append(column).append(" not like '%").append(EXCLUSIVE_VARS[0]).append("%'");
 
-        String data_query = "select EMPAD_RAW_TBL.chunk_i as raw_chunk_i, EMPAD_RAW_TBL.n_total_chunks as raw_n_total_chunks, EMPAD_RAW_TBL.filename as raw_filename, EMPAD_RAW_TBL.data as raw_data, " +
-                "EMPAD_BKGD_TBL.chunk_i as bkgd_chunk_i, EMPAD_BKGD_TBL.n_total_chunks as bkgd_n_total_chunks, EMPAD_BKGD_TBL.filename as bkgd_filename, EMPAD_BKGD_TBL.data as bkgd_data" +
-                " FROM EMPAD_RAW_TBL, EMPAD_BKGD_TBL where EMPAD_RAW_TBL.chunk_i = EMPAD_BKGD_TBL.chunk_i and RIGHT(EMPAD_RAW_TBL.filename, 40) = RIGHT(EMPAD_BKGD_TBL.filename, 40)";
+        return query_param.toString();
+    }
 
-        Table raw_table = tableEnv.sqlQuery(data_query);
+    private static void processWorkflow(StreamTableEnvironment tableEnv, DataStream<DataFileChunk> rawDataStream) throws Exception {
 
-        DataStream<Row> join_stream = tableEnv.toDataStream(raw_table);
+        tableEnv.createTemporaryView("EMPAD_TBL", rawDataStream);
 
-        join_stream.keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(ROW_IMAGE_NAME)).substring(4, UUID_LEN)).
-                map(new EMPADProcessor());
+        String signalOperationQuery = "select \n" +
+                "       EMPAD_TBL_RAW.chunk_i           as raw_chunk_i,\n" +
+                "       EMPAD_TBL_RAW.n_total_chunks    as raw_n_total_chunks,\n" +
+                "       EMPAD_TBL_RAW.subdir_str        as raw_subdir_str,\n" +
+                "       EMPAD_TBL_RAW.filename          as raw_filename,\n" +
+                "       EMPAD_TBL_RAW.data              as raw_data,\n" +
+                "       EMPAD_TBL_OPR.filename          as opr_filename,\n" +
+                "       EMPAD_TBL_OPR.subdir_str as opr_subdir_str,\n" +
+                "       EMPAD_TBL_RAW.experiment as my_experiment\n" +
+                "       from EMPAD_TBL EMPAD_TBL_RAW, EMPAD_TBL EMPAD_TBL_OPR\n" +
+                "       where (((SUBSTR(EMPAD_TBL_OPR.filename, 1, CHAR_LENGTH (EMPAD_TBL_OPR.filename) - " + OPERATION_EXT.length() + ") = EMPAD_TBL_OPR.subdir_str) and\n" +
+                "       EMPAD_TBL_RAW.filename = '" + RAW_NAME + "' and " +
+                "       EMPAD_TBL_OPR.subdir_str = EMPAD_TBL_RAW.subdir_str" +
+                "))";
 
+
+        Table raw_table = tableEnv.sqlQuery(signalOperationQuery);
+        tableEnv.toDataStream(raw_table).
+                keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(PROTECTED_KEY_ID))).
+                process(new StreamingSignalProcessing());
     }
 
     public static void main(String[] args) throws Exception {
         disableWarning();
 
-        Options options = initOptions();
-        int v = processCommands(options, args);
+        KAFKA_TEST_CLUSTER_USERNAME = System.getenv("KAFKA_ENV_USERNAME");
+        KAFKA_TEST_CLUSTER_PASSWORD = System.getenv("KAFKA_ENV_PASSWORD");
 
-        if (v != EMPADConstants.ERR_COMMAND) {
-            System.out.println("============================================================");
-            System.out.println("IMAGE_TOPIC:" + IMAGE_TOPIC);
-            System.out.println("NOISE_TOPIC:" + NOISE_TOPIC);
-            System.out.println("GROUP_ID:" + GROUP_ID);
-            System.out.println("CHECKPOINT_STORAGE:" + CHECKPOINT_STORAGE);
-            System.out.println("============================================================");
-            processFromStream();
-        }
+        EMPAD_TOPIC = System.getenv("EMPAD_TOPIC");
+        GROUP_ID = System.getenv("GROUP_ID");
+        CHECKPOINT_STORAGE = System.getenv("CHECKPOINT_STORAGE");
+
+        System.out.println("EMPAD_TOPIC = " + EMPAD_TOPIC);
+        System.out.println("GROUP_ID = " + GROUP_ID);
+
+        processStream();
+
     }
 }

@@ -25,13 +25,17 @@ public class DataFileChunk implements Serializable {
     public String chunk_offset_write;
     public long n_total_chunks;
     public String subdir_str;
+    public String experiment;
     public String filename_append;
     public BinaryValue data;
     public long file_size;
+
     public DataFileChunk() {
     }
-    public DataFileChunk(long chunk_i, String filename, BinaryValue chunk_hash, String chunk_offset_write,
+
+    public DataFileChunk(String experiment, long chunk_i, String filename, BinaryValue chunk_hash, String chunk_offset_write,
                          long n_total_chunks, String subdir_str, String filename_append, BinaryValue data) {
+        this.experiment = experiment;
         this.chunk_i = chunk_i;
         this.filename = filename;
         this.chunk_hash = chunk_hash;
@@ -49,7 +53,9 @@ public class DataFileChunk implements Serializable {
 //    }
     @Override
     public String toString() {
-        return "Event{" + "chunk_i=" + chunk_i + ", n_total_chunks=" + n_total_chunks +
+        return "Event{" +
+                "experiment=" + experiment +
+                ", chunk_i=" + chunk_i + ", n_total_chunks=" + n_total_chunks +
                 ", filename='" + filename + '\'' +
                 ", chunk_hash='" + chunk_hash + '\'' +
                 ", chunk_offset_write='" + chunk_offset_write + '\'' +
@@ -68,7 +74,8 @@ public class DataFileChunk implements Serializable {
             return false;
         }
         DataFileChunk dataFileChunk = (DataFileChunk) o;
-        return chunk_i == dataFileChunk.chunk_i &&
+        return experiment.equals(dataFileChunk.experiment) &&
+                chunk_i == dataFileChunk.chunk_i &&
                 n_total_chunks == dataFileChunk.n_total_chunks &&
                 filename.equals(dataFileChunk.filename) &&
                 chunk_hash.equals(dataFileChunk.chunk_hash) &&
@@ -76,6 +83,14 @@ public class DataFileChunk implements Serializable {
                 subdir_str.equals(dataFileChunk.subdir_str) &&
                 filename_append.equals(dataFileChunk.filename_append) &&
                 data.equals(dataFileChunk.data);
+    }
+
+    public String getExperiment() {
+        return experiment;
+    }
+
+    public void setExperiment(String experiment) {
+        this.experiment = experiment;
     }
 
     public long getChunk_i() {
@@ -149,5 +164,5 @@ public class DataFileChunk implements Serializable {
     public void setFile_size(long file_size) {
         this.file_size = file_size;
     }
-    
+
 }

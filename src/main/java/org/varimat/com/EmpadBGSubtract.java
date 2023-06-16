@@ -2,16 +2,12 @@ package org.varimat.com;
 
 import me.tongfei.progressbar.ProgressBar;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
-import org.apache.flink.api.common.state.MapState;
+import org.apache.flink.api.java.tuple.Tuple2;
 import org.msgpack.value.BinaryValue;
 import org.varimat.util.NumericalUtils;
 
 import java.io.*;
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -33,8 +29,9 @@ import java.util.stream.Stream;
 
 public class EmpadBGSubtract {
 
+//    private static final String EMPAD_HOME = "/empad/";
     private static final String EMPAD_HOME = System.getenv("EMPAD_HOME");
-    private static final String calib_path = EMPAD_HOME + "EMPAD2-calib_oct2020/";
+    private static final String calib_path = EMPAD_HOME + "/calibration/";
     private static final String[] calib_filters = {"G1A_prelim", "G1B_prelim", "G2A_prelim", "G2B_prelim", "B2A_prelim", "B2B_prelim"};
     private static final String[] calib_shapes = {"g1A", "g1B", "g2A", "g2B", "offA", "offB"};
     private static final String[] flat_filter = {"FFA_prelim", "FFB_prelim"};
@@ -204,8 +201,29 @@ public class EmpadBGSubtract {
         return combineConcatenatedEMPAD2ABLarge(chunk_size_power, calicarations, dataBinaryChunk);
     }
 
+//    private double[][] meanOf3dArrayAxisZero(double[][][] array) {
+//
+//        // size of the first dimension
+//        int l = array.length;
+//
+//        // create a 2-dimensional array, I assumed that the second and third dimensions of the array are equal (128).
+//        double[][] meanVals = new double[128][128];
+//        for (int i = 0; i < l; i++)
+//            Arrays.fill(meanVals[i], 0);
+//
+//        for (int i = 0; i < 128; i++) {
+//            for (int j = 0; j < 128; j++) {
+//                for (int k = 0; k < l; k++) {
+//                    meanVals[i][j] += array[k][i][j];
+//                }
+//            }
+//        }
+//
+//        return meanVals;
+//    }
+
     private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
-        int l = bkgdObjArray[0].length / 2;
+        int l = bkgdObjArray.length / 2;
         double[][][] bkgdDataArray = new double[l][128][128];
 
         for (int i = 0; i < l; i++) {
@@ -213,8 +231,6 @@ public class EmpadBGSubtract {
         }
 
         double[][] meanBkgd = new double[128][128];
-        for (int i = 0; i < 128; i++)
-            Arrays.fill(meanBkgd[i], 0);
 
         for (int i = 0; i < 128; i++) {
             for (int j = 0; j < 128; j++) {
@@ -228,8 +244,8 @@ public class EmpadBGSubtract {
         return meanBkgd;
     }
 
-    private double[] arange(double start, double end, int step) {
-        return IntStream.rangeClosed(0, (int) ((end - start) / step)).mapToDouble(x -> x * step + start).toArray();
+    private double[] arange(double start, double end) {
+        return IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray();
     }
 
     private int largestIndex(double[] arr) {
@@ -256,17 +272,17 @@ public class EmpadBGSubtract {
         return ret2;
     }
 
-    private double[][] debounce_f(double[][] npMat, int wide, int w2) {
-        double range1 = -200.00 - ((double) wide / 2);
-        double range2 = 220.00 - ((double) wide / 2);
-        double[] edges = arange(range1, range2, wide);
+    private double[][] debounce_f(double[][] npMat) {
+        double range1 = -200.00 - ((double) 10 / 2);
+        double range2 = 220.00 - ((double) 10 / 2);
+        double[] edges = arange(range1, range2);
         double[] npMatFlat = Stream.of(npMat).flatMapToDouble(DoubleStream::of).toArray();
 
         double[] histVal = histogram(npMatFlat, edges);
         int histMaxArg = largestIndex(histVal);
 
         double histMaxVal = histVal[histMaxArg] + 1;
-        int nNumPoint = 2 * w2 + 1;
+        int nNumPoint = 2 * 3 + 1;
 
         double offset;
 
@@ -275,12 +291,12 @@ public class EmpadBGSubtract {
 
         if (histMaxVal > 40) {
 
-            int[] wVal = new int[2 * w2 + 1];
+            int[] wVal = new int[2 * 3 + 1];
             for (int i = 0; i < wVal.length; i++)
-                wVal[i] = -w2 + i;
+                wVal[i] = -3 + i;
 
-            int nInd1 = Math.max(histMaxArg - w2, 0);
-            int nInd2 = Math.min(histMaxArg + w2 + 1, histVal.length);
+            int nInd1 = Math.max(histMaxArg - 3, 0);
+            int nInd2 = Math.min(histMaxArg + 3 + 1, histVal.length);
             double[] CurrentHist = new double[Math.abs(nInd1 - nInd2)];
             System.arraycopy(histVal, nInd1, CurrentHist, 0, CurrentHist.length);
 
@@ -305,7 +321,7 @@ public class EmpadBGSubtract {
                 comx = -bVal / (2 * aVal);
             }
 
-            offset = edges[histMaxArg] + ((double) wide / 2.0) + (comx * wide);
+            offset = edges[histMaxArg] + ((double) 10 / 2.0) + (comx * 10);
             if (Math.abs(offset) > 200) {
                 offset = 0;
             }
@@ -323,7 +339,101 @@ public class EmpadBGSubtract {
     }
 
 
-    public void combine_from_concat_EMPAD2_AB_big(int s, int raw_total_chunk, MapState<Integer, double[][][]> imageMap, MapState<Integer, double[][][]> noiseMap,
+    public Tuple2<double[][], double[][]> noiseMeans(int s, int noise_total_chunk, HashMap<Integer, double[][][]> noiseMap) {
+        int nFramesBack = noise_total_chunk * s;
+
+        double[][][] noiseObjArray = new double[nFramesBack][128][128];
+        try {
+
+            for (int chunkId = 0; chunkId < noise_total_chunk; chunkId++) {
+                double[][][] nm = noiseMap.get(chunkId + 1);
+                if (s >= 0) System.arraycopy(nm, 0, noiseObjArray, s * chunkId, s);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        double[][] bkgedata, bkgodata;
+
+        bkgodata = calculateMean(noiseObjArray, 0);
+
+        if (nFramesBack > 1) {
+            bkgedata = calculateMean(noiseObjArray, 1);
+        } else {
+            bkgedata = new double[128][128];
+        }
+
+        return new Tuple2<>(bkgodata, bkgedata);
+    }
+
+    public void combine_from_concat_EMPAD2_AB(int s, int signal_total_chunk, HashMap<Integer, double[][][]> signalMap, Tuple2<double[][], double[][]> means,
+                                              String outName) throws Exception {
+        int nFramesBack = signal_total_chunk * s;
+
+        double[][][] imageObjArray = new double[nFramesBack][128][128];
+
+        ConcurrentHashMap<String, double[][]> flatCalibarations = loadFlatCalibrationData();
+        double[][] flatfA = flatCalibarations.get(flat_shapes[0]);
+        double[][] flatfB = flatCalibarations.get(flat_shapes[1]);
+
+        for (int chunkId = 0; chunkId < signal_total_chunk; chunkId++) {
+            double[][][] im = signalMap.get(chunkId + 1);
+
+            if (s >= 0) System.arraycopy(im, 0, imageObjArray, s * chunkId, s);
+        }
+
+        double[][] bkgodata = means.f0;
+        double[][] bkgedata = means.f1;
+
+        for (int i = 0; i < nFramesBack; i += 2) {
+            imageObjArray[i] = minus2mat(imageObjArray[i], bkgodata);
+            imageObjArray[i + 1] = minus2mat(imageObjArray[i + 1], bkgedata);
+        }
+
+        ProgressBar pb = new ProgressBar("Debouncing", nFramesBack);
+        for (int i = 0; i < nFramesBack; i++) {
+            pb.stepBy(i);
+            imageObjArray[i] = debounce_f(imageObjArray[i]);
+        }
+        pb.close();
+
+        pb = new ProgressBar("Transforming Filters", (long) (nFramesBack / 2) * 128 * 128);
+        int count = 0;
+        for (int i = 0; i < nFramesBack; i += 2) {
+            double[][] data1 = imageObjArray[i];
+            for (int j = 0; j < 128; j++) {
+                for (int k = 0; k < 128; k++) {
+                    imageObjArray[i][j][k] = data1[j][k] * flatfA[j][k];
+                    pb.stepBy(count++);
+                }
+            }
+        }
+        pb.close();
+
+        pb = new ProgressBar("Finalizing Results", (long) (nFramesBack / 2) * 128 * 128);
+        count = 0;
+        double[][] data1;
+        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(outName))) {
+            for (int i = 0; i < nFramesBack; i += 2) {
+                data1 = imageObjArray[i];
+                for (int j = 0; j < 128; j++) {
+                    for (int k = 0; k < 128; k++) {
+//                        out.writeByte((byte) (data1[j][k] * flatfB[j][k]));
+                        out.writeDouble(data1[j][k] * flatfB[j][k]);
+                        pb.stepBy(count++);
+                    }
+                }
+            }
+            out.flush();
+            pb.close();
+        }
+        pb.close();
+
+        System.out.println(outName + " saved to disk.");
+
+    }
+
+    public void combine_from_concat_EMPAD2_AB_big(int s, int raw_total_chunk, HashMap<Integer, double[][][]> imageMap, HashMap<Integer, double[][][]> noiseMap,
                                                   String outName) throws Exception {
         int nFramesBack = raw_total_chunk * s;
 
@@ -338,17 +448,12 @@ public class EmpadBGSubtract {
             double[][][] nm = noiseMap.get(chunkId + 1);
             double[][][] im = imageMap.get(chunkId + 1);
 
-            noiseMap.remove(chunkId + 1);
-            imageMap.remove(chunkId + 1);
-
             for (int i = 0; i < s; i++) {
                 noiseObjArray[s * chunkId + i] = nm[i];
                 imageObjArray[s * chunkId + i] = im[i];
             }
         }
 
-        imageMap.clear();
-        noiseMap.clear();
 
         double[][] bkgedata, bkgodata;
 
@@ -371,7 +476,7 @@ public class EmpadBGSubtract {
         ProgressBar pb = new ProgressBar("Debouncing", nFramesBack);
         for (int i = 0; i < nFramesBack; i++) {
             pb.stepBy(i);
-            imageObjArray[i] = debounce_f(imageObjArray[i], 10, 3);
+            imageObjArray[i] = debounce_f(imageObjArray[i]);
         }
         pb.close();
 
@@ -388,29 +493,24 @@ public class EmpadBGSubtract {
         }
         pb.close();
 
-        FileWriter fstream = new FileWriter(outName, true);
-        BufferedWriter out = new BufferedWriter(fstream);
-        DecimalFormat df = new DecimalFormat("#.#####");
-        pb = new ProgressBar("Finalizing Results", (long) (nFramesBack / 2) * 128 * 128);
-        count = 0;
-        for (int i = 0; i < nFramesBack; i += 2) {
-            double[][] data1 = imageObjArray[i];
-            for (int j = 0; j < 128; j++) {
-                for (int k = 0; k < 128; k++) {
-                    imageObjArray[i][j][k] = data1[j][k] * flatfB[j][k];
-                    out.write(df.format(data1[j][k] * flatfB[j][k]) + " ");
-                    pb.stepBy(count++);
+        double[][] data1;
+        try (DataOutputStream out = new DataOutputStream(new FileOutputStream(outName))) {
+            for (int i = 0; i < nFramesBack; i += 2) {
+                data1 = imageObjArray[i];
+                for (int j = 0; j < 128; j++) {
+                    for (int k = 0; k < 128; k++) {
+//                        out.writeByte((byte) (data1[j][k] * flatfB[j][k]));
+                        out.writeDouble(data1[j][k] * flatfB[j][k]);
+                        pb.stepBy(count++);
+                    }
                 }
-                out.newLine();
             }
-            out.newLine();
+            out.flush();
+            pb.close();
         }
-        pb.close();
-
-        out.flush();
-        out.close();
 
         System.out.println(outName + " saved to disk.");
 
     }
+
 }
