@@ -30,15 +30,8 @@ From the config file you will need to specify the path for RocksDBStateBackend c
 * Working with State https://nightlies.apache.org/flink/flink-docs-master/docs/dev/datastream/fault-tolerance/state/
 
 ## Build from MAVEN
-1. From the following command, modify the path of **flink-statebackend-rocksdb-1.18-SNAPSHOT.jar** `mvn install:install-file \
-   -Dfile=<THE_PATH>/flink-statebackend-rocksdb-1.18-SNAPSHOT.jar \
-   -DgroupId=org.apache.flink \
-   -DartifactId=flink-statebackend-rocksdb \
-   -Dversion=1.18-SNAPSHOT \
-   -Dpackaging=jar \
-   -DgeneratePom=true`. The jar file is under [SNAPSHOT_lib](https://github.com/paradimdata/varimatstream/tree/main/src/SNAPSHOT_lib) folder
-2. In your terminal, from the root of the project, run `mvn package`
-3.  `cd target/`
+1. In your terminal, from the root of the project, run `mvn package`
+2.  `cd target/`
 
 ## Setup Configurations
 Open [empad.config](https://github.com/paradimdata/pyempadcalibratescript/blob/main/stream/empad.config) and fill out the blank properties.
