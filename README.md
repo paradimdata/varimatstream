@@ -49,4 +49,4 @@ You will need to modify IMAGE_TOPIC, NOISE_TOPIC, GROUP_ID, and CHECKPOINT_STORA
 2. There are several options that you will need them to run the application properly.
 * i: System Information
 * c: Config File (**required**)
-3. From the target folder, `java -Xms15g -Xmx24g -jar varimat-stream-processing-1.2.jar --config empad.config`
+3. From the target folder, `java -Xms15g -Xmx24g -jar varimat-stream-processing-1.3.jar --config empad.config`
