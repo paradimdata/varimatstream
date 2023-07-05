@@ -5,7 +5,6 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
-import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.api.java.functions.KeySelector;
 
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -39,7 +38,6 @@ public class EMPADStreamCommand {
 
     private static String EMPAD_TOPIC;
     private static String GROUP_ID;
-    private static String CHECKPOINT_STORAGE;
     private static String KAFKA_TEST_CLUSTER_USERNAME;
     private static String KAFKA_TEST_CLUSTER_PASSWORD;
 
@@ -136,12 +134,6 @@ public class EMPADStreamCommand {
                         System.out.println("Group ID needs to be provided!");
                         return EMPADConstants.ERR_COMMAND;
                     }
-
-                    CHECKPOINT_STORAGE = properties.getProperty("CHECKPOINT_STORAGE");
-                    if (CHECKPOINT_STORAGE == null || CHECKPOINT_STORAGE.length() == 0) {
-                        System.out.println("CHECKPOINT_STORAGE needs to be provided!");
-                        return EMPADConstants.ERR_COMMAND;
-                    }
                 }
             } else {
                 System.out.println("no commands!");
@@ -158,9 +150,6 @@ public class EMPADStreamCommand {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-
-        env.setStateBackend(new EmbeddedRocksDBStateBackend());
-        env.getCheckpointConfig().setCheckpointStorage("file:///" + System.getenv("EMPAD_HOME") + CHECKPOINT_STORAGE);
 
         KafkaSource<DataFileChunk> rawSource = KafkaSource.<DataFileChunk>builder().
                 setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
@@ -223,18 +212,18 @@ public class EMPADStreamCommand {
         Table raw_table = tableEnv.sqlQuery(signalOperationQuery);
         tableEnv.toDataStream(raw_table).
                 keyBy((KeySelector<Row, String>) row -> String.valueOf(row.getField(PROTECTED_KEY_ID))).
-                process(new StreamingSignalProcessing());
+                process(new StreamingSignalProcessing()).setParallelism(8);
     }
 
     public static void main(String[] args) throws Exception {
+
         disableWarning();
 
         KAFKA_TEST_CLUSTER_USERNAME = System.getenv("KAFKA_ENV_USERNAME");
         KAFKA_TEST_CLUSTER_PASSWORD = System.getenv("KAFKA_ENV_PASSWORD");
 
-        EMPAD_TOPIC = System.getenv("EMPAD_TOPIC");
         GROUP_ID = System.getenv("GROUP_ID");
-        CHECKPOINT_STORAGE = System.getenv("CHECKPOINT_STORAGE");
+        EMPAD_TOPIC = System.getenv("EMPAD_TOPIC");
 
         System.out.println("EMPAD_TOPIC = " + EMPAD_TOPIC);
         System.out.println("GROUP_ID = " + GROUP_ID);

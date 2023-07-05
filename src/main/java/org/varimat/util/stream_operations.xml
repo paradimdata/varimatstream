@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<operation>
+    <noise id = "3-right_CL1p2m_conv1p5mrad_probeCur40pA_1p8Mx_dwell100us_concat_bkgd">
+        <signal name = "raw_scan_x256_y256.raw"/>
+    </noise>
+</operation>

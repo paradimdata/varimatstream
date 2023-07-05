@@ -14,7 +14,10 @@ package org.varimat.com;
          @date: 05/23/2023
 */
 
-    public final class EMPADConstants {
+public final class EMPADConstants {
+//    public final static String EMPAD_HOME = "C:\\Users\\asharif9\\OneDrive - Johns Hopkins\\empad";
+    public final static String EMPAD_HOME = System.getenv("EMPAD_HOME");
+//    public final static String EMPAD_HOME = "/Users/amir/empad";
     public final static int ERR_COMMAND = -1;
 
     /**** Map constants***/
