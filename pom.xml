@@ -24,6 +24,27 @@
 
     <dependencies>
 
+                <!-- https://mvnrepository.com/artifact/org.tallison/jmatio -->
+        <dependency>
+            <groupId>org.tallison</groupId>
+            <artifactId>jmatio</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>8.5.4</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-test-utils</artifactId>
@@ -178,26 +199,11 @@
             <version>0.8.18</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni -->
-        <dependency>
-            <groupId>com.ververica</groupId>
-            <artifactId>frocksdbjni</artifactId>
-            <version>6.20.3-ververica-2.0</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.jdom/jdom -->
         <dependency>
             <groupId>org.jdom</groupId>
             <artifactId>jdom</artifactId>
             <version>2.0.2</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-statebackend-rocksdb -->
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-statebackend-rocksdb</artifactId>
-            <version>${flink.version}</version>
-            <scope>compile</scope>
         </dependency>
 
     </dependencies>
