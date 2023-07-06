@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.jmatio.types.*;
+import org.varimat.dto.MaskTO;
 
 import static java.lang.Math.round;
 import static org.varimat.com.EMPADConstants.*;
@@ -42,14 +43,11 @@ import static org.varimat.com.EMPADConstants.*;
          version 1.3
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 06/14/2023
+         @last modified: 07/06/2023
 */
 
 public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[][][]>> {
-//        ProcessJoinFunction<Row, Row, List<double[][][]>> implements FlatJoinFunction<Row, Row , List<double[][][]>> {
-//        ProcessJoinFunction
-//                <Row, Row, List<double[][][]>> {
-
-    //    private static final String EMPAD_HOME = System.getenv("EMPAD_HOME");
+    private transient ValueState<MaskTO> maskState;
     private transient ValueState<String> noiseValue;
     private transient ValueState<String> osSlashValue;
     private transient MapState<String, Integer> countMap;
@@ -59,21 +57,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
     private transient MapState<String, Date> processedRaw;
 
-    private final String[] calib_filters = {"G1A_prelim", "G1B_prelim", "G2A_prelim", "G2B_prelim", "B2A_prelim", "B2B_prelim", "FFA_prelim", "FFB_prelim"};
-    private final String[] calib_shapes = {"g1A", "g1B", "g2A", "g2B", "offA", "offB", "flatfA", "flatfB"};
-
 
     @Override
     public void processElement(Row row, ProcessFunction<Row, List<double[][][]>>.Context ctx, Collector<List<double[][][]>> out) throws Exception {
-//        OperationTO operationTO = null;
 
-//        String operationName = String.valueOf(row.getField(FILE_NAME));
-
-//        if (operationMap.get(operationName) == null) {
-//            operationMap.put(operationName, OperationalUtil.getOperation((String.valueOf(right.getField(DATA)))));
-//        }
-//        System.out.println(rawPath);
-//
         if (osSlashValue.value() == null || osSlashValue.value().length() == 0) {
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
                 osSlashValue.update("\\");
@@ -86,9 +73,26 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         String slash = osSlashValue.value();
         String tempPath = EMPAD_HOME + slash + "temp" + slash;
         String statePath = tempPath + stateDir;
-        String calibrationPath = EMPAD_HOME + slash + "mask" + slash + "mask.mat";
 
         if (processedRaw.get(stateDir) == null) {
+
+            if (maskState.value() == null) {
+                String calibrationPath = EMPAD_HOME + slash + "mask" + slash + "mask.mat";
+                MatFileReader matfilereader = new MatFileReader(calibrationPath);
+
+                double[][] g1A = ((MLDouble) matfilereader.getMLArray("g1A")).getArray();
+                double[][] g1B = ((MLDouble) matfilereader.getMLArray("g1B")).getArray();
+                double[][] g2A = ((MLDouble) matfilereader.getMLArray("g2A")).getArray();
+                double[][] g2B = ((MLDouble) matfilereader.getMLArray("g2B")).getArray();
+                double[][] offA = ((MLDouble) matfilereader.getMLArray("offA")).getArray();
+                double[][] offB = ((MLDouble) matfilereader.getMLArray("offB")).getArray();
+
+                double[][] flatfA = ((MLDouble) matfilereader.getMLArray("flatfA")).getArray();
+                double[][] flatfB = ((MLDouble) matfilereader.getMLArray("flatfB")).getArray();
+
+                MaskTO maskTO = new MaskTO(g1A, g1B, g2A, g2B, offA, offB, flatfA, flatfB);
+                maskState.update(maskTO);
+            }
 
             if (!Files.exists(Paths.get(statePath))) {
                 Files.createDirectories(Paths.get(statePath));
@@ -131,7 +135,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 }
             }
 
-            double[][][] rawFrames = process(chunkSizePower, raw_data_chunk, calibrationPath);
+            double[][][] rawFrames = process(chunkSizePower, raw_data_chunk, maskState.value());
             SerializationUtils.serialize(rawFrames, new FileOutputStream(statePath + slash + chunkId));
 
             if (countMap.get(stateDir) % 100 == 0) {
@@ -169,6 +173,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                         numFrames = (count - 1) * rawDimension.get(noise) + finalRawFrameLen;
 
                         System.out.println(noise + ": nFramesBack = " + numFrames);
+
                         imageObjArray = new double[numFrames][128][128];
 
                         s = rawDimension.get(noise);
@@ -212,6 +217,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                         numFrames = (count - 1) * rawDimension.get(noise) + finalRawFrameLen;
 
                         System.out.println(signal + ": nFramesBack = " + numFrames);
+
                         imageObjArray = new double[numFrames][128][128];
 
                         s = rawDimension.get(signal);
@@ -233,7 +239,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.out.println(signal + " just processed!");
 
-                        combine_from_concat_EMPAD2(signal, calibrationPath, slash, numFrames, imageObjArray, meansObj);
+                        combine_from_concat_EMPAD2(signal, maskState.value(), slash, numFrames, imageObjArray, meansObj);
 
                         FileUtils.delete(new File(tempPath + "prc" + slash + signal + "_prc.raw"));
 
@@ -246,6 +252,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
     @Override
     public void open(Configuration parameters) throws Exception {
+
+        ValueStateDescriptor<MaskTO> maskStateDescriptor =
+                new ValueStateDescriptor<>(
+                        "maskState",
+                        TypeInformation.of(MaskTO.class));
+        maskState = getRuntimeContext().getState(maskStateDescriptor);
 
         MapStateDescriptor<String, Integer> totalMapStateDescriptor =
                 new MapStateDescriptor<>(
@@ -415,16 +427,15 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return npFrames;
     }
 
-    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunk_size_power, BinaryValue dataBinaryChunk, String calibrationPath) throws Exception {
+    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunk_size_power, BinaryValue dataBinaryChunk, MaskTO maskTO) throws Exception {
         double[][] g1A, g1B, g2A, g2B, offA, offB;
-        MatFileReader matfilereader = new MatFileReader(calibrationPath);
 
-        g1A = ((MLDouble) matfilereader.getMLArray("g1A")).getArray();
-        g1B = ((MLDouble) matfilereader.getMLArray("g1B")).getArray();
-        g2A = ((MLDouble) matfilereader.getMLArray("g2A")).getArray();
-        g2B = ((MLDouble) matfilereader.getMLArray("g2B")).getArray();
-        offA = ((MLDouble) matfilereader.getMLArray("offA")).getArray();
-        offB = ((MLDouble) matfilereader.getMLArray("offB")).getArray();
+        g1A = maskTO.getG1A();
+        g1B = maskTO.getG1B();
+        g2A = maskTO.getG2A();
+        g2B = maskTO.getG2B();
+        offA = maskTO.getOffA();
+        offB = maskTO.getOffB();
 
         int chunk_size = (int) Math.pow(2, chunk_size_power);
 
@@ -436,8 +447,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return PAD_AB_bin2data(nVals_i, g1A, g1B, g2A, g2B, offA, offB);
     }
 
-    private double[][][] process(int chunk_size_power, BinaryValue dataBinaryChunk, String calibrationPath) throws Exception {
-        return combineConcatenatedEMPAD2ABLarge(chunk_size_power, dataBinaryChunk, calibrationPath);
+    private double[][][] process(int chunk_size_power, BinaryValue dataBinaryChunk, MaskTO maskTO) throws Exception {
+        return combineConcatenatedEMPAD2ABLarge(chunk_size_power, dataBinaryChunk, maskTO);
     }
 
     private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
@@ -573,12 +584,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return new Tuple2<>(bkgodata, bkgedata);
     }
 
-    private void combine_from_concat_EMPAD2(String signal, String calibrationPath, String slash, int nFramesBack, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
+    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int nFramesBack, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
 
-        MatFileReader matfilereader = new MatFileReader(calibrationPath);
-
-        double[][] flatfA = ((MLDouble) matfilereader.getMLArray("flatfA")).getArray();
-        double[][] flatfB = ((MLDouble) matfilereader.getMLArray("flatfB")).getArray();
+        double[][] flatfA = maskTO.getFlatfA();
+        double[][] flatfB = maskTO.getFlatfB();
 
         double[][] bkgodata = means.f0;
         double[][] bkgedata = means.f1;
