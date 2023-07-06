@@ -1,90 +1,71 @@
 package org.varimat.dto;
 
+/*
+              #######      #         #       ##########          #            #########
+              #            # #     # #       #        #         # #           #        #
+              #            #  #   #  #       #        #        #   #          #         #
+              #######      #   # #   #       ##########       #######         #          #
+              #            #    #    #       #               #       #        #         #
+              #            #         #       #              #         #       #        #
+              ######       #         #       #             #           #      #########
+
+         version 1.3
+         @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
+         @date: 05/25/2023
+         @last modified: 07/06/2023
+*/
+
 public class MaskTO {
-    private byte[][] perlimB2A;
-    private byte[][] perlimB2B;
-    private byte[][] perlimFFA;
-    private byte[][] perlimFFB;
-    private byte[][] perlimG1A;
-    private byte[][] perlimG1B;
-    private byte[][] perlimG2A;
-    private byte[][] perlimG2B;
+    private final double[][] g1A;
+    private final double[][] g1B;
+    private final double[][] g2A;
+    private final double[][] g2B;
+    private final double[][] offA;
+    private final double[][] offB;
+    private final double[][] flatfA;
+    private final double[][] flatfB;
 
-    public MaskTO(byte[][] perlimB2A, byte[][] perlimB2B,
-                  byte[][] perlimFFA, byte[][] perlimFFB,
-                  byte[][] perlimG1A, byte[][] perlimG1B,
-                  byte[][] perlimG2A, byte[][] perlimG2B) {
-        this.perlimB2A = perlimB2A;
-        this.perlimB2B = perlimB2B;
-        this.perlimFFA = perlimFFA;
-        this.perlimFFB = perlimFFB;
-        this.perlimG1A = perlimG1A;
-        this.perlimG1B = perlimG1B;
-        this.perlimG2A = perlimG2A;
-        this.perlimG2B = perlimG2B;
+    public MaskTO(double[][] g1A, double[][] g1B, double[][] g2A, double[][] g2B,
+                  double[][] offA, double[][] offB, double[][] flatfA, double[][] flatfB) {
+        this.g1A = g1A;
+        this.g1B = g1B;
+        this.g2A = g2A;
+        this.g2B = g2B;
+        this.offA = offA;
+        this.offB = offB;
+        this.flatfA = flatfA;
+        this.flatfB = flatfB;
     }
 
-    public byte[][] getPerlimB2A() {
-        return perlimB2A;
+    public double[][] getG1A() {
+        return g1A;
     }
 
-    public void setPerlimB2A(byte[][] perlimB2A) {
-        this.perlimB2A = perlimB2A;
+    public double[][] getG1B() {
+        return g1B;
     }
 
-    public byte[][] getPerlimB2B() {
-        return perlimB2B;
+    public double[][] getG2A() {
+        return g2A;
     }
 
-    public void setPerlimB2B(byte[][] perlimB2B) {
-        this.perlimB2B = perlimB2B;
+    public double[][] getG2B() {
+        return g2B;
     }
 
-    public byte[][] getPerlimFFA() {
-        return perlimFFA;
+    public double[][] getOffA() {
+        return offA;
     }
 
-    public void setPerlimFFA(byte[][] perlimFFA) {
-        this.perlimFFA = perlimFFA;
+    public double[][] getOffB() {
+        return offB;
     }
 
-    public byte[][] getPerlimFFB() {
-        return perlimFFB;
+    public double[][] getFlatfA() {
+        return flatfA;
     }
 
-    public void setPerlimFFB(byte[][] perlimFFB) {
-        this.perlimFFB = perlimFFB;
-    }
-
-    public byte[][] getPerlimG1A() {
-        return perlimG1A;
-    }
-
-    public void setPerlimG1A(byte[][] perlimG1A) {
-        this.perlimG1A = perlimG1A;
-    }
-
-    public byte[][] getPerlimG1B() {
-        return perlimG1B;
-    }
-
-    public void setPerlimG1B(byte[][] perlimG1B) {
-        this.perlimG1B = perlimG1B;
-    }
-
-    public byte[][] getPerlimG2A() {
-        return perlimG2A;
-    }
-
-    public void setPerlimG2A(byte[][] perlimG2A) {
-        this.perlimG2A = perlimG2A;
-    }
-
-    public byte[][] getPerlimG2B() {
-        return perlimG2B;
-    }
-
-    public void setPerlimG2B(byte[][] perlimG2B) {
-        this.perlimG2B = perlimG2B;
+    public double[][] getFlatfB() {
+        return flatfB;
     }
 }
