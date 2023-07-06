@@ -106,7 +106,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             assert raw_data_chunk != null;
 
             int chunkSize = raw_data_chunk.asByteArray().length;
-            int chunkSizePower = (int) (Math.log(chunkSize) / Math.log(2));
+//            int chunkSizePower = (int) (Math.log(chunkSize) / Math.log(2));
 
             String rawType = "Signal";
             if (totalMap.get(stateDir) == null) {
@@ -115,7 +115,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 }
                 System.out.println("===========================================================================================");
                 System.out.println(rawType + " Detected: " + stateDir + " | " + " Total chunk = " + rawTotalChunk +
-                        " | Size = " + (rawTotalChunk * Math.pow(2, chunkSizePower) / 1000000000) + " GB");
+                        " | Size = " + (rawTotalChunk / 100.00) * (chunkSize / 10000000.00) + " GB");
                 System.out.println("===========================================================================================");
             }
 
@@ -135,7 +135,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 }
             }
 
-            double[][][] rawFrames = process(chunkSizePower, raw_data_chunk, maskState.value());
+            double[][][] rawFrames = process(chunkSize, raw_data_chunk, maskState.value());
             SerializationUtils.serialize(rawFrames, new FileOutputStream(statePath + slash + chunkId));
 
             if (countMap.get(stateDir) % 100 == 0) {
@@ -427,7 +427,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return npFrames;
     }
 
-    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunk_size_power, BinaryValue dataBinaryChunk, MaskTO maskTO) throws Exception {
+    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) {
         double[][] g1A, g1B, g2A, g2B, offA, offB;
 
         g1A = maskTO.getG1A();
@@ -437,18 +437,18 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         offA = maskTO.getOffA();
         offB = maskTO.getOffB();
 
-        int chunk_size = (int) Math.pow(2, chunk_size_power);
+//        int chunk_size = (int) Math.pow(2, chunk_size_power);
 
         byte[] chunkByte;
         long[] nVals_i;
         chunkByte = dataBinaryChunk.asByteArray();
-        nVals_i = (long[]) unpack('I', chunk_size / 4, chunkByte);
+        nVals_i = (long[]) unpack('I', chunkSize / 4, chunkByte);
         assert nVals_i != null;
         return PAD_AB_bin2data(nVals_i, g1A, g1B, g2A, g2B, offA, offB);
     }
 
-    private double[][][] process(int chunk_size_power, BinaryValue dataBinaryChunk, MaskTO maskTO) throws Exception {
-        return combineConcatenatedEMPAD2ABLarge(chunk_size_power, dataBinaryChunk, maskTO);
+    private double[][][] process(int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) {
+        return combineConcatenatedEMPAD2ABLarge(chunkSize, dataBinaryChunk, maskTO);
     }
 
     private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
