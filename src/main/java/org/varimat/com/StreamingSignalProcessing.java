@@ -1,5 +1,8 @@
 package org.varimat.com;
 
+import com.dynatrace.dynahist.Histogram;
+import com.dynatrace.dynahist.layout.CustomLayout;
+import com.dynatrace.dynahist.layout.Layout;
 import com.jmatio.io.MatFileReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.math3.stat.descriptive.summary.Sum;
@@ -28,7 +31,6 @@ import java.util.stream.Stream;
 import com.jmatio.types.*;
 import org.varimat.dto.MaskTO;
 
-import static java.lang.Math.round;
 import static org.varimat.com.EMPADConstants.*;
 
 /*
@@ -51,11 +53,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
     private transient ValueState<String> noiseValue;
     private transient ValueState<String> osSlashValue;
     private transient MapState<String, Integer> countMap;
+    private transient MapState<String, Long> timerMap;
     private MapState<String, Integer> totalMap;
 
     private transient MapState<String, Integer> rawDimension;
 
-    private transient MapState<String, Date> processedRaw;
+    private transient MapState<String, Long> processedRaw;
 
 
     @Override
@@ -73,6 +76,18 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         String slash = osSlashValue.value();
         String tempPath = EMPAD_HOME + slash + "temp" + slash;
         String statePath = tempPath + stateDir;
+
+        if (processedRaw.get(stateDir) == null && stateDir.contains(NOISE_EXT) &&
+                Files.exists(Paths.get(EMPAD_HOME + slash + "means" + slash + stateDir))) {
+
+            processedRaw.put(stateDir, (long) 0);
+
+            noiseValue.update(stateDir);
+
+            System.out.println("===========================================================================================");
+            System.out.println("Processed Mean Detected: " + EMPAD_HOME + slash + "means" + slash + stateDir);
+            System.out.println("===========================================================================================");
+        }
 
         if (processedRaw.get(stateDir) == null) {
 
@@ -106,7 +121,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             assert raw_data_chunk != null;
 
             int chunkSize = raw_data_chunk.asByteArray().length;
-//            int chunkSizePower = (int) (Math.log(chunkSize) / Math.log(2));
 
             String rawType = "Signal";
             if (totalMap.get(stateDir) == null) {
@@ -129,6 +143,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 countMap.put(stateDir, countState + 1);
             }
 
+            if (timerMap.get(stateDir) == null) {
+                timerMap.put(stateDir, System.currentTimeMillis());
+            }
+
             if (noiseValue.value().length() == 0) {
                 if (stateDir.contains(NOISE_EXT)) {
                     noiseValue.update(stateDir);
@@ -136,6 +154,15 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             }
 
             double[][][] rawFrames = process(chunkSize, raw_data_chunk, maskState.value());
+
+            long timer;
+            if (timerMap.get(stateDir) == null) {
+                timerMap.put(stateDir, System.currentTimeMillis());
+            } else {
+                timer = timerMap.get(stateDir);
+                timerMap.put(stateDir, System.currentTimeMillis() - timer);
+            }
+
             SerializationUtils.serialize(rawFrames, new FileOutputStream(statePath + slash + chunkId));
 
             if (countMap.get(stateDir) % 100 == 0) {
@@ -146,7 +173,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 rawDimension.put(stateDir, rawFrames.length);
             }
 
-            int numFrames, count, s, finalRawFrameLen;
+            int count, finalRawFrameLen, totalFrames, s;
 
             Tuple2<double[][], double[][]> means;
             double[][][] imageObjArray;
@@ -167,14 +194,17 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                     assert listOfFiles != null;
                     if (listOfFiles.length >= countMap.get(noise)) {
 
+                        timer = timerMap.get(noise);
+                        timerMap.put(noise, System.currentTimeMillis() - timer);
+
                         finalRawFrame = SerializationUtils.deserialize(new FileInputStream(tempPath + noise + slash + count));
                         finalRawFrameLen = finalRawFrame.length;
 
-                        numFrames = (count - 1) * rawDimension.get(noise) + finalRawFrameLen;
+                        totalFrames = (count - 1) * rawDimension.get(noise) + finalRawFrameLen;
 
-                        System.out.println(noise + ": nFramesBack = " + numFrames);
+                        System.out.println(noise + ": Total Frames = " + totalFrames);
 
-                        imageObjArray = new double[numFrames][128][128];
+                        imageObjArray = new double[totalFrames][128][128];
 
                         s = rawDimension.get(noise);
 
@@ -185,12 +215,18 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.arraycopy(finalRawFrame, 0, imageObjArray, (count - 1) * finalRawFrameLen, finalRawFrameLen);
 
-                        means = noiseMeans(numFrames, imageObjArray);
+                        means = noiseMeans(totalFrames, imageObjArray);
                         SerializationUtils.serialize(means, new FileOutputStream(meansPath));
-                        processedRaw.put(noise, new Date());
+
+                        timer = timerMap.get(noise);
+                        timerMap.put(noise, System.currentTimeMillis() - timer);
+
+                        processedRaw.put(noise, timerMap.get(noise));
                         System.out.println("Processed Noise Mean Value.");
 
                         FileUtils.deleteDirectory(new File(tempPath + noise));
+
+                        System.out.println("The duration of processing " + noise + " was: " + (timerMap.get(noise) / 1000) + " seconds.");
                     }
                 }
             }
@@ -209,16 +245,19 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                     if (!signal.equals(noise) && totalMap.get(signal) == count) {
 
+                        timer = timerMap.get(signal);
+                        timerMap.put(signal, System.currentTimeMillis() - timer);
+
                         meansObj = SerializationUtils.deserialize(new FileInputStream(meansPath));
 
                         finalRawFrame = SerializationUtils.deserialize(new FileInputStream(tempPath + signal + slash + count));
                         finalRawFrameLen = finalRawFrame.length;
 
-                        numFrames = (count - 1) * rawDimension.get(noise) + finalRawFrameLen;
+                        totalFrames = (count - 1) * rawDimension.get(signal) + finalRawFrameLen;
 
-                        System.out.println(signal + ": nFramesBack = " + numFrames);
+                        System.out.println(signal + ": Total Frames = " + totalFrames);
 
-                        imageObjArray = new double[numFrames][128][128];
+                        imageObjArray = new double[totalFrames][128][128];
 
                         s = rawDimension.get(signal);
 
@@ -239,11 +278,16 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.out.println(signal + " just processed!");
 
-                        combine_from_concat_EMPAD2(signal, maskState.value(), slash, numFrames, imageObjArray, meansObj);
+                        combine_from_concat_EMPAD2(signal, maskState.value(), slash, totalFrames, imageObjArray, meansObj);
+
+                        timer = timerMap.get(signal);
+                        timerMap.put(signal, System.currentTimeMillis() - timer);
 
                         FileUtils.delete(new File(tempPath + "prc" + slash + signal + "_prc.raw"));
 
-                        processedRaw.put(signal, new Date());
+                        processedRaw.put(signal, timer = timerMap.get(signal));
+
+                        System.out.println("The duration of processing " + signal + " was: " + (timerMap.get(signal) / 1000) + " seconds.");
                     }
                 }
             }
@@ -251,7 +295,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
     }
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(Configuration parameters) {
 
         ValueStateDescriptor<MaskTO> maskStateDescriptor =
                 new ValueStateDescriptor<>(
@@ -295,12 +339,18 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                         }));
         countMap = getRuntimeContext().getMapState(countMapStateDescriptor);
 
-        MapStateDescriptor<String, Date> processedRawDescriptor =
+        MapStateDescriptor<String, Long> timerMapStateDescriptor =
+                new MapStateDescriptor<>(
+                        "timerMapState",
+                        Types.STRING,
+                        Types.LONG);
+        timerMap = getRuntimeContext().getMapState(timerMapStateDescriptor);
+
+        MapStateDescriptor<String, Long> processedRawDescriptor =
                 new MapStateDescriptor<>(
                         "processedRawSate",
                         Types.STRING,
-                        TypeInformation.of(new TypeHint<>() {
-                        }));
+                        Types.LONG);
         processedRaw = getRuntimeContext().getMapState(processedRawDescriptor);
 
     }
@@ -380,7 +430,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
     private double[][][] PAD_AB_bin2data(long[] nVals, double[][] g1A, double[][] g1B, double[][] g2A, double[][] g2B, double[][] offA, double[][] offB) {
 
         int nLen = nVals.length;
-        int nFrames = round((float) nLen / 128 / 128);
+        int nFrames = nLen / 128 / 128;
 
         double[] ana = new double[nLen];
         for (int i = 0; i < nLen; i++)
@@ -422,7 +472,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             term3 = hadamard(g2B, dig3d[i + 1]);
             npFrames[i + 1] = add2mat(add2mat(term1, term2), term3);
         }
-
 
         return npFrames;
     }
@@ -501,16 +550,32 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return ret2;
     }
 
+    private Layout createLayout(double start, double end) {
+        return CustomLayout.create(IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray());
+    }
+
     private double[][] debounce_f(double[][] npMat) {
         double range1 = -200.00 - ((double) 10 / 2);
         double range2 = 220.00 - ((double) 10 / 2);
         double[] edges = arange(range1, range2);
         double[] npMatFlat = Stream.of(npMat).flatMapToDouble(DoubleStream::of).toArray();
 
-        double[] histVal = histogram(npMatFlat, edges);
-        int histMaxArg = largestIndex(histVal);
+        Layout layout = CustomLayout.create(edges);
+        Histogram histogram = Histogram.createStatic(layout);
+        for (double v : npMatFlat) {
+            histogram.addValue((float) v);
+        }
 
-        double histMaxVal = histVal[histMaxArg] + 1;
+        double[] histVal = IntStream.range(histogram.getLayout().getUnderflowBinIndex() + 1,
+                histogram.getLayout().getOverflowBinIndex()).mapToDouble(histogram::getCount).toArray();
+
+//        double[] histVal = histogram(npMatFlat, edges);
+        int histMaxArg = largestIndex(histVal);
+//
+        double histMaxVal = histVal[histMaxArg];
+
+        System.out.println(histMaxVal + " " + histMaxArg);
+
         int nNumPoint = 2 * 3 + 1;
 
         double offset;
@@ -584,7 +649,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return new Tuple2<>(bkgodata, bkgedata);
     }
 
-    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int nFramesBack, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
+    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
 
         double[][] flatfA = maskTO.getFlatfA();
         double[][] flatfB = maskTO.getFlatfB();
@@ -592,19 +657,19 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         double[][] bkgodata = means.f0;
         double[][] bkgedata = means.f1;
 
-        for (int i = 0; i < nFramesBack; i += 2) {
+        for (int i = 0; i < totalFrames; i += 2) {
             imageObjArray[i] = minus2mat(imageObjArray[i], bkgodata);
             imageObjArray[i + 1] = minus2mat(imageObjArray[i + 1], bkgedata);
         }
 
         System.out.println("Debouncing: " + signal);
-        for (int i = 0; i < nFramesBack; i++) {
+        for (int i = 0; i < totalFrames; i++) {
             imageObjArray[i] = debounce_f(imageObjArray[i]);
         }
 
         System.out.println("Transforming Filters: " + signal);
         double[][] data;
-        for (int i = 0; i < nFramesBack; i += 2) {
+        for (int i = 0; i < totalFrames; i += 2) {
             data = imageObjArray[i];
             for (int j = 0; j < 128; j++) {
                 for (int k = 0; k < 128; k++) {
@@ -613,8 +678,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             }
         }
 
-
-        for (int i = 1; i < nFramesBack; i += 2) {
+        for (int i = 1; i < totalFrames; i += 2) {
             data = imageObjArray[i];
             for (int j = 0; j < 128; j++) {
                 for (int k = 0; k < 128; k++) {
@@ -626,27 +690,34 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         System.out.println("Finalizing Results: " + signal);
         double[][] data1;
         double[][] data2;
+        int a, b;
+        for (int i = 0; i < totalFrames / 2; i++) {
+            a = 2 * i;
+            b = 2 * i + 1;
+            data1 = imageObjArray[a];
+            data2 = imageObjArray[b];
+            for (int j = 0; j < 128; j++) {
+                for (int k = 0; k < 128; k++) {
+                    imageObjArray[a][j][k] = data1[j][k] * flatfA[j][k];
+                    imageObjArray[b][j][k] = data2[j][k] * flatfB[j][k];
+                }
+            }
+        }
+
+        System.out.println("Writing Output: " + signal);
         String outFileName = "out_" + signal + ".raw";
         String outFilePath = EMPAD_HOME + slash + "output" + slash;
-
-        int a, b;
         try (DataOutputStream out = new DataOutputStream(
                 new BufferedOutputStream(
                         new FileOutputStream(outFilePath + outFileName)))) {
-            for (int i = 0; i < nFramesBack / 2; i++) {
-                a = 2 * i;
-                b = 2 * i + 1;
-                data1 = imageObjArray[a];
-                data2 = imageObjArray[b];
+            for (int i = 0; i < totalFrames; i++) {
                 for (int j = 0; j < 128; j++) {
                     for (int k = 0; k < 128; k++) {
-                        imageObjArray[a][j][k] = data1[j][k] * flatfA[j][k];
-                        imageObjArray[b][j][k] = data2[j][k] * flatfB[j][k];
-                        out.writeDouble(imageObjArray[a][j][k]);
-                        out.writeDouble(imageObjArray[b][j][k]);
+                        out.writeFloat((float) imageObjArray[i][j][k]);
                     }
                 }
             }
+            out.flush();
         }
 
         System.out.println(outFileName + " took place into " + EMPAD_HOME + slash + "output.");
