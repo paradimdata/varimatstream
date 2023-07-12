@@ -16,17 +16,17 @@ package org.varimat.dto;
 */
 
 public class MaskTO {
-    private final double[][] g1A;
-    private final double[][] g1B;
-    private final double[][] g2A;
-    private final double[][] g2B;
-    private final double[][] offA;
-    private final double[][] offB;
-    private final double[][] flatfA;
-    private final double[][] flatfB;
+    private final float[][] g1A;
+    private final float[][] g1B;
+    private final float[][] g2A;
+    private final float[][] g2B;
+    private final float[][] offA;
+    private final float[][] offB;
+    private final float[][] flatfA;
+    private final float[][] flatfB;
 
-    public MaskTO(double[][] g1A, double[][] g1B, double[][] g2A, double[][] g2B,
-                  double[][] offA, double[][] offB, double[][] flatfA, double[][] flatfB) {
+    public MaskTO(float[][] g1A, float[][] g1B, float[][] g2A, float[][] g2B,
+                  float[][] offA, float[][] offB, float[][] flatfA, float[][] flatfB) {
         this.g1A = g1A;
         this.g1B = g1B;
         this.g2A = g2A;
@@ -37,35 +37,35 @@ public class MaskTO {
         this.flatfB = flatfB;
     }
 
-    public double[][] getG1A() {
+    public float[][] getG1A() {
         return g1A;
     }
 
-    public double[][] getG1B() {
+    public float[][] getG1B() {
         return g1B;
     }
 
-    public double[][] getG2A() {
+    public float[][] getG2A() {
         return g2A;
     }
 
-    public double[][] getG2B() {
+    public float[][] getG2B() {
         return g2B;
     }
 
-    public double[][] getOffA() {
+    public float[][] getOffA() {
         return offA;
     }
 
-    public double[][] getOffB() {
+    public float[][] getOffB() {
         return offB;
     }
 
-    public double[][] getFlatfA() {
+    public float[][] getFlatfA() {
         return flatfA;
     }
 
-    public double[][] getFlatfB() {
+    public float[][] getFlatfB() {
         return flatfB;
     }
 }
