@@ -5,7 +5,6 @@ import com.dynatrace.dynahist.layout.CustomLayout;
 import com.dynatrace.dynahist.layout.Layout;
 import com.jmatio.io.MatFileReader;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.math3.stat.descriptive.summary.Sum;
 import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -26,7 +25,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 import com.jmatio.types.*;
 import org.varimat.dto.MaskTO;
@@ -53,7 +51,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
     private transient ValueState<String> noiseValue;
     private transient ValueState<String> osSlashValue;
     private transient MapState<String, Integer> countMap;
-    private transient MapState<String, Long> timerMap;
     private MapState<String, Integer> totalMap;
 
     private transient MapState<String, Integer> rawDimension;
@@ -95,15 +92,15 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 String calibrationPath = EMPAD_HOME + slash + "mask" + slash + "mask.mat";
                 MatFileReader matfilereader = new MatFileReader(calibrationPath);
 
-                double[][] g1A = ((MLDouble) matfilereader.getMLArray("g1A")).getArray();
-                double[][] g1B = ((MLDouble) matfilereader.getMLArray("g1B")).getArray();
-                double[][] g2A = ((MLDouble) matfilereader.getMLArray("g2A")).getArray();
-                double[][] g2B = ((MLDouble) matfilereader.getMLArray("g2B")).getArray();
-                double[][] offA = ((MLDouble) matfilereader.getMLArray("offA")).getArray();
-                double[][] offB = ((MLDouble) matfilereader.getMLArray("offB")).getArray();
+                float[][] g1A = toFloat(((MLDouble) matfilereader.getMLArray("g1A")).getArray());
+                float[][] g1B = toFloat(((MLDouble) matfilereader.getMLArray("g1B")).getArray());
+                float[][] g2A = toFloat(((MLDouble) matfilereader.getMLArray("g2A")).getArray());
+                float[][] g2B = toFloat(((MLDouble) matfilereader.getMLArray("g2B")).getArray());
+                float[][] offA = toFloat(((MLDouble) matfilereader.getMLArray("offA")).getArray());
+                float[][] offB = toFloat(((MLDouble) matfilereader.getMLArray("offB")).getArray());
 
-                double[][] flatfA = ((MLDouble) matfilereader.getMLArray("flatfA")).getArray();
-                double[][] flatfB = ((MLDouble) matfilereader.getMLArray("flatfB")).getArray();
+                float[][] flatfA = toFloat(((MLDouble) matfilereader.getMLArray("flatfA")).getArray());
+                float[][] flatfB = toFloat(((MLDouble) matfilereader.getMLArray("flatfB")).getArray());
 
                 MaskTO maskTO = new MaskTO(g1A, g1B, g2A, g2B, offA, offB, flatfA, flatfB);
                 maskState.update(maskTO);
@@ -143,25 +140,13 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                 countMap.put(stateDir, countState + 1);
             }
 
-            if (timerMap.get(stateDir) == null) {
-                timerMap.put(stateDir, System.currentTimeMillis());
-            }
-
             if (noiseValue.value().length() == 0) {
                 if (stateDir.contains(NOISE_EXT)) {
                     noiseValue.update(stateDir);
                 }
             }
 
-            double[][][] rawFrames = process(chunkSize, raw_data_chunk, maskState.value());
-
-            long timer;
-            if (timerMap.get(stateDir) == null) {
-                timerMap.put(stateDir, System.currentTimeMillis());
-            } else {
-                timer = timerMap.get(stateDir);
-                timerMap.put(stateDir, System.currentTimeMillis() - timer);
-            }
+            float[][][] rawFrames = process(chunkId, chunkSize, raw_data_chunk, maskState.value());
 
             SerializationUtils.serialize(rawFrames, new FileOutputStream(statePath + slash + chunkId));
 
@@ -175,9 +160,9 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
             int count, finalRawFrameLen, totalFrames, s;
 
-            Tuple2<double[][], double[][]> means;
-            double[][][] imageObjArray;
-            double[][][] finalRawFrame;
+            Tuple2<float[][], float[][]> means;
+            float[][][] imageObjArray;
+            float[][][] finalRawFrame;
             File[] listOfFiles;
 
             String noise = noiseValue.value();
@@ -194,9 +179,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                     assert listOfFiles != null;
                     if (listOfFiles.length >= countMap.get(noise)) {
 
-                        timer = timerMap.get(noise);
-                        timerMap.put(noise, System.currentTimeMillis() - timer);
-
                         finalRawFrame = SerializationUtils.deserialize(new FileInputStream(tempPath + noise + slash + count));
                         finalRawFrameLen = finalRawFrame.length;
 
@@ -204,7 +186,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.out.println(noise + ": Total Frames = " + totalFrames);
 
-                        imageObjArray = new double[totalFrames][128][128];
+                        imageObjArray = new float[totalFrames][128][128];
 
                         s = rawDimension.get(noise);
 
@@ -218,20 +200,14 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                         means = noiseMeans(totalFrames, imageObjArray);
                         SerializationUtils.serialize(means, new FileOutputStream(meansPath));
 
-                        timer = timerMap.get(noise);
-                        timerMap.put(noise, System.currentTimeMillis() - timer);
-
-                        processedRaw.put(noise, timerMap.get(noise));
                         System.out.println("Processed Noise Mean Value.");
 
                         FileUtils.deleteDirectory(new File(tempPath + noise));
-
-                        System.out.println("The duration of processing " + noise + " was: " + (timerMap.get(noise) / 1000) + " seconds.");
                     }
                 }
             }
 
-            Tuple2<double[][], double[][]> meansObj;
+            Tuple2<float[][], float[][]> meansObj;
 
             if (processedRaw.get(noise) != null) {
                 Iterable<String> signalKeys = totalMap.keys();
@@ -245,9 +221,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                     if (!signal.equals(noise) && totalMap.get(signal) == count) {
 
-                        timer = timerMap.get(signal);
-                        timerMap.put(signal, System.currentTimeMillis() - timer);
-
                         meansObj = SerializationUtils.deserialize(new FileInputStream(meansPath));
 
                         finalRawFrame = SerializationUtils.deserialize(new FileInputStream(tempPath + signal + slash + count));
@@ -257,7 +230,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.out.println(signal + ": Total Frames = " + totalFrames);
 
-                        imageObjArray = new double[totalFrames][128][128];
+                        imageObjArray = new float[totalFrames][128][128];
 
                         s = rawDimension.get(signal);
 
@@ -280,14 +253,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         combine_from_concat_EMPAD2(signal, maskState.value(), slash, totalFrames, imageObjArray, meansObj);
 
-                        timer = timerMap.get(signal);
-                        timerMap.put(signal, System.currentTimeMillis() - timer);
-
                         FileUtils.delete(new File(tempPath + "prc" + slash + signal + "_prc.raw"));
-
-                        processedRaw.put(signal, timer = timerMap.get(signal));
-
-                        System.out.println("The duration of processing " + signal + " was: " + (timerMap.get(signal) / 1000) + " seconds.");
                     }
                 }
             }
@@ -339,13 +305,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
                         }));
         countMap = getRuntimeContext().getMapState(countMapStateDescriptor);
 
-        MapStateDescriptor<String, Long> timerMapStateDescriptor =
-                new MapStateDescriptor<>(
-                        "timerMapState",
-                        Types.STRING,
-                        Types.LONG);
-        timerMap = getRuntimeContext().getMapState(timerMapStateDescriptor);
-
         MapStateDescriptor<String, Long> processedRawDescriptor =
                 new MapStateDescriptor<>(
                         "processedRawSate",
@@ -355,7 +314,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
     }
 
-    //    private long convert
     private Object unpack(char type, int dim, byte[] raw) {
         if (type == 'f') {
             var floats = ByteBuffer.wrap(raw).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
@@ -372,6 +330,26 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return null;
     }
 
+    private float[][] toFloat(double[][] data) {
+        float[][] flMat = new float[data.length][data[0].length];
+        for (int i = 0; i < flMat.length; i++) {
+            for (int j = 0; j < flMat[0].length; j++) {
+                flMat[i][j] = (float) data[i][j];
+            }
+        }
+        return flMat;
+    }
+
+    private float[][] reshape1_to_2(float[] array, int rows, int cols) {
+        if (array.length != (rows * cols)) throw new IllegalArgumentException("Invalid array length");
+
+        float[][] array2d = new float[rows][cols];
+        for (int i = 0; i < rows; i++)
+            System.arraycopy(array, (i * cols), array2d[i], 0, cols);
+
+        return array2d;
+    }
+
     private double[][] reshape1_to_2(double[] array, int rows, int cols) {
         if (array.length != (rows * cols)) throw new IllegalArgumentException("Invalid array length");
 
@@ -382,10 +360,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return array2d;
     }
 
-    private double[][][] reshape1_to_3_float(double[] data, int width, int height, int depth) {
+    private float[][][] reshape1_to_3_float(float[] data, int width, int height, int depth) {
         if (data.length != (width * height * depth)) throw new IllegalArgumentException("Invalid array length");
 
-        double[][][] array3d = new double[width][height][depth];
+        float[][][] array3d = new float[width][height][depth];
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -397,8 +375,9 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return array3d;
     }
 
-    private double[][] hadamard(double[][] m1, double[][] m2) {
-        double[][] res = new double[m1.length][m1[0].length];
+
+    private float[][] hadamard(float[][] m1, float[][] m2) {
+        float[][] res = new float[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
                 res[i][j] = m1[i][j] * m2[i][j];
@@ -407,8 +386,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return res;
     }
 
-    private double[][] add2mat(double[][] m1, double[][] m2) {
-        double[][] res = new double[m1.length][m1[0].length];
+    private float[][] add2mat(float[][] m1, float[][] m2) {
+        float[][] res = new float[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
                 res[i][j] = m1[i][j] + m2[i][j];
@@ -417,8 +396,19 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return res;
     }
 
-    private double[][] minus2mat(double[][] m1, double[][] m2) {
-        double[][] res = new double[m1.length][m1[0].length];
+
+    private float[][] add2mat(float[][] m1, double[][] m2) {
+        float[][] res = new float[m1.length][m1[0].length];
+        for (int i = 0; i < m1.length; i++) {
+            for (int j = 0; j < m1[0].length; j++) {
+                res[i][j] = (float) (m1[i][j] + m2[i][j]);
+            }
+        }
+        return res;
+    }
+
+    private float[][] minus2mat(float[][] m1, float[][] m2) {
+        float[][] res = new float[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
                 res[i][j] = m1[i][j] - m2[i][j];
@@ -427,57 +417,67 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return res;
     }
 
-    private double[][][] PAD_AB_bin2data(long[] nVals, double[][] g1A, double[][] g1B, double[][] g2A, double[][] g2B, double[][] offA, double[][] offB) {
+    private float[][][] PAD_AB_bin2data(int chId, long[] nVals, float[][] g1A, float[][] g1B, float[][] g2A, float[][] g2B, float[][] offA, float[][] offB) throws IOException {
 
         int nLen = nVals.length;
         int nFrames = nLen / 128 / 128;
 
-        double[] ana = new double[nLen];
+        float[] ana = new float[nLen];
         for (int i = 0; i < nLen; i++)
             ana[i] = nVals[i] & 16383;
 
-        double[][][] ana3d = reshape1_to_3_float(ana, nFrames, 128, 128);
+        float[][][] ana3d = reshape1_to_3_float(ana, nFrames, 128, 128);
 
-        double[] dig = new double[nLen];
+        float[] dig = new float[nLen];
         for (int i = 0; i < nLen; i++)
-            dig[i] = (double) (nVals[i] & 1073725440) / 16384;
+            dig[i] = (float) (nVals[i] & 1073725440) / 16384;
 
-        double[][][] dig3d = reshape1_to_3_float(dig, nFrames, 128, 128);
+        float[][][] dig3d = reshape1_to_3_float(dig, nFrames, 128, 128);
 
         long gnl;
-        double[] gn = new double[nLen];
+        float[] gn = new float[nLen];
         String td = "2147483648";
         for (int i = 0; i < nLen; i++) {
             gnl = (nVals[i]) & Long.parseLong(td);
-            gn[i] = (double) gnl / 65536 / 16384 / 2;
+            gn[i] = (float) gnl / 65536 / 16384 / 2;
         }
 
-        double[][][] gn3d = reshape1_to_3_float(gn, nFrames, 128, 128);
+        float[][][] gn3d = reshape1_to_3_float(gn, nFrames, 128, 128);
 
-        double[][] ones_2 = new double[128][128];
-        for (double[] row : ones_2) {
-            Arrays.fill(row, 1);
+        float[][] ones_2 = new float[128][128];
+        for (float[] row : ones_2) {
+            Arrays.fill(row, 1.0F);
         }
 
-        double[][][] npFrames = ana3d;
-        double[][] term1, term2, term3;
+        float[][][] npFrames = new float[ana3d.length][ana3d[0].length][ana3d[0][0].length];
+
+        float[][] term1_1, term1, term2_1, term2_2, term2, term3, term5;
+
         for (int i = 0; i < nFrames; i += 2) {
-            term1 = hadamard(ana3d[i], minus2mat(ones_2, gn3d[i]));
-            term2 = hadamard(hadamard(g1A, minus2mat(ana3d[i], offA)), gn3d[i]);
+            term1_1 = minus2mat(ones_2, gn3d[i]);
+            term1 = hadamard(ana3d[i], term1_1);
+            term2_1 = minus2mat(ana3d[i], offA);
+            term2_2 = hadamard(g1A, term2_1);
+            term2 = hadamard(term2_2, gn3d[i]);
             term3 = hadamard(g2A, dig3d[i]);
-            npFrames[i] = add2mat(add2mat(term1, term2), term3);
+            term5 = add2mat(term1, term2);
+            npFrames[i] = add2mat(term5, term3);
 
-            term1 = hadamard(ana3d[i + 1], minus2mat(ones_2, gn3d[i + 1]));
-            term2 = hadamard(hadamard(g1B, minus2mat(ana3d[i + 1], offB)), gn3d[i + 1]);
+            term1_1 = minus2mat(ones_2, gn3d[i + 1]);
+            term1 = hadamard(ana3d[i + 1], term1_1);
+            term2_1 = minus2mat(ana3d[i + 1], offB);
+            term2_2 = hadamard(g1B, term2_1);
+            term2 = hadamard(term2_2, gn3d[i + 1]);
             term3 = hadamard(g2B, dig3d[i + 1]);
-            npFrames[i + 1] = add2mat(add2mat(term1, term2), term3);
+            term5 = add2mat(term1, term2);
+            npFrames[i + 1] = add2mat(term5, term3);
         }
 
         return npFrames;
     }
 
-    private double[][][] combineConcatenatedEMPAD2ABLarge(int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) {
-        double[][] g1A, g1B, g2A, g2B, offA, offB;
+    private float[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
+        float[][] g1A, g1B, g2A, g2B, offA, offB;
 
         g1A = maskTO.getG1A();
         g1B = maskTO.getG1B();
@@ -486,29 +486,28 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         offA = maskTO.getOffA();
         offB = maskTO.getOffB();
 
-//        int chunk_size = (int) Math.pow(2, chunk_size_power);
-
         byte[] chunkByte;
         long[] nVals_i;
         chunkByte = dataBinaryChunk.asByteArray();
         nVals_i = (long[]) unpack('I', chunkSize / 4, chunkByte);
+
         assert nVals_i != null;
-        return PAD_AB_bin2data(nVals_i, g1A, g1B, g2A, g2B, offA, offB);
+        return PAD_AB_bin2data(chId, nVals_i, g1A, g1B, g2A, g2B, offA, offB);
     }
 
-    private double[][][] process(int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) {
-        return combineConcatenatedEMPAD2ABLarge(chunkSize, dataBinaryChunk, maskTO);
+    private float[][][] process(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
+        return combineConcatenatedEMPAD2ABLarge(chId, chunkSize, dataBinaryChunk, maskTO);
     }
 
-    private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
+    private float[][] calculateMean(float[][][] bkgdObjArray, int s) {
         int l = bkgdObjArray.length / 2;
-        double[][][] bkgdDataArray = new double[l][128][128];
+        float[][][] bkgdDataArray = new float[l][128][128];
 
         for (int i = 0; i < l; i++) {
             bkgdDataArray[i] = bkgdObjArray[i * 2 + s];
         }
 
-        double[][] meanBkgd = new double[128][128];
+        float[][] meanBkgd = new float[128][128];
 
         for (int i = 0; i < 128; i++) {
             for (int j = 0; j < 128; j++) {
@@ -534,54 +533,59 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         return maxAt;
     }
 
-    private double[] histogram(double[] x, double[] binEdges) {
-        int binEdgesSize = binEdges.length;
-        NavigableMap<Double, Integer> binEdgesMap = new TreeMap<>();
-        for (int i = 0; i < binEdgesSize; ++i)
-            binEdgesMap.put(binEdges[i], i);
-        double[] ret = new double[binEdgesSize];
-        for (double d : x) {
-            Map.Entry<Double, Integer> e = binEdgesMap.ceilingEntry(d);
-            if (e != null) ++ret[e.getValue()];
-        }
-
-        double[] ret2 = new double[binEdgesSize - 1];
-        System.arraycopy(ret, 1, ret2, 0, binEdgesSize - 1);
-        return ret2;
-    }
-
     private Layout createLayout(double start, double end) {
         return CustomLayout.create(IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray());
     }
 
-    private double[][] debounce_f(double[][] npMat) {
-        double range1 = -200.00 - ((double) 10 / 2);
-        double range2 = 220.00 - ((double) 10 / 2);
+    private float[] flattenedFloat(float[][] matrix) {
+        float[] flattenedArray = new float[matrix.length * matrix[0].length];
+        int count = 0;
+        for (float[] floats : matrix) {
+            for (int k = 0; k < matrix[0].length; k++) {
+                flattenedArray[count++] = floats[k];
+            }
+        }
+        return flattenedArray;
+    }
+
+    private double[] flattenedFloat(float[][][] matrix) {
+        double[] flattenedArray = new double[matrix.length * matrix[0].length * matrix[0][0].length];
+        int count = 0;
+        for (float[][] floats : matrix) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                for (int k = 0; k < matrix[0][0].length; k++) {
+                    flattenedArray[count++] = floats[j][k];
+                }
+            }
+        }
+        return flattenedArray;
+    }
+
+    private float[][] debounce_f(float[][] npMat) {
+        float range1 = (float) (-200.00 - ((float) 10 / 2));
+        float range2 = (float) (220.00 - ((float) 10 / 2));
         double[] edges = arange(range1, range2);
-        double[] npMatFlat = Stream.of(npMat).flatMapToDouble(DoubleStream::of).toArray();
+        float[] npMatFlat = flattenedFloat(npMat);
 
         Layout layout = CustomLayout.create(edges);
         Histogram histogram = Histogram.createStatic(layout);
         for (double v : npMatFlat) {
-            histogram.addValue((float) v);
+            histogram.addValue(v);
         }
 
         double[] histVal = IntStream.range(histogram.getLayout().getUnderflowBinIndex() + 1,
                 histogram.getLayout().getOverflowBinIndex()).mapToDouble(histogram::getCount).toArray();
 
-//        double[] histVal = histogram(npMatFlat, edges);
         int histMaxArg = largestIndex(histVal);
-//
-        double histMaxVal = histVal[histMaxArg];
 
-        System.out.println(histMaxVal + " " + histMaxArg);
+        double histMaxVal = histVal[histMaxArg];
 
         int nNumPoint = 2 * 3 + 1;
 
-        double offset;
+        float offset;
 
-        double[] offsetArr = new double[npMatFlat.length];
-        double[] npNewMat = new double[npMatFlat.length];
+        float[] offsetArr = new float[npMatFlat.length];
+        float[] npNewMat = new float[npMatFlat.length];
 
         if (histMaxVal > 40) {
 
@@ -594,11 +598,11 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             double[] currentHist = new double[Math.abs(nInd1 - nInd2)];
             System.arraycopy(histVal, nInd1, currentHist, 0, currentHist.length);
 
-            double sum_y = new Sum().evaluate(currentHist);
-            double sum_xy = 0;
-            double sum_x2y = 0;
-            double sum_x2 = 0;
-            double sum_x4 = 0;
+            float sum_y = (float) DoubleStream.of(currentHist).sum();
+            float sum_xy = 0;
+            float sum_x2y = 0;
+            float sum_x2 = 0;
+            float sum_x4 = 0;
 
             int min = Math.min(wVal.length, currentHist.length);
 
@@ -612,12 +616,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             double bVal = sum_xy / sum_x2;
             double aVal = (nNumPoint * sum_x2y - sum_x2 * sum_y) / (nNumPoint * sum_x4 - sum_x2 * sum_x2);
 
-            double comx = 0.0;
+            double comx = 0.0F;
             if (Math.abs(aVal) > 0.0001) {
                 comx = -bVal / (2 * aVal);
             }
 
-            offset = edges[histMaxArg] + ((double) 10 / 2.0) + (comx * 10);
+            offset = (float) ((float) edges[histMaxArg] + ((float) 10 / 2.0) + (comx * 10));
             if (Math.abs(offset) > 200) {
                 offset = 0;
             }
@@ -628,34 +632,34 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         Arrays.fill(offsetArr, offset);
 
         for (int i = 0; i < npMatFlat.length; i++) {
-            npNewMat[i] = npMatFlat[i] - offsetArr[i];
+            npNewMat[i] = (float) npMatFlat[i] - offsetArr[i];
         }
 
         return reshape1_to_2(npNewMat, 128, 128);
     }
 
 
-    private Tuple2<double[][], double[][]> noiseMeans(int nFramesBack, double[][][] noiseObjArray) {
-        double[][] bkgedata, bkgodata;
+    private Tuple2<float[][], float[][]> noiseMeans(int nFramesBack, float[][][] noiseObjArray) {
+        float[][] bkgedata, bkgodata;
 
         bkgodata = calculateMean(noiseObjArray, 0);
 
         if (nFramesBack > 1) {
             bkgedata = calculateMean(noiseObjArray, 1);
         } else {
-            bkgedata = new double[128][128];
+            bkgedata = new float[128][128];
         }
 
         return new Tuple2<>(bkgodata, bkgedata);
     }
 
-    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
+    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, float[][][] imageObjArray, Tuple2<float[][], float[][]> means) throws Exception {
 
-        double[][] flatfA = maskTO.getFlatfA();
-        double[][] flatfB = maskTO.getFlatfB();
+        float[][] flatfA = maskTO.getFlatfA();
+        float[][] flatfB = maskTO.getFlatfB();
 
-        double[][] bkgodata = means.f0;
-        double[][] bkgedata = means.f1;
+        float[][] bkgodata = means.f0;
+        float[][] bkgedata = means.f1;
 
         for (int i = 0; i < totalFrames; i += 2) {
             imageObjArray[i] = minus2mat(imageObjArray[i], bkgodata);
@@ -668,28 +672,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
         }
 
         System.out.println("Transforming Filters: " + signal);
-        double[][] data;
-        for (int i = 0; i < totalFrames; i += 2) {
-            data = imageObjArray[i];
-            for (int j = 0; j < 128; j++) {
-                for (int k = 0; k < 128; k++) {
-                    imageObjArray[i][j][k] = data[j][k] * flatfA[j][k];
-                }
-            }
-        }
-
-        for (int i = 1; i < totalFrames; i += 2) {
-            data = imageObjArray[i];
-            for (int j = 0; j < 128; j++) {
-                for (int k = 0; k < 128; k++) {
-                    imageObjArray[i][j][k] = data[j][k] * flatfB[j][k];
-                }
-            }
-        }
-
-        System.out.println("Finalizing Results: " + signal);
-        double[][] data1;
-        double[][] data2;
+        float[][] data1;
+        float[][] data2;
         int a, b;
         for (int i = 0; i < totalFrames / 2; i++) {
             a = 2 * i;
@@ -713,7 +697,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
             for (int i = 0; i < totalFrames; i++) {
                 for (int j = 0; j < 128; j++) {
                     for (int k = 0; k < 128; k++) {
-                        out.writeFloat((float) imageObjArray[i][j][k]);
+                        out.writeFloat(imageObjArray[i][j][k]);
                     }
                 }
             }
