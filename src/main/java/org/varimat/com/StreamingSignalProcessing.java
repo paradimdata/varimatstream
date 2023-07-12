@@ -20,8 +20,7 @@ import org.testcontainers.shaded.org.apache.commons.lang3.SerializationUtils;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -202,6 +201,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         System.out.println("Processed Noise Mean Value.");
 
+                        processedRaw.put(stateDir, (long) 0);
+
                         FileUtils.deleteDirectory(new File(tempPath + noise));
                     }
                 }
@@ -253,7 +254,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, List<double[
 
                         combine_from_concat_EMPAD2(signal, maskState.value(), slash, totalFrames, imageObjArray, meansObj);
 
+                        processedRaw.put(signal, 0L);
+
                         FileUtils.delete(new File(tempPath + "prc" + slash + signal + "_prc.raw"));
+
                     }
                 }
             }
