@@ -4,7 +4,7 @@
 
     <groupId>org.varimat</groupId>
     <artifactId>varimat-stream-processing</artifactId>
-    <version>1.4</version>
+    <version>1.6</version>
     <packaging>jar</packaging>
 
     <name>VariMat Stream Processing</name>
@@ -30,7 +30,7 @@
             <artifactId>jmatio</artifactId>
             <version>1.5</version>
         </dependency>
-        
+
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
@@ -219,7 +219,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.varimat.com.EMPADStreamCommand</mainClass>
+                            <mainClass>org.paradim.empad.com.EMPADStreamCommand</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -233,7 +233,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.varimat.com.EMPADStreamCommand</mainClass>
+                            <mainClass>org.paradim.empad.com.EMPADStreamCommand</mainClass>
                             <classpathPrefix>dependency-jars/</classpathPrefix>
                         </manifest>
                     </archive>
