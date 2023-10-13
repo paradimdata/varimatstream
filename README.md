@@ -1,3 +1,23 @@
+## EMPAD-SSP
+## Project Specification:
+
+EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of a standalone Python/Cython that was implemented for paired noise and signal processing.
+
+In the previous version, each pair of signal and noise data was read from a local system and processed to create a corrected image.
+
+In this program, signal and noise data are streamed from the Kafka customer ([OpenMSIStream](https://openmsistream.readthedocs.io/en/latest/)) in the form of scattered packets and processed simultaneously.
+
+The processor service we have used is [Apache Flink (1.17)](https://flink.apache.org/), which is a stateful streaming platform and has a [relatively better performance than Spark](https://www.macrometa.com/event-stream-processing/spark-vs-flink) for stream data processing.
+
+In addition, we have stored some results of processed data (such as noise) in the memory, which can be shared with other processed signals later, so that the program has a higher speed.
+
+On the other hand, all filter data (eight filters in total) are also stored in a MATLAB file and processed by an open-source Java library ([JMatIO](https://github.com/diffplug/JMatIO)) during program execution.
+
+We also tried to minimize redundant calculations and focus on performance and accuracy.
+
+
+![image](https://github.com/paradimdata/varimatstream/assets/2089846/5a5d3ba4-742e-4271-a5bd-1890f7e20d64)
+
 ## Installation Application:
 1. [Java 11](https://docs.oracle.com/en/java/javase/11/install/overview-jdk-installation.html#GUID-8677A77F-231A-40F7-98B9-1FD0B48C346A)
 2. [Maven](https://maven.apache.org/install.html)
