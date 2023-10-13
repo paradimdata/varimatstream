@@ -10,7 +10,7 @@ The processor service we have used is [Apache Flink (1.17)](https://flink.apache
 
 In addition, we have stored some results of processed data (such as noise) in the memory, which can be shared with other processed signals later, so that the program has a higher speed.
 
-On the other hand, all filter data (eight filters in total) are also stored in a MATLAB file and processed by an open-source Java library ([JMatIO](https://github.com/diffplug/JMatIO)) during program execution.
+On the other hand, all filter data (eight filters in total) are also stored in a [MATLAB file](https://github.com/paradimdata/varimatstream/blob/main/mask/mask.mat) and evaluated by an open-source Java library ([JMatIO](https://github.com/diffplug/JMatIO)) during program execution.
 
 We also tried to minimize redundant calculations and focus on performance and accuracy.
 
