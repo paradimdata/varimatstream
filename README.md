@@ -1,4 +1,3 @@
-## EMPAD-SSP
 ## Project Specification:
 
 EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of a standalone Python/Cython that was implemented for paired noise and signal processing.
