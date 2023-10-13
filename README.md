@@ -4,7 +4,7 @@ EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processin
 
 In the previous version, each pair of signal and noise data was read from a local system and processed to create a corrected image.
 
-In this program, signal and noise data are streamed from the Kafka consumer ([OpenMSIStream](https://openmsistream.readthedocs.io/en/latest/)) in the form of scattered packets and processed simultaneously.
+In this program, signal and noise data are streamed through the Kafka connector ([OpenMSIStream](https://openmsistream.readthedocs.io/en/latest/)) in the form of scattered packets and processed simultaneously.
 
 The processor service we have used is [Apache Flink (1.17)](https://flink.apache.org/), which is a stateful streaming platform and has a [relatively better performance than Spark](https://www.macrometa.com/event-stream-processing/spark-vs-flink) for stream data processing.
 
