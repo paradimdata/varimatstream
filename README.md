@@ -18,13 +18,15 @@ We also tried to minimize redundant calculations and focus on performance and ac
 ## Technical Specification:
 
 ## General workflow processes:
-1. Authentication
-2. Deserialization 
-3. Query Investigation
-4. State Registration
-5. Computational Signal Processing and State Verification
-6. Statistics (Debouncing, Histogram, and Transforming Filters)
-7. Finalizing the results and frame corrections
+1. [Authentication](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADStreamCommand.java#L147)
+2. [Deserialization](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/DataFileChunkDeserializer.java#L52)
+3. [Filter Extraction](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L01)
+4 [Query Investigation](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADStreamCommand.java#L197)
+5 [State Registration](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L357)
+6. [Computational Signal Processing](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L624) and [State Verification](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L269)
+7. ([Debouncing](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L690))
+8. [Transforming Filters](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L782), and [frame corrections]([Transforming Filters](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L853))
+
 
 ## Producer Side:
 1. Each directory must contain the noise, signal, or signals, and a corresponding XML file.
