@@ -16,10 +16,7 @@ We also tried to minimize redundant calculations and focus on performance and ac
 
 ## Technical Specification:
 
-## Technical Specification:
-**Agreement terms**
-
-a. Producer Side:
+## Producer Side:
 1. Each directory needs to contain the noise, signal or signals, and a corresponding xml file.
 (TODO: We may implement an application to verify those files).
 2. To distinguish the noise file from the signal files, we agreed that the name of each noise file ends with [_bkg](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADConstants.java)
