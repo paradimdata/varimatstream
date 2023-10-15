@@ -187,6 +187,20 @@ public class EMPADStreamCommand {
         return query_param.toString();
     }
 
+    /**
+     * <p>First we create a temporary view (EMPAD_TBL). Then, we are required to create a normalized query on the stream from a single topic. 
+     * I will extract all signals associated with a unique noise. The query will exclude all other data except the XML, noise, and signal files.
+     * The results contain
+     * 1) the index of the chuck (raw_chunk_i),
+     * 2) the total number of chunks (raw_n_total_chunks),
+     * 3) the subdirectory where all signals, the noise file, and the XML files are located (raw_subdir_str),
+     * 4) the name of each raw file (either signal or noise file),
+     * 5) the name of the XML file (opr_filename)
+     * </p>
+     * @param tableEnv
+     * @param rawDataStream
+     * @throws Exception
+     */
     private static void processWorkflow(StreamTableEnvironment tableEnv, DataStream<DataFileChunk> rawDataStream) throws Exception {
 
         tableEnv.createTemporaryView("EMPAD_TBL", rawDataStream);
