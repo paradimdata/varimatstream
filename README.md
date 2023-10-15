@@ -17,10 +17,10 @@ We also tried to minimize redundant calculations and focus on performance and ac
 ## Technical Specification:
 
 ## Producer Side:
-1. Each directory needs to contain the noise, signal or signals, and a corresponding xml file.
+1. Each directory needs to contain the noise, signal, or signals, and a corresponding XML file.
 (TODO: We may implement an application to verify those files).
 2. To distinguish the noise file from the signal files, we agreed that the name of each noise file ends with [_bkg](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADConstants.java)
-3. Each directory needs to contain a xml file. The name of each xml file inside the directory (regardless of the extension) must be exactly the same as the directory name. We use this xml file so that it can be distinguished when executing a query on other signals that are dependent on other noise. This xml file also contains information about the dimensions of the frames and their measurement accuracy, which may be different in different tests, which will have a direct impact on our calculations.
+3. Each directory needs to contain an XML file. The name of each XML file inside the directory (regardless of the extension) must be exactly the same as the directory name. We use this XML file so that it can be distinguished when executing a query on other signals that are dependent on other noise. This XML file also contains information about the dimensions of the frames and their measurement accuracy, which may be different in different tests, which will have a direct impact on our calculations.
 4. The producer must be only conducted through the [DataFileUploadDirectory](https://openmsistream.readthedocs.io/en/latest/user_info/main_programs/data_file_upload_directory.html)
 
    
