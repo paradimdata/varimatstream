@@ -15,6 +15,7 @@ On the other hand, all filter data (eight filters in total) are also stored in a
 We also tried to minimize redundant calculations and focus on performance and accuracy.
 
 ## Technical Specification:
+
 1. **Agreement terms**
 a. Producer Side:
 Each directory needs to contain the noise, signal, or signals, and a corresponding XML file.
