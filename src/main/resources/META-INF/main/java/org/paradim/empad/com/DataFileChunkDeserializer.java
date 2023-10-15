@@ -50,12 +50,12 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
     }
 
     /**
-     * <p>This method deserializes byte array message coming from Kafka producer into a DataFileChunk object.
+     * <p>This method deserializes the byte array message coming from the Kafka producer into a DataFileChunk object.
      * <a href="https://github.com/openmsi/openmsistream/blob/b92eeda583c529d64d38681172d552a1ca52de8b/openmsistream/kafka_wrapper/serialization.py#L178">DataFileChunkDeserializer</a>
      * To ensure that the data is correct, we compare the encoded binary values of both messages.
-      </p>
-
-       @param message
+     * </p>
+     *
+     * @param message
      * @return DataFileChunk
      * @since 1.6
      */
