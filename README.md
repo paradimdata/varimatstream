@@ -24,7 +24,7 @@ We also tried to minimize redundant calculations and focus on performance and ac
 4. State Registration
 5. Computational Signal Processing and State Verification
 6. Statistics (Debouncing, Histogram, and Transforming Filters)
-7. Finalizing the results and correcting frames
+7. Finalizing the results and frame corrections
 
 ## Producer Side:
 1. Each directory must contain the noise, signal, or signals, and a corresponding XML file.
