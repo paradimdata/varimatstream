@@ -1,10 +1,11 @@
 ## General Specification:
 
-EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of the standalone Python/Cython that was implemented for paired noise and signal processing.
+EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of the standalone Python/Cython that was implemented for paired noise and signal processing. The ultimate goal is streaming data processing. This means that any data sent by the Kafka platform if it passes the required conditions (please read the Producer Side), will be processed without interruption and priority, and the results will be applied to other computing services at the appropriate time. 
 
 In the previous version, each pair of signal and noise data was read from a local system and processed to create a corrected image.
 
 In this program, signal and noise data are streamed through the Kafka connector ([OpenMSIStream](https://openmsistream.readthedocs.io/en/latest/)) in the form of scattered packets and processed simultaneously.
+
 
 The processor service we have used is [Apache Flink (1.17)](https://flink.apache.org/), which is a stateful streaming platform and has a [relatively better performance than Spark](https://www.macrometa.com/event-stream-processing/spark-vs-flink) for stream data processing.
 
@@ -17,10 +18,10 @@ We also tried to minimize redundant calculations and focus on performance and ac
 ## Technical Specification:
 
 ## Producer Side:
-1. Each directory needs to contain the noise, signal, or signals, and a corresponding XML file.
+1. Each directory must contain the noise, signal, or signals, and a corresponding XML file.
 (TODO: We may implement an application to verify those files).
 2. To distinguish the noise file from the signal files, we agreed that the name of each noise file ends with [_bkg](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADConstants.java)
-3. The name of each XML file inside the directory (regardless of the extension) must be exactly the same as the directory name. We use this XML file so that it can be distinguished when executing a query on other signals that are dependent on other noise. This XML file also contains information about the dimensions of the frames and their measurement accuracy, which may be different in different tests, which will have a direct impact on our calculations.
+3. The name of each XML file inside the directory (regardless of the extension) must be exactly the same as the directory name. We use this XML file so that it can be distinguished when executing a query on other signals that are dependent on other noise. This XML file also contains information about the dimensions of the frames and their measurement accuracy, which may be different in different tests, which will directly impact our calculations.
 4. The producer must be only conducted through the [DataFileUploadDirectory](https://openmsistream.readthedocs.io/en/latest/user_info/main_programs/data_file_upload_directory.html)
 
    
