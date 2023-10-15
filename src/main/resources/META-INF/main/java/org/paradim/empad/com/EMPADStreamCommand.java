@@ -197,6 +197,7 @@ public class EMPADStreamCommand {
      * 4) the name of each raw file (either signal or noise file),
      * 5) the name of the XML file (opr_filename)
      * </p>
+     *
      * @param tableEnv
      * @param rawDataStream
      * @throws Exception
