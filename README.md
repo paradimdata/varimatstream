@@ -20,7 +20,7 @@ We also tried to minimize redundant calculations and focus on performance and ac
 ## General workflow processes:
 1. [Authentication](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADStreamCommand.java#L147)
 2. [Deserialization](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/DataFileChunkDeserializer.java#L52)
-3. [Filter Extraction](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L01)
+3. [Filter Extraction](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L101)
 4. [Query Investigation](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADStreamCommand.java#L197)
 5. [State Registration](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L357)
 6. [Computational Signal Processing](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L624) and [State Verification](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L269)
