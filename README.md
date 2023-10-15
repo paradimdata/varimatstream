@@ -17,6 +17,15 @@ We also tried to minimize redundant calculations and focus on performance and ac
 
 ## Technical Specification:
 
+## General workflow processes:
+1. Authentication
+2. Deserialization 
+3. Query Investigation
+4. State Registration
+5. Computational Signal Processing and State Verification
+6. Statistics (Debouncing, Histogram, and Transforming Filters)
+7. Finalizing the results and correcting frames
+
 ## Producer Side:
 1. Each directory must contain the noise, signal, or signals, and a corresponding XML file.
 (TODO: We may implement an application to verify those files).
