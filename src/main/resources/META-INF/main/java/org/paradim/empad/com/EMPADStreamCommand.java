@@ -228,6 +228,14 @@ public class EMPADStreamCommand {
                 process(new StreamingSignalProcessing()).setParallelism(8);
     }
 
+    /**
+     * <p> Main method (The program starts here).
+     * These system environment variable (KAFKA_TEST_CLUSTER_USERNAME, KAFKA_TEST_CLUSTER_PASSWORD, GROUP_ID, and EMPAD_TOPIC) are being provided.
+     * </p>
+     * @param args
+     * @throws Exception
+     */
+
     public static void main(String[] args) throws Exception {
 
         disableWarning();
