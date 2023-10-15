@@ -144,6 +144,13 @@ public class EMPADStreamCommand {
         return commands;
     }
 
+    /**
+     * <p>This method provides some features to connect Apache Kafka.
+     * <a href="https://nightlies.apache.org/flink/flink-docs-master/docs/connectors/datastream/kafka/">Apache Kafka Connector</a>
+     * There system environment variable (EMPAD_TOPIC, GROUP_ID, KAFKA_TEST_CLUSTER_USERNAME, and KAFKA_TEST_CLUSTER_PASSWORD) are require to be provided.
+     * </p>
+     * @throws Exception
+     */
     private static void processStream() throws Exception {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -235,7 +242,6 @@ public class EMPADStreamCommand {
      * @param args
      * @throws Exception
      */
-
     public static void main(String[] args) throws Exception {
 
         disableWarning();
