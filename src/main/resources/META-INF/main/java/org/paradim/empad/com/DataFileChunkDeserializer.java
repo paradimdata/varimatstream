@@ -28,19 +28,35 @@ import java.util.List;
 
          version 1.6
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
-         @date: 05/25/2023
+         @update: 10/15/2023
 */
 
+/**
+ * DataFileChunkDeserializer
+ */
 public class DataFileChunkDeserializer extends AbstractDeserializationSchema<DataFileChunk> {
 
     private static final long serialVersionUID = 1L;
 
     private transient ObjectMapper objectMapper;
 
+    /**
+     *
+     * @param context
+     */
     @Override
     public void open(InitializationContext context) {
         objectMapper = JsonMapper.builder().build().registerModule(new JavaTimeModule());
     }
+
+    /**
+     * This method deserializes the byte array message coming from the Kafka producer into a DataFileChunk object.
+     * https://github.com/openmsi/openmsistream/blob/b92eeda583c529d64d38681172d552a1ca52de8b/openmsistream/kafka_wrapper/serialization.py#L178
+     * To ensure that the data is correct, we compare the encoded binary values of both messages.
+     * @param message
+     * @return
+     * @throws IOException
+     */
 
     @Override
     public DataFileChunk deserialize(byte[] message) throws IOException {
