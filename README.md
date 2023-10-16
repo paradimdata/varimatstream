@@ -25,7 +25,7 @@ We also tried to minimize redundant calculations and focus on performance and ac
 5. [State Registration](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L357)
 6. [Computational Signal Processing](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L720) and [State Verification](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L269)
 7. [Debouncing](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L834)
-8. [Transforming Filters](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L782), and [Frame Corrections](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L853)
+8. [Transforming Filters](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L936), and [Frame Corrections](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/StreamingSignalProcessing.java#L1029)
 
 
 
