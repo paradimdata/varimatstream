@@ -424,6 +424,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method is equivalent of NumPy unpack function's implementation for both gloat and unsigned integer</p>
+     *
      * @param type
      * @param dim
      * @param raw
@@ -448,6 +449,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method converts 2D double to 2D float</p>
+     *
      * @param data
      * @return 2D float
      */
@@ -473,6 +475,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method converts a double array to a 2D double array. The dimensions should be justified properly</p>
+     *
      * @param array
      * @param rows
      * @param cols
@@ -490,6 +493,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method converts a double array to a 3D double array. The dimensions should be justified properly</p>
+     *
      * @param data
      * @param width
      * @param height
@@ -513,6 +517,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method is equivalent of NumPy * implementation which is Hadamard product of two 2D double arrays hadamard</p>
+     *
      * @param m1
      * @param m2
      * @return 2D double array
@@ -529,6 +534,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method is equivalent of NumPy * implementation which is Hadamard product of two 2D float arrays hadamard</p>
+     *
      * @param m1
      * @param m2
      * @return 2D double array
@@ -545,6 +551,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method adds two double arrays</p>
+     *
      * @param m1
      * @param m2
      * @return 2D array
@@ -561,6 +568,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method adds a 2D double array to a 2D float array</p>
+     *
      * @param m1
      * @param m2
      * @return 2D float array
@@ -577,6 +585,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method subtracts a 2D double array from another 2D double array </p>
+     *
      * @param m1
      * @param m2
      * @return 2D double array
@@ -593,6 +602,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <p>This method subtracts a 2D double array from a 2D float array</p>
+     *
      * @param m1
      * @param m2
      * @return 2D double array
@@ -609,6 +619,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * This method applies some filters into the results of an array of unsigned unpacked. The scientific specification is based on the MATLAB code from Cornel University
+     *
      * @param chId
      * @param nVals
      * @param g1A
@@ -677,6 +688,16 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return ana3d;
     }
 
+    /**
+     * This method unpacked the packet (unsigned integer) and applies the results into six filters
+     *
+     * @param chId
+     * @param chunkSize
+     * @param dataBinaryChunk
+     * @param maskTO
+     * @return 3D double array
+     * @throws IOException
+     */
     private double[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
         float[][] g1A, g1B, g2A, g2B, offA, offB;
 
@@ -696,10 +717,27 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return PAD_AB_bin2data(chId, nVals_i, g1A, g1B, g2A, g2B, offA, offB);
     }
 
+    /**
+     * <p>This is initiation of signal processing. A deserialized packet and a transforming abject which carries filters will be performed</p>
+     *
+     * @param chId
+     * @param chunkSize
+     * @param dataBinaryChunk
+     * @param maskTO
+     * @return 3D double array
+     * @throws IOException
+     */
     private double[][][] process(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
         return combineConcatenatedEMPAD2ABLarge(chId, chunkSize, dataBinaryChunk, maskTO);
     }
 
+    /**
+     * <p>This method is implementation of NumPy mean's function where axis = 0.</p>
+     *
+     * @param bkgdObjArray
+     * @param s
+     * @return 2D double array
+     */
     private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
         int l = bkgdObjArray.length / 2;
         double[][][] bkgdDataArray = new double[l][128][128];
@@ -722,22 +760,48 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return meanBkgd;
     }
 
+    /**
+     * This method generates an array of double values in the bracket of [start..end] with a 10 step
+     *
+     * @param start
+     * @param end
+     * @return array of doubles
+     */
     private double[] arange(double start, double end) {
         return IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray();
     }
 
+    /**
+     * This method find the index of the largest value in an array
+     * @param arr
+     * @return int
+     */
     private int largestIndex(double[] arr) {
-        int maxAt = 0;
-        for (int i = 0; i < arr.length; i++) {
-            maxAt = arr[i] > arr[maxAt] ? i : maxAt;
-        }
-        return maxAt;
+        int l = -1;
+        if (arr == null || arr.length == 0)
+            return l;
+
+        l = 0;
+        for (int i = 1; i < arr.length; i++)
+            if (arr[i] > arr[l]) l = i;
+        return l;
     }
 
+    /**
+     * <a>This method generates a layout for histogram</a>
+     * @param start
+     * @param end
+     * @return Layout object
+     */
     private Layout createLayout(double start, double end) {
         return CustomLayout.create(IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray());
     }
 
+    /**
+     * <a>This method flats a 2D float array into an array</a>
+     * @param matrix
+     * @return array of floats
+     */
     private float[] flattenedFloat(float[][] matrix) {
         float[] flattenedArray = new float[matrix.length * matrix[0].length];
         int count = 0;
@@ -749,6 +813,11 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return flattenedArray;
     }
 
+    /**
+     * a>This method flats a 3D float array into an array</a>
+     * @param matrix
+     * @return array of floats
+     */
     private double[] flattenedFloat(float[][][] matrix) {
         double[] flattenedArray = new double[matrix.length * matrix[0].length * matrix[0][0].length];
         int count = 0;
@@ -762,6 +831,11 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return flattenedArray;
     }
 
+    /**
+     * <a>This method applies the histogram and several statistics calculations. The scientific specification is based on the MATLAB code from Cornel University.
+     * @param npMat
+     * @return Tuple3
+     */
     private Tuple3<double[][], Integer, Integer> debounce_f(double[][] npMat) {
         double range1 = (-200.00 - ((float) 10 / 2));
         double range2 = (220.00 - ((float) 10 / 2));
@@ -839,7 +913,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return new Tuple3<>(reshape1_to_2(npNewMat, 128, 128), (int) histMaxVal, histMaxArg);
     }
 
-
+    /**
+     * This method calculates the mean value of a 3D double array.
+     * @param nFramesBack
+     * @param noiseObjArray
+     * @return Tuple2
+     */
     private Tuple2<double[][], double[][]> noiseMeans(int nFramesBack, double[][][] noiseObjArray) {
         double[][] bkgedata, bkgodata;
 
@@ -854,6 +933,18 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return new Tuple2<>(bkgodata, bkgedata);
     }
 
+    /**
+     * <p>This method finalizes the results from a signal and mean values. The scientific specification is based on the MATLAB code from Cornel University.
+     * The final results will be corrected and will be saved as a raw object into a local file system.
+     * </p>
+     * @param signal
+     * @param maskTO
+     * @param slash
+     * @param totalFrames
+     * @param imageObjArray
+     * @param means
+     * @throws Exception
+     */
     private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
 
         float[][] flatfA = maskTO.getFlatfA();
