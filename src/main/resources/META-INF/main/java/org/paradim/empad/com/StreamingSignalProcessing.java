@@ -46,7 +46,7 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
          version 1.6
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 06/14/2023
-         @last modified: 07/16/2023
+         @last modified: 10/15/2023
 */
 
 public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
@@ -422,6 +422,14 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     }
 
+    /**
+     * <p>This method is equivalent of NumPy unpack function's implementation for both gloat and unsigned integer</p>
+     * @param type
+     * @param dim
+     * @param raw
+     * @return object
+     */
+
     private Object unpack(char type, int dim, byte[] raw) {
         if (type == 'f') {
             var floats = ByteBuffer.wrap(raw).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
@@ -438,6 +446,11 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return null;
     }
 
+    /**
+     * <p>This method converts 2D double to 2D float</p>
+     * @param data
+     * @return 2D float
+     */
     private float[][] toFloat(double[][] data) {
         float[][] flMat = new float[data.length][data[0].length];
         for (int i = 0; i < flMat.length; i++) {
@@ -458,6 +471,13 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return array2d;
     }
 
+    /**
+     * <p>This method converts a double array to a 2D double array. The dimensions should be justified properly</p>
+     * @param array
+     * @param rows
+     * @param cols
+     * @return
+     */
     private double[][] reshape1_to_2(double[] array, int rows, int cols) {
         if (array.length != (rows * cols)) throw new IllegalArgumentException("Invalid array length");
 
@@ -468,6 +488,14 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return array2d;
     }
 
+    /**
+     * <p>This method converts a double array to a 3D double array. The dimensions should be justified properly</p>
+     * @param data
+     * @param width
+     * @param height
+     * @param depth
+     * @return
+     */
     private double[][][] reshape1_to_3_float(double[] data, int width, int height, int depth) {
         if (data.length != (width * height * depth)) throw new IllegalArgumentException("Invalid array length");
 
@@ -483,7 +511,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return array3d;
     }
 
-
+    /**
+     * <p>This method is equivalent of NumPy * implementation which is Hadamard product of two 2D double arrays hadamard</p>
+     * @param m1
+     * @param m2
+     * @return 2D double array
+     */
     private double[][] hadamard(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -494,6 +527,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
+    /**
+     * <p>This method is equivalent of NumPy * implementation which is Hadamard product of two 2D float arrays hadamard</p>
+     * @param m1
+     * @param m2
+     * @return 2D double array
+     */
     private double[][] hadamard(float[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -504,6 +543,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
+    /**
+     * <p>This method adds two double arrays</p>
+     * @param m1
+     * @param m2
+     * @return 2D array
+     */
     private double[][] add2mat(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -514,7 +559,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
-
+    /**
+     * <p>This method adds a 2D double array to a 2D float array</p>
+     * @param m1
+     * @param m2
+     * @return 2D float array
+     */
     private float[][] add2mat(float[][] m1, double[][] m2) {
         float[][] res = new float[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -525,6 +575,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
+    /**
+     * <p>This method subtracts a 2D double array from another 2D double array </p>
+     * @param m1
+     * @param m2
+     * @return 2D double array
+     */
     private double[][] minus2mat(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -535,6 +591,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
+    /**
+     * <p>This method subtracts a 2D double array from a 2D float array</p>
+     * @param m1
+     * @param m2
+     * @return 2D double array
+     */
     private double[][] minus2mat(double[][] m1, float[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
@@ -545,6 +607,19 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return res;
     }
 
+    /**
+     * This method applies some filters into the results of an array of unsigned unpacked. The scientific specification is based on the MATLAB code from Cornel University
+     * @param chId
+     * @param nVals
+     * @param g1A
+     * @param g1B
+     * @param g2A
+     * @param g2B
+     * @param offA
+     * @param offB
+     * @return 3D double array
+     * @throws IOException
+     */
     private double[][][] PAD_AB_bin2data(int chId, long[] nVals, float[][] g1A, float[][] g1B, float[][] g2A, float[][] g2B, float[][] offA, float[][] offB) throws IOException {
 
         int nLen = nVals.length;
