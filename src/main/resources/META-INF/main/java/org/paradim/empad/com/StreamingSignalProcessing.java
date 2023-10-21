@@ -431,7 +431,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @return object
      */
 
-    private Object unpack(char type, int dim, byte[] raw) {
+    public Object unpack(char type, int dim, byte[] raw) {
         if (type == 'f') {
             var floats = ByteBuffer.wrap(raw).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
             var floatArray = new float[dim];
@@ -453,7 +453,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param data
      * @return 2D float
      */
-    private float[][] toFloat(double[][] data) {
+    public float[][] toFloat(double[][] data) {
         float[][] flMat = new float[data.length][data[0].length];
         for (int i = 0; i < flMat.length; i++) {
             for (int j = 0; j < flMat[0].length; j++) {
@@ -463,7 +463,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         return flMat;
     }
 
-    private float[][] reshape1_to_2(float[] array, int rows, int cols) {
+    public float[][] reshape1_to_2(float[] array, int rows, int cols) {
         if (array.length != (rows * cols)) throw new IllegalArgumentException("Invalid array length");
 
         float[][] array2d = new float[rows][cols];
@@ -481,7 +481,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param cols
      * @return
      */
-    private double[][] reshape1_to_2(double[] array, int rows, int cols) {
+    public double[][] reshape1_to_2(double[] array, int rows, int cols) {
         if (array.length != (rows * cols)) throw new IllegalArgumentException("Invalid array length");
 
         double[][] array2d = new double[rows][cols];
@@ -500,7 +500,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param depth
      * @return
      */
-    private double[][][] reshape1_to_3_float(double[] data, int width, int height, int depth) {
+    public double[][][] reshape1_to_3_float(double[] data, int width, int height, int depth) {
         if (data.length != (width * height * depth)) throw new IllegalArgumentException("Invalid array length");
 
         double[][][] array3d = new double[width][height][depth];
@@ -522,7 +522,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D double array
      */
-    private double[][] hadamard(double[][] m1, double[][] m2) {
+    public double[][] hadamard(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -539,7 +539,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D double array
      */
-    private double[][] hadamard(float[][] m1, double[][] m2) {
+    public double[][] hadamard(float[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -556,7 +556,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D array
      */
-    private double[][] add2mat(double[][] m1, double[][] m2) {
+    public double[][] add2mat(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -573,7 +573,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D float array
      */
-    private float[][] add2mat(float[][] m1, double[][] m2) {
+    public float[][] add2mat(float[][] m1, double[][] m2) {
         float[][] res = new float[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -590,7 +590,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D double array
      */
-    private double[][] minus2mat(double[][] m1, double[][] m2) {
+    public double[][] minus2mat(double[][] m1, double[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -607,7 +607,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param m2
      * @return 2D double array
      */
-    private double[][] minus2mat(double[][] m1, float[][] m2) {
+    public double[][] minus2mat(double[][] m1, float[][] m2) {
         double[][] res = new double[m1.length][m1[0].length];
         for (int i = 0; i < m1.length; i++) {
             for (int j = 0; j < m1[0].length; j++) {
@@ -631,7 +631,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @return 3D double array
      * @throws IOException
      */
-    private double[][][] PAD_AB_bin2data(int chId, long[] nVals, float[][] g1A, float[][] g1B, float[][] g2A, float[][] g2B, float[][] offA, float[][] offB) throws IOException {
+    public double[][][] PAD_AB_bin2data(int chId, long[] nVals, float[][] g1A, float[][] g1B, float[][] g2A, float[][] g2B, float[][] offA, float[][] offB) throws IOException {
 
         int nLen = nVals.length;
         int nFrames = nLen / 128 / 128;
@@ -698,7 +698,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @return 3D double array
      * @throws IOException
      */
-    private double[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
+    public double[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
         float[][] g1A, g1B, g2A, g2B, offA, offB;
 
         g1A = maskTO.getG1A();
@@ -727,7 +727,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @return 3D double array
      * @throws IOException
      */
-    private double[][][] process(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
+    public double[][][] process(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
         return combineConcatenatedEMPAD2ABLarge(chId, chunkSize, dataBinaryChunk, maskTO);
     }
 
@@ -738,7 +738,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param s
      * @return 2D double array
      */
-    private double[][] calculateMean(double[][][] bkgdObjArray, int s) {
+    public double[][] calculateMean(double[][][] bkgdObjArray, int s) {
         int l = bkgdObjArray.length / 2;
         double[][][] bkgdDataArray = new double[l][128][128];
 
@@ -767,7 +767,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param end
      * @return array of doubles
      */
-    private double[] arange(double start, double end) {
+    public double[] arange(double start, double end) {
         return IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray();
     }
 
@@ -776,7 +776,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param arr
      * @return int
      */
-    private int largestIndex(double[] arr) {
+    public int largestIndex(double[] arr) {
         int l = -1;
         if (arr == null || arr.length == 0)
             return l;
@@ -793,7 +793,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param end
      * @return Layout object
      */
-    private Layout createLayout(double start, double end) {
+    public Layout createLayout(double start, double end) {
         return CustomLayout.create(IntStream.rangeClosed(0, (int) ((end - start) / 10)).mapToDouble(x -> x * 10 + start).toArray());
     }
 
@@ -802,7 +802,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param matrix
      * @return array of floats
      */
-    private float[] flattenedFloat(float[][] matrix) {
+    public float[] flattenedFloat(float[][] matrix) {
         float[] flattenedArray = new float[matrix.length * matrix[0].length];
         int count = 0;
         for (float[] floats : matrix) {
@@ -818,7 +818,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param matrix
      * @return array of floats
      */
-    private double[] flattenedFloat(float[][][] matrix) {
+    public double[] flattenedFloat(float[][][] matrix) {
         double[] flattenedArray = new double[matrix.length * matrix[0].length * matrix[0][0].length];
         int count = 0;
         for (float[][] floats : matrix) {
@@ -836,7 +836,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param npMat
      * @return Tuple3
      */
-    private Tuple3<double[][], Integer, Integer> debounce_f(double[][] npMat) {
+    public Tuple3<double[][], Integer, Integer> debounce_f(double[][] npMat) {
         double range1 = (-200.00 - ((float) 10 / 2));
         double range2 = (220.00 - ((float) 10 / 2));
         double[] edges = arange(range1, range2);
@@ -919,7 +919,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param noiseObjArray
      * @return Tuple2
      */
-    private Tuple2<double[][], double[][]> noiseMeans(int nFramesBack, double[][][] noiseObjArray) {
+    public Tuple2<double[][], double[][]> noiseMeans(int nFramesBack, double[][][] noiseObjArray) {
         double[][] bkgedata, bkgodata;
 
         bkgodata = calculateMean(noiseObjArray, 0);
@@ -945,7 +945,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param means
      * @throws Exception
      */
-    private void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
+    public void combine_from_concat_EMPAD2(String signal, MaskTO maskTO, String slash, int totalFrames, double[][][] imageObjArray, Tuple2<double[][], double[][]> means) throws Exception {
 
         float[][] flatfA = maskTO.getFlatfA();
         float[][] flatfB = maskTO.getFlatfB();
