@@ -1,15 +1,10 @@
 import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import static junit.framework.TestCase.assertEquals;
-import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
 
 /**
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
@@ -17,13 +12,11 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
 public class EMPADTest {
 
     private static final int chunkSizePower = 10;
-
-//    TODO
-    private static final String testPath = "";
+    private static final String testPath = System.getProperty("user.dir");
 
     @Test
     void addition() {
-        assertEquals(2, sum(1, 1));
+        Assertions.assertEquals(2, sum(1, 1));
     }
 
     private int sum(int a, int b) {
@@ -60,7 +53,12 @@ public class EMPADTest {
     }
 
     @Test
+    public void testReadSampleData() throws IOException {
+        File file = new File(testPath + "/test/noise_chunks/1");
+        Assertions.assertTrue(file.exists());
+    }
+
+    @Test
     public void testUnsignedUnpack() throws IOException {
-//        TODO
     }
 }
