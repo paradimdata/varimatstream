@@ -59,6 +59,11 @@ public class EMPADTest {
     }
 
     @Test
+    public void testReadSampleData2() throws IOException {
+        File file = new File(testPath + "/test/noise_chunks/1000");
+        Assertions.assertTrue(file.exists());
+
+    @Test
     public void testUnsignedUnpack() throws IOException {
     }
 }
