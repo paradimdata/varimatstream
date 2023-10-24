@@ -59,12 +59,12 @@ public class EMPADTest {
         File file = new File(testPath + "/test/noise_chunks/1");
         assertTrue(file.exßists());
     }
-//
-//    @Test
-//    public void testReadSampleData2() throws IOException {
-//        File file = new File(testPath + "/test/noise_chunks/2");
-//        assertTrue(file.exists());
-//    }
+
+    @Test
+    public void testReadSampleData2() throws IOException {
+        File file = new File(testPath + "/test/noise_chunks/23232323");
+        assertTrue(file.exists());
+    }
 
     @Test
     public void testUnsignedUnpack() throws IOException {
