@@ -54,11 +54,11 @@ public class EMPADTest {
         inputStream.close();
     }
 
-//    @Test
-//    public void testReadSampleData() throws IOException {
-//        File file = new File(testPath + "/test/noise_chunks/1");
-//        assertTrue(file.exists());
-//    }
+    @Test
+    public void testReadSampleData() throws IOException {
+        File file = new File(testPath + "/test/noise_chunks/1");
+        assertTrue(file.exßists());
+    }
 //
 //    @Test
 //    public void testReadSampleData2() throws IOException {
