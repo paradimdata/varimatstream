@@ -1,11 +1,37 @@
-version: '2.1'
-orbs:
-  maven: circleci/maven@1.1
-workflows:
-  maven_test:
-    jobs:
-      - maven/test:
-          executor: example
+version: 2.1
+executors:
+  default:
+    working_directory: ~/app
+    docker:
+      - image: circleci/openjdk:11-jdk
+
+jobs:
+  build:
+    executor: default
+    steps:
+      - checkout
+      - run:
+          name: Set up Java
+          command: |
+            sudo update-alternatives --set java /usr/lib/jvm/jdk-11.0.10/bin/java
+            sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.10/bin/javac
+      - restore_cache:
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run:
+          name: Build with Maven
+          command: mvn clean install -DskipTests=true
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "pom.xml" }}
+      - run:
+          name: Run Tests
+          command: mvn test
+
+
+
+# Additional configuration options can be added as needed
+
 
 #version: 2.1
 #executors:
