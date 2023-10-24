@@ -1,12 +1,12 @@
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
@@ -62,7 +62,7 @@ public class EMPADTest {
 
     @Test
     public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/100990");
+        File file = new File(testPath + "/test/noise_chunks/2");
         assertTrue(file.exists());
     }
 
