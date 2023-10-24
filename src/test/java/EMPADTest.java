@@ -23,9 +23,6 @@ public class EMPADTest {
         return a + b;
     }
 
-    public static void main(String[] args) {
-    }
-
     private void splitRawDataIntoChunks(String path) throws IOException {
         int fileLength = (int) new File(path).length();
         int chunkSize = (int) Math.pow(2, chunkSizePower);
