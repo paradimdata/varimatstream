@@ -1,68 +1,22 @@
-#version: 2.1
-#
-#executors:
-#  default-executor:
-#    docker:
-#      - image: circleci/openjdk:11-jdk
-#
-#jobs:
-#  build:
-#    executor: default-executor
-#
-#    steps:
-#      - checkout
-#
-#      - run:
-#          name: Set up Java environment
-#          command: |
-#            # Set up Java environment
-#            echo 'export JAVA_HOME=/usr/lib/jvm/zulu-11' >> $BASH_ENV
-#            source $BASH_ENV
-#
-#      - run:
-#          name: Build and test with Maven
-#          command: |
-#            # Run Maven build and tests
-#            mvn clean install
-#
-#      - store_artifacts:
-#          path: target/
-#          destination: artifacts
-#
-#      - store_test_results:
-#          path: target/surefire-reports
-#
-#workflows:
-#  version: 2
-#  build:
-#    jobs:
-#      - build
-
-
-
 version: 2.1
 executors:
   default:
     docker:
-      - image: circleci/openjdk:11-jdk
+      - image: circleci/openjdk:11-jdk  # You can choose the Java version you need
 
 jobs:
   build:
     executor: default
     steps:
-      - checkout
+      - checkout  # Pull your source code from your VCS repository
       - run:
           name: Build and Test
           command: |
-            mvn compile
-            mvn test
+            # Build the Maven project
+            mvn clean install
 
 workflows:
   version: 2
-  build:
+  build_and_test:
     jobs:
       - build
-  maven_test:
-    jobs:
-      - maven/test
-
