@@ -18,7 +18,7 @@ public class EMPADTest {
 
     @Test
     public void testAddition() {
-        assertEquals(3, sum(1, 1));
+        assertEquals(10, sum(1, 1));
     }
 
     private int sum(int a, int b) {
