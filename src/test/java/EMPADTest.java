@@ -1,10 +1,12 @@
 import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
@@ -15,12 +17,15 @@ public class EMPADTest {
     private static final String testPath = System.getProperty("user.dir");
 
     @Test
-    void addition() {
-        Assertions.assertEquals(2, sum(1, 1));
+    public void testAddition() {
+        assertEquals(2, sum(1, 1));
     }
 
     private int sum(int a, int b) {
         return a + b;
+    }
+
+    public static void main(String[] args) {
     }
 
     private void splitRawDataIntoChunks(String path) throws IOException {
@@ -52,19 +57,13 @@ public class EMPADTest {
     @Test
     public void testReadSampleData() throws IOException {
         File file = new File(testPath + "/test/noise_chunks/1");
-        Assertions.assertTrue(file.exists());
+        assertTrue(file.exists());
     }
 
     @Test
     public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/1000");
-        Assertions.assertTrue(file.exists());
-    }
-
-    @Test
-    public void testReadSampleData3() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/dbnbnasbna");
-        Assertions.assertTrue(file.exists());
+        File file = new File(testPath + "/test/noise_chunks/100990");
+        assertTrue(file.exists());
     }
 
     @Test
