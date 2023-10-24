@@ -1,7 +1,41 @@
+#version: 2.1
+#executors:
+#  default:
+#    working_directory: ~/app
+#    docker:
+#      - image: circleci/openjdk:11-jdk
+#
+#jobs:
+#  build:
+#    executor: default
+#    steps:
+#      - checkout
+#      - run:
+#          name: Set up Java
+#          command: |
+#            sudo update-alternatives --set java /usr/lib/jvm/jdk-11.0.10/bin/java
+#            sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.10/bin/javac
+#      - restore_cache:
+#          key: v1-dependencies-{{ checksum "pom.xml" }}
+#      - run:
+#          name: Build with Maven
+#          command: mvn clean install -DskipTests=true
+#      - save_cache:
+#          paths:
+#            - ~/.m2
+#          key: v1-dependencies-{{ checksum "pom.xml" }}
+#      - run:
+#          name: Run Tests
+#          command: mvn test
+
+
+
+# Additional configuration options can be added as needed
+
+
 version: 2.1
 executors:
   default:
-    working_directory: ~/app
     docker:
       - image: circleci/openjdk:11-jdk
 
@@ -11,51 +45,17 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Set up Java
+          name: Build and Test
           command: |
-            sudo update-alternatives --set java /usr/lib/jvm/jdk-11.0.10/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.10/bin/javac
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run:
-          name: Build with Maven
-          command: mvn clean install -DskipTests=true
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: v1-dependencies-{{ checksum "pom.xml" }}
-      - run:
-          name: Run Tests
-          command: mvn test
+            mvn compile 
+            mvn test
 
-
-
-# Additional configuration options can be added as needed
-
-
-#version: 2.1
-#executors:
-#  default:
-#    docker:
-#      - image: circleci/openjdk:11-jdk  # You can choose a different Java version if needed
-#
-#jobs:
-#  build:
-#    executor: default
-#    steps:
-#      - checkout  # This step checks out your code
-#      - run:
-#          name: Build and Test
-#          command: |
-#            mvn compile  # Compile your Java code
-#            mvn test     # Run your tests
-#
-#workflows:
-#  version: 2
-#  build:
-#    jobs:
-#      - build
-#  maven_test:
-#    jobs:
-#      - maven/test
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+  maven_test:
+    jobs:
+      - maven/test
 
