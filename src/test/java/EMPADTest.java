@@ -62,7 +62,7 @@ public class EMPADTest {
 
     @Test
     public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/23433434");
+        File file = new File(testPath + "/test/noise_chunks/2");
         assertTrue(file.exists());
     }
 
