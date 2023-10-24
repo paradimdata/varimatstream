@@ -1,7 +1,48 @@
+version: 2.1
+
+executors:
+  default-executor:
+    docker:
+      - image: circleci/openjdk:11-jdk
+
+jobs:
+  build:
+    executor: default-executor
+
+    steps:
+      - checkout
+
+      - run:
+          name: Set up Java environment
+          command: |
+            # Set up Java environment
+            echo 'export JAVA_HOME=/usr/lib/jvm/zulu-11' >> $BASH_ENV
+            source $BASH_ENV
+
+      - run:
+          name: Build and test with Maven
+          command: |
+            # Run Maven build and tests
+            mvn clean install
+
+      - store_artifacts:
+          path: target/
+          destination: artifacts
+
+      - store_test_results:
+          path: target/surefire-reports
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+
+
+
 #version: 2.1
 #executors:
 #  default:
-#    working_directory: ~/app
 #    docker:
 #      - image: circleci/openjdk:11-jdk
 #
@@ -11,51 +52,17 @@
 #    steps:
 #      - checkout
 #      - run:
-#          name: Set up Java
+#          name: Build and Test
 #          command: |
-#            sudo update-alternatives --set java /usr/lib/jvm/jdk-11.0.10/bin/java
-#            sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.10/bin/javac
-#      - restore_cache:
-#          key: v1-dependencies-{{ checksum "pom.xml" }}
-#      - run:
-#          name: Build with Maven
-#          command: mvn clean install -DskipTests=true
-#      - save_cache:
-#          paths:
-#            - ~/.m2
-#          key: v1-dependencies-{{ checksum "pom.xml" }}
-#      - run:
-#          name: Run Tests
-#          command: mvn test
-
-
-
-# Additional configuration options can be added as needed
-
-
-version: 2.1
-executors:
-  default:
-    docker:
-      - image: circleci/openjdk:11-jdk
-
-jobs:
-  build:
-    executor: default
-    steps:
-      - checkout
-      - run:
-          name: Build and Test
-          command: |
-            mvn compile 
-            mvn test
-
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build
-  maven_test:
-    jobs:
-      - maven/test
+#            mvn compile
+#            mvn test
+#
+#workflows:
+#  version: 2
+#  build:
+#    jobs:
+#      - build
+#  maven_test:
+#    jobs:
+#      - maven/test
 
