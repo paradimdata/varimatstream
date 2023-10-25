@@ -14,6 +14,7 @@ jobs:
           command: |
             # Build the Maven project
             mvn clean install
+            mvn test
 
 workflows:
   version: 2
