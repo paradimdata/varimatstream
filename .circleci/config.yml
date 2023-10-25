@@ -2,13 +2,13 @@ version: 2.1
 executors:
   default:
     docker:
-      - image: circleci/openjdk:11-jdk  # You can choose the Java version you need
+      - image: circleci/openjdk:11-jdk
 
 jobs:
   build:
     executor: default
     steps:
-      - checkout  # Pull your source code from your VCS repository
+      - checkout
       - run:
           name: Build and Test
           command: |
