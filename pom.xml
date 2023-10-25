@@ -13,7 +13,7 @@
         <flink.version>1.17.0</flink.version>
         <jackson.databind.version>2.14.0</jackson.databind.version>
         <jackson.version>2.14.0</jackson.version>
-        <junit.jupiter.version>5.9.1</junit.jupiter.version>
+        <!--        <junit.jupiter.version>5.9.1</junit.jupiter.version>-->
         <kafka.version>3.2.2</kafka.version>
         <log4j.version>2.19.0</log4j.version>
         <maven.compiler.source>${target.java.version}</maven.compiler.source>
@@ -198,12 +198,21 @@
             <version>2.0.2</version>
         </dependency>
 
+        <!--        <dependency>-->
+        <!--            <groupId>org.junit.jupiter</groupId>-->
+        <!--            <artifactId>junit-jupiter-engine</artifactId>-->
+        <!--            <version>${junit.jupiter.version}</version>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
+        <!--    </dependencies>-->
+
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.jupiter.version}</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
