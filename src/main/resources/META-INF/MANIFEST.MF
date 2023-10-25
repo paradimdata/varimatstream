@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Main-Class: org.varimat.com.EMPADStreamCommand
+Main-Class: org.paradim.empad.com.EMPADStreamCommand
 Class-Path: log4j-api-2.19.0.jar jackson-databind-2.14.0.jar kafka-clien
  ts-3.2.3.jar flink-shaded-netty-4.1.82.Final-16.1.jar progressbar-0.9.5
  .jar frocksdbjni-6.20.3-ververica-2.0.jar flink-hadoop-fs-1.17.0.jar fl
