@@ -11,14 +11,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
  */
-public class EMPADTest {
+public class TestCase {
 
     private static final int chunkSizePower = 10;
     private static final String testPath = System.getProperty("user.dir");
 
     @Test
     public void testAddition() {
-        assertEquals(10, sum(1, 1));
+        assertEquals(2, sum(1, 1));
     }
 
     private int sum(int a, int b) {
@@ -57,12 +57,12 @@ public class EMPADTest {
     @Test
     public void testReadSampleData() throws IOException {
         File file = new File(testPath + "/test/noise_chunks/1");
-        assertTrue(file.exßists());
+        assertTrue(file.exists());
     }
 
     @Test
     public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/23232323");
+        File file = new File(testPath + "/test/noise_chunks/2");
         assertTrue(file.exists());
     }
 
