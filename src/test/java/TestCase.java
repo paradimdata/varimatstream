@@ -62,7 +62,7 @@ public class TestCase {
 
     @Test
     public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/2");
+        File file = new File(testPath + "/test/noise_chunks/2assa");
         assertTrue(file.exists());
     }
 
