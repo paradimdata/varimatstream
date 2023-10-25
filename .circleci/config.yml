@@ -13,7 +13,7 @@ jobs:
           name: Build and Test
           command: |
             # Build the Maven project
-            mvn clean install
+            mvn build
             mvn test
 
 workflows:
