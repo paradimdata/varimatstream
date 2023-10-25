@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
+ *
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
  */
 public class TestCase {

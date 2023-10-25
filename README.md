@@ -7,7 +7,7 @@ In the previous version, each pair of signal and noise data was read from a loca
 In this program, signal and noise data are streamed through the Kafka connector ([OpenMSIStream](https://openmsistream.readthedocs.io/en/latest/)) in the form of scattered packets and processed simultaneously.
 
 
-The processor service we have used is [Apache Flink (1.17)](https://flink.apache.org/), which is a stateful streaming platform and has a [relatively better performance than Spark](https://www.macrometa.com/event-stream-processing/spark-vs-flink) for stream data processing.
+The processor service we have used is [Apache Flink (1.17.1)](https://flink.apache.org/), which is a stateful streaming platform and has a [relatively better performance than Spark](https://www.macrometa.com/event-stream-processing/spark-vs-flink) for stream data processing.
 
 In addition, we have stored some results of processed data (such as noise) in the memory, which will be served to other processed signals later, so that the program has a higher speed.
 
