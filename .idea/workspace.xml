@@ -7,8 +7,6 @@
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/StreamingSignalProcessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/StreamingSignalProcessing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/TestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -148,7 +146,7 @@
       <workItem from="1698256704813" duration="1469000" />
       <workItem from="1698258228278" duration="15319000" />
       <workItem from="1698356874365" duration="698000" />
-      <workItem from="1698357640575" duration="2133000" />
+      <workItem from="1698357640575" duration="2385000" />
     </task>
     <servers />
   </component>
