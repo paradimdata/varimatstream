@@ -46,7 +46,7 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
          version 1.6
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 06/14/2023
-         @last modified: 10/15/2023
+         @last modified: 26/15/2023
 */
 
 public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
@@ -96,19 +96,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
             if (maskState.value() == null) {
                 String calibrationPath = EMPAD_HOME + slash + "mask" + slash + "mask.mat";
-                MatFileReader matfilereader = new MatFileReader(calibrationPath);
-
-                float[][] g1A = toFloat(((MLDouble) matfilereader.getMLArray("g1A")).getArray());
-                float[][] g1B = toFloat(((MLDouble) matfilereader.getMLArray("g1B")).getArray());
-                float[][] g2A = toFloat(((MLDouble) matfilereader.getMLArray("g2A")).getArray());
-                float[][] g2B = toFloat(((MLDouble) matfilereader.getMLArray("g2B")).getArray());
-                float[][] offA = toFloat(((MLDouble) matfilereader.getMLArray("offA")).getArray());
-                float[][] offB = toFloat(((MLDouble) matfilereader.getMLArray("offB")).getArray());
-
-                float[][] flatfA = toFloat(((MLDouble) matfilereader.getMLArray("flatfA")).getArray());
-                float[][] flatfB = toFloat(((MLDouble) matfilereader.getMLArray("flatfB")).getArray());
-
-                MaskTO maskTO = new MaskTO(g1A, g1B, g2A, g2B, offA, offB, flatfA, flatfB);
+                MaskTO maskTO = loadMasks(calibrationPath);
                 maskState.update(maskTO);
             }
 
@@ -173,7 +161,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 //                timeDurationMapState.put(stateDir, Duration.between(prev, now));
 //            }
 
-            double[][][] rawFrames = process(chunkId, chunkSize, raw_data_chunk, maskState.value());
+            byte[] chunkByte = raw_data_chunk.asByteArray();
+            double[][][] rawFrames = process(chunkId, chunkSize, chunkByte, maskState.value());
 
 //            if (timeInstantMapState.get(stateDir) != null) {
 //                Instant now = Instant.now();
@@ -423,6 +412,29 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
     }
 
     /**
+     * This method loads masks from a local MATLAB file
+     *
+     * @param maskDir
+     * @return MaskTO
+     * @throws IOException
+     */
+    public MaskTO loadMasks(String maskDir) throws IOException {
+        MatFileReader matfilereader = new MatFileReader(maskDir);
+
+        float[][] g1A = toFloat(((MLDouble) matfilereader.getMLArray("g1A")).getArray());
+        float[][] g1B = toFloat(((MLDouble) matfilereader.getMLArray("g1B")).getArray());
+        float[][] g2A = toFloat(((MLDouble) matfilereader.getMLArray("g2A")).getArray());
+        float[][] g2B = toFloat(((MLDouble) matfilereader.getMLArray("g2B")).getArray());
+        float[][] offA = toFloat(((MLDouble) matfilereader.getMLArray("offA")).getArray());
+        float[][] offB = toFloat(((MLDouble) matfilereader.getMLArray("offB")).getArray());
+
+        float[][] flatfA = toFloat(((MLDouble) matfilereader.getMLArray("flatfA")).getArray());
+        float[][] flatfB = toFloat(((MLDouble) matfilereader.getMLArray("flatfB")).getArray());
+
+        return new MaskTO(g1A, g1B, g2A, g2B, offA, offB, flatfA, flatfB);
+    }
+
+    /**
      * <p>This method is equivalent of NumPy unpack function's implementation for both gloat and unsigned integer</p>
      *
      * @param type
@@ -430,7 +442,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * @param raw
      * @return object
      */
-
     public Object unpack(char type, int dim, byte[] raw) {
         if (type == 'f') {
             var floats = ByteBuffer.wrap(raw).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
@@ -693,12 +704,12 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      *
      * @param chId
      * @param chunkSize
-     * @param dataBinaryChunk
+     * @param chunkByte
      * @param maskTO
      * @return 3D double array
      * @throws IOException
      */
-    public double[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
+    public double[][][] combineConcatenatedEMPAD2ABLarge(int chId, int chunkSize, byte[] chunkByte, MaskTO maskTO) throws IOException {
         float[][] g1A, g1B, g2A, g2B, offA, offB;
 
         g1A = maskTO.getG1A();
@@ -708,9 +719,8 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
         offA = maskTO.getOffA();
         offB = maskTO.getOffB();
 
-        byte[] chunkByte;
         long[] nVals_i;
-        chunkByte = dataBinaryChunk.asByteArray();
+
         nVals_i = (long[]) unpack('I', chunkSize / 4, chunkByte);
 
         assert nVals_i != null;
@@ -722,13 +732,13 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      *
      * @param chId
      * @param chunkSize
-     * @param dataBinaryChunk
+     * @param chunkByte
      * @param maskTO
      * @return 3D double array
      * @throws IOException
      */
-    public double[][][] process(int chId, int chunkSize, BinaryValue dataBinaryChunk, MaskTO maskTO) throws IOException {
-        return combineConcatenatedEMPAD2ABLarge(chId, chunkSize, dataBinaryChunk, maskTO);
+    public double[][][] process(int chId, int chunkSize, byte[] chunkByte, MaskTO maskTO) throws IOException {
+        return combineConcatenatedEMPAD2ABLarge(chId, chunkSize, chunkByte, maskTO);
     }
 
     /**
@@ -773,6 +783,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * This method find the index of the largest value in an array
+     *
      * @param arr
      * @return int
      */
@@ -789,6 +800,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <a>This method generates a layout for histogram</a>
+     *
      * @param start
      * @param end
      * @return Layout object
@@ -799,6 +811,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <a>This method flats a 2D float array into an array</a>
+     *
      * @param matrix
      * @return array of floats
      */
@@ -815,6 +828,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * a>This method flats a 3D float array into an array</a>
+     *
      * @param matrix
      * @return array of floats
      */
@@ -833,6 +847,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * <a>This method applies the histogram and several statistics calculations. The scientific specification is based on the MATLAB code from Cornel University.
+     *
      * @param npMat
      * @return Tuple3
      */
@@ -915,6 +930,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
     /**
      * This method calculates the mean value of a 3D double array.
+     *
      * @param nFramesBack
      * @param noiseObjArray
      * @return Tuple2
@@ -937,6 +953,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
      * <p>This method finalizes the results from a signal and mean values. The scientific specification is based on the MATLAB code from Cornel University.
      * The final results will be corrected and will be saved as a raw object into a local file system.
      * </p>
+     *
      * @param signal
      * @param maskTO
      * @param slash

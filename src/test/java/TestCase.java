@@ -1,72 +1,72 @@
+import com.jmatio.io.MatFileReader;
+import com.jmatio.types.MLSingle;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.paradim.empad.com.StreamingSignalProcessing;
+import org.paradim.empad.dto.MaskTO;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * Test class for EMPAD's functionality (mostly corresponding computational functions in MATLAB)
+ * last update: 10/26/2023
  */
 public class TestCase {
 
-    private static final int chunkSizePower = 10;
-    private static final String testPath = System.getProperty("user.dir");
+    private static final int chunkSizePower = 19;
+    private static final String systemPath = System.getProperty("user.dir");
 
-    @Test
-    public void testAddition() {
-        assertEquals(2, sum(1, 1));
-    }
-
-    private int sum(int a, int b) {
-        return a + b;
-    }
+    private static StreamingSignalProcessing instance;
 
     public static void main(String[] args) {
     }
 
-    private void splitRawDataIntoChunks(String path) throws IOException {
-        int fileLength = (int) new File(path).length();
+    /**
+     * compare the results of MATLAB frames and EMPAD process method
+     * @throws IOException
+     */
+    @Test
+    public void testNoiseFrames() throws IOException {
+        if (instance == null) {
+            instance = new StreamingSignalProcessing();
+        }
+
+        MaskTO maskTO = instance.loadMasks(systemPath + "/mask/mask.mat");
         int chunkSize = (int) Math.pow(2, chunkSizePower);
 
-        int bufferSize = fileLength / chunkSize;
+        float val;
+        int idx, init, chunkId, count = 0;
+        double[][][] packetData;
+        byte[] chunkByte;
+        double[] packetDataFlatten;
 
-        FileInputStream inputStream = new FileInputStream(path);
-        byte[] buffer = new byte[bufferSize];
+        MatFileReader noiseFrames;
+        try {
+            noiseFrames = new MatFileReader(systemPath + "/testdata/matlab/noise_frames.mat");
+            for (int i = 0; i < 128; i++) {
+                chunkId = i + 1;
+                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + chunkId));
+                packetData = instance.process((i + 1), chunkSize, chunkByte, maskTO);
+                packetDataFlatten = Arrays.stream(packetData)
+                        .flatMap(Arrays::stream)
+                        .flatMapToDouble(Arrays::stream)
+                        .toArray();
 
-        String outPath;
+                init = i * 8 * 128 * 128;
+                idx = 0;
+                for (int j = init; j < (i + 1) * 8 * 128 * 128; j++) {
+                    val = ((MLSingle) (noiseFrames.getMLArray("frames"))).get(count++);
+                    assertEquals((float) packetDataFlatten[idx++], val);
+                }
 
-        if (path.contains("bkg")) {
-            outPath = testPath + "noise_chunks/";
-        } else {
-            outPath = testPath + "signal_chunks/";
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        int fileIndex = 1;
-        while ((inputStream.read(buffer)) > 0) {
-            FileUtils.writeByteArrayToFile(new File(outPath + fileIndex), buffer);
-            fileIndex++;
-        }
-
-        inputStream.close();
-    }
-
-    @Test
-    public void testReadSampleData() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/1");
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void testReadSampleData2() throws IOException {
-        File file = new File(testPath + "/test/noise_chunks/2assa");
-        assertTrue(file.exists());
-    }
-
-    @Test
-    public void testUnsignedUnpack() throws IOException {
     }
 }
