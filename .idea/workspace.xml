@@ -5,8 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +59,7 @@
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestCase.testNoiseFrames">
+  <component name="RunManager" selected="JUnit.TestCase.testMean">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -97,11 +97,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCase" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCase.testMean" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="varimat-stream-processing" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="TestCase" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="METHOD_NAME" value="testMean" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -126,12 +127,23 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestCase.testSignalrames" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="varimat-stream-processing" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestCase" />
+      <option name="METHOD_NAME" value="testSignalrames" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestCase.testMean" />
+        <item itemvalue="JUnit.TestCase.testSignalrames" />
         <item itemvalue="JUnit.TestCase.testNoiseFrames" />
         <item itemvalue="Application.TestCase" />
         <item itemvalue="JUnit.TestCase.testSignalFrames" />
-        <item itemvalue="JUnit.TestCase" />
       </list>
     </recent_temporary>
   </component>
@@ -146,7 +158,7 @@
       <workItem from="1698256704813" duration="1469000" />
       <workItem from="1698258228278" duration="15319000" />
       <workItem from="1698356874365" duration="698000" />
-      <workItem from="1698357640575" duration="2385000" />
+      <workItem from="1698357640575" duration="12921000" />
     </task>
     <servers />
   </component>
@@ -158,7 +170,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestCase.java</url>
-          <line>26</line>
+          <line>28</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
