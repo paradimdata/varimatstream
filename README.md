@@ -1,6 +1,6 @@
 ## General Specification:
 
-EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of the standalone Python/Cython that was implemented for paired noise and signal processing. The ultimate goal is streaming data processing. This means that any data sent by the Kafka platform if it passes the required conditions (please read the Producer Side), will be processed without interruption and priority, and the results will be applied to other computing services at the appropriate time. 
+EMPAD-SSP (Electron Microscope Pixel Array Detector - Streaming Signal Processing) is an extended version of the standalone Python/Cython that was implemented for paired noise and signal processing. The ultimate goal is streaming data processing. Any data sent by the Kafka platform if it passes the required conditions (please read the Producer Side), will be processed without interruption and priority, and the results will be applied to other computing services at the appropriate time.
 
 In the previous version, each pair of signal and noise data was read from a local system and processed to create a corrected image.
 
@@ -31,16 +31,20 @@ We also tried to minimize redundant calculations and focus on performance and ac
 
 ## Producer Side:
 1. Each directory must contain the noise, signal, or signals, and a corresponding XML file.
-(TODO: We may implement an application to verify those files).
+   (TODO: We may implement an application to verify those files).
 2. To distinguish the noise file from the signal files, we agreed that the name of each noise file ends with [_bkg](https://github.com/paradimdata/varimatstream/blob/main/src/main/resources/META-INF/main/java/org/paradim/empad/com/EMPADConstants.java)
 3. The name of each XML file inside the directory (regardless of the extension) must be exactly the same as the directory name. We use this XML file so that it can be distinguished when executing a query on other signals that are dependent on other noise. This XML file also contains information about the dimensions of the frames and their measurement accuracy, which may be different in different tests, which will directly impact our calculations.
 4. The producer must be only conducted through the [DataFileUploadDirectory](https://openmsistream.readthedocs.io/en/latest/user_info/main_programs/data_file_upload_directory.html)
 
-   
+
 ## Dockerization:
 1. **Installing Docker**: You need to make sure that [Docker](https://docs.docker.com) is already installed on your computer and is running. Follow the [instruction](https://docs.docker.com/engine/install/) on how to install docker on your operating system.
 2. **Building the docker image**: From the terminal run this command line `docker build -t openmsi/empad:1.6 .`. **1.6** is the latest version at this point.
 3. **Modifying the environment file**: the .env file contains the following data and needs to be modified before running the image:
- 3.1. _EMPAD_HOME_: The root directory of the application (i.e. EMPAD_HOME=/empad)
- 3.2 _KAFKA_ENV_USERNAME_, KAFKA_ENV_PASSWORD, _EMPAD_TOPIC_ and _GROUP_ID_ need to be defined correctly in your environment.
+   3.1. _EMPAD_HOME_: The root directory of the application (i.e. EMPAD_HOME=/empad)
+   3.2 _KAFKA_ENV_USERNAME_, KAFKA_ENV_PASSWORD, _EMPAD_TOPIC_ and _GROUP_ID_ need to be defined correctly in your environment.
 4. **Running the image: From terminal run this command**: `docker run --env-file ./.env -v ./out:/empad/output` where corrected images take place into the **output** directory.
+
+## Unit Test
+We have already generated some test data with MATLAB and saved the results in .mat files. We also implemented test cases corresponding to Java methods and compare the results with MATLAB data with a very low error ratio.
+To ensure the correctness of the test methods, we also run them on the CircleCI platform.
