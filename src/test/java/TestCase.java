@@ -55,7 +55,7 @@ public class TestCase {
             noiseFrames = new MatFileReader(systemPath + "/testdata/matlab/noise_frames.mat");
             for (int i = 0; i < frameDim; i++) {
                 chunkId = i + 1;
-                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + chunkId));
+                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/empad/noise_chunks/" + chunkId));
                 packetData = instance.process((i + 1), chunkSize, chunkByte, maskTO);
                 packetDataFlatten = Arrays.stream(packetData)
                         .flatMap(Arrays::stream)
@@ -99,7 +99,7 @@ public class TestCase {
             noiseFrames = new MatFileReader(systemPath + "/testdata/matlab/signal_frames.mat");
             for (int i = 0; i < frameDim; i++) {
                 chunkId = i + 1;
-                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/signal_chunks/" + chunkId));
+                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/empad/signal_chunks/" + chunkId));
                 packetData = instance.process((i + 1), chunkSize, chunkByte, maskTO);
                 packetDataFlatten = Arrays.stream(packetData)
                         .flatMap(Arrays::stream)
@@ -145,11 +145,11 @@ public class TestCase {
         try {
             for (int i = 0; i < frameDim - 1; i++) {
                 chunkId = i + 1;
-                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + chunkId));
+                chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/empad/noise_chunks/" + chunkId));
                 noisePacketArray = instance.process((i + 1), chunkSize, chunkByte, maskTO);
                 System.arraycopy(noisePacketArray, 0, noiseTotalArray, 8 * i, 8);
             }
-            chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + frameDim));
+            chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/empad/noise_chunks/" + frameDim));
             noisePacketArray = instance.process(frameDim - 1, chunkSize, chunkByte, maskTO);
             System.arraycopy(noisePacketArray, 0, noiseTotalArray, 8 * (frameDim - 1), 8);
             empadMeans = instance.noiseMeans(totalFrames, noisePacketArray);
@@ -170,6 +170,10 @@ public class TestCase {
 
     }
 
+    /**
+     * This test method compares Matlab and EMPAD final results
+     * @throws IOException
+     */
     @Test
     public void testFinalResults() throws IOException {
         if (instance == null) {
