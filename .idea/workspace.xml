@@ -5,8 +5,265 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/matlab/cbed.mat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/testdata/matlab/out_signal_custom.raw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/1" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/10" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/100" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/101" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/101" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/102" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/102" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/103" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/103" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/104" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/104" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/105" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/105" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/106" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/106" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/107" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/107" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/108" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/108" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/109" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/109" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/11" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/11" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/110" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/110" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/111" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/111" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/112" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/112" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/113" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/113" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/114" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/114" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/115" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/115" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/116" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/116" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/117" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/117" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/118" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/118" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/119" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/119" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/12" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/120" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/120" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/121" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/121" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/122" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/122" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/123" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/123" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/124" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/124" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/125" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/125" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/126" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/126" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/127" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/127" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/128" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/128" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/13" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/13" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/14" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/14" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/15" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/15" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/16" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/16" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/17" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/17" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/18" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/18" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/19" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/19" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/2" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/20" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/20" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/21" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/21" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/22" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/22" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/23" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/23" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/24" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/24" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/25" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/25" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/26" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/26" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/27" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/27" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/28" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/28" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/29" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/29" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/3" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/30" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/30" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/31" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/31" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/32" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/32" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/33" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/33" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/34" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/34" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/35" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/35" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/36" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/36" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/37" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/37" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/38" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/38" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/39" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/39" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/4" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/40" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/41" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/41" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/42" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/42" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/43" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/43" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/44" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/44" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/45" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/45" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/46" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/46" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/47" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/47" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/48" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/48" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/49" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/49" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/5" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/50" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/50" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/51" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/51" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/52" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/52" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/53" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/53" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/54" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/54" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/55" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/55" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/56" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/56" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/57" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/57" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/58" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/58" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/59" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/59" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/6" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/60" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/60" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/61" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/61" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/62" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/62" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/63" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/63" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/64" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/64" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/65" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/65" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/66" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/66" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/67" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/67" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/68" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/68" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/69" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/69" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/7" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/70" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/70" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/71" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/71" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/72" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/72" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/73" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/73" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/74" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/74" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/75" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/76" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/76" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/77" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/77" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/78" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/78" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/79" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/79" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/8" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/80" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/80" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/81" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/81" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/82" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/82" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/83" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/83" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/84" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/84" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/85" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/85" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/86" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/86" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/87" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/87" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/88" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/88" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/89" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/89" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/9" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/9" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/90" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/90" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/91" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/91" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/92" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/92" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/93" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/93" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/94" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/94" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/95" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/95" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/96" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/96" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/97" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/97" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/98" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/98" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/noise_chunks/99" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/noise_chunks/99" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/1" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/1" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/10" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/10" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/100" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/100" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/101" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/101" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/102" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/102" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/103" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/103" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/104" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/104" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/105" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/105" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/106" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/106" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/107" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/107" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/108" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/108" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/109" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/109" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/11" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/11" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/110" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/110" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/111" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/111" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/112" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/112" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/113" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/113" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/114" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/114" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/115" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/115" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/116" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/116" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/117" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/117" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/118" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/118" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/119" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/119" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/12" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/12" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/120" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/120" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/121" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/121" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/122" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/122" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/123" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/123" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/124" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/124" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/125" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/125" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/126" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/126" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/127" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/127" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/128" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/128" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/13" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/13" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/14" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/14" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/15" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/15" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/16" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/16" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/17" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/17" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/18" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/18" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/19" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/19" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/2" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/20" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/20" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/21" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/21" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/22" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/22" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/23" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/23" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/24" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/24" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/25" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/25" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/26" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/26" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/27" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/27" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/28" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/28" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/29" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/29" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/3" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/30" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/30" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/31" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/31" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/32" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/32" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/33" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/33" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/34" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/34" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/35" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/35" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/36" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/36" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/37" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/37" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/38" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/38" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/39" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/39" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/4" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/40" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/40" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/41" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/41" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/42" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/42" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/43" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/43" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/44" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/44" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/45" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/45" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/46" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/46" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/47" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/47" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/48" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/48" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/49" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/49" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/5" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/50" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/50" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/51" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/51" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/52" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/52" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/53" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/53" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/54" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/54" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/55" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/55" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/56" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/56" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/57" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/57" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/58" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/58" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/59" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/59" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/6" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/60" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/60" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/61" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/61" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/62" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/62" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/63" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/63" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/64" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/64" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/65" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/65" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/66" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/66" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/67" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/67" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/68" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/68" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/69" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/69" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/7" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/70" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/70" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/71" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/71" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/72" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/72" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/73" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/73" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/74" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/74" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/75" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/75" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/76" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/76" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/77" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/77" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/78" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/78" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/79" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/79" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/8" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/8" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/80" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/80" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/81" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/81" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/82" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/82" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/83" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/83" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/84" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/84" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/85" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/85" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/86" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/86" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/87" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/87" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/88" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/88" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/89" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/89" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/9" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/9" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/90" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/90" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/91" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/91" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/92" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/92" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/93" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/93" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/94" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/94" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/95" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/95" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/96" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/96" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/97" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/97" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/98" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/98" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testdata/signal_chunks/99" beforeDir="false" afterPath="$PROJECT_DIR$/testdata/empad/signal_chunks/99" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +298,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/amir/IdeaProjects/master-ssp/testdata/matlab",
+    "last_opened_file_path": "/Users/amir/IdeaProjects/ssp/varimatstream/testdata/matlab",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -56,10 +313,11 @@
       <recent name="$PROJECT_DIR$/testdata" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/testdata/empad" />
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestCase.testMean">
+  <component name="RunManager" selected="JUnit.TestCase.testFinalResults">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -97,6 +355,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="TestCase.testFinalResults" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="varimat-stream-processing" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TestCase" />
+      <option name="METHOD_NAME" value="testFinalResults" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="TestCase.testMean" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="varimat-stream-processing" />
       <option name="PACKAGE_NAME" value="" />
@@ -117,16 +385,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCase.testSignalFrames" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="varimat-stream-processing" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestCase" />
-      <option name="METHOD_NAME" value="testSignalFrames" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="TestCase.testSignalrames" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="varimat-stream-processing" />
       <option name="PACKAGE_NAME" value="" />
@@ -139,11 +397,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestCase.testFinalResults" />
         <item itemvalue="JUnit.TestCase.testMean" />
         <item itemvalue="JUnit.TestCase.testSignalrames" />
         <item itemvalue="JUnit.TestCase.testNoiseFrames" />
         <item itemvalue="Application.TestCase" />
-        <item itemvalue="JUnit.TestCase.testSignalFrames" />
       </list>
     </recent_temporary>
   </component>
@@ -159,6 +417,7 @@
       <workItem from="1698258228278" duration="15319000" />
       <workItem from="1698356874365" duration="698000" />
       <workItem from="1698357640575" duration="14228000" />
+      <workItem from="1698789743212" duration="435000" />
     </task>
     <servers />
   </component>
@@ -170,7 +429,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestCase.java</url>
-          <line>28</line>
+          <line>31</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

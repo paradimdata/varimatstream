@@ -6,8 +6,7 @@ import org.junit.Test;
 import org.paradim.empad.com.StreamingSignalProcessing;
 import org.paradim.empad.dto.MaskTO;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,6 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class TestCase {
 
     private static final int chunkSizePower = 19;
+
+    private static final int totalFrames = 1024;
+
+    private static final int frameDim = 128;
     private static final String systemPath = System.getProperty("user.dir");
 
     private static StreamingSignalProcessing instance;
@@ -50,7 +53,7 @@ public class TestCase {
         MatFileReader noiseFrames;
         try {
             noiseFrames = new MatFileReader(systemPath + "/testdata/matlab/noise_frames.mat");
-            for (int i = 0; i < 128; i++) {
+            for (int i = 0; i < frameDim; i++) {
                 chunkId = i + 1;
                 chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + chunkId));
                 packetData = instance.process((i + 1), chunkSize, chunkByte, maskTO);
@@ -60,7 +63,7 @@ public class TestCase {
                         .toArray();
 
                 idx = 0;
-                for (int j = i * 8 * 128 * 128; j < (i + 1) * 8 * 128 * 128; j++) {
+                for (int j = i * 8 * frameDim * frameDim; j < (i + 1) * 8 * frameDim * frameDim; j++) {
                     val = ((MLSingle) (noiseFrames.getMLArray("frames"))).get(count++);
                     assertEquals((float) packetDataFlatten[idx++], val);
                 }
@@ -94,7 +97,7 @@ public class TestCase {
         MatFileReader noiseFrames;
         try {
             noiseFrames = new MatFileReader(systemPath + "/testdata/matlab/signal_frames.mat");
-            for (int i = 0; i < 128; i++) {
+            for (int i = 0; i < frameDim; i++) {
                 chunkId = i + 1;
                 chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/signal_chunks/" + chunkId));
                 packetData = instance.process((i + 1), chunkSize, chunkByte, maskTO);
@@ -104,7 +107,7 @@ public class TestCase {
                         .toArray();
 
                 idx = 0;
-                for (int j = i * 8 * 128 * 128; j < (i + 1) * 8 * 128 * 128; j++) {
+                for (int j = i * 8 * frameDim * frameDim; j < (i + 1) * 8 * frameDim * frameDim; j++) {
                     val = ((MLSingle) (noiseFrames.getMLArray("frames"))).get(count++);
                     assertTrue(packetDataFlatten[idx++] - val < 0.5);
                 }
@@ -132,7 +135,7 @@ public class TestCase {
         float bkgodataVal, bkgedataVal;
         int idx, chunkId, count = 0;
         byte[] chunkByte;
-        double[][][] noiseTotalArray = new double[1024][128][128];
+        double[][][] noiseTotalArray = new double[totalFrames][frameDim][frameDim];
         double[][][] noisePacketArray;
         Tuple2<double[][], double[][]> empadMeans;
 
@@ -140,16 +143,16 @@ public class TestCase {
         MatFileReader bkgedata_means;
 
         try {
-            for (int i = 0; i < 127; i++) {
+            for (int i = 0; i < frameDim - 1; i++) {
                 chunkId = i + 1;
                 chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + chunkId));
                 noisePacketArray = instance.process((i + 1), chunkSize, chunkByte, maskTO);
                 System.arraycopy(noisePacketArray, 0, noiseTotalArray, 8 * i, 8);
             }
-            chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + 128));
-            noisePacketArray = instance.process(127, chunkSize, chunkByte, maskTO);
-            System.arraycopy(noisePacketArray, 0, noiseTotalArray, 8 * 127, 8);
-            empadMeans = instance.noiseMeans(1024, noisePacketArray);
+            chunkByte = FileUtils.readFileToByteArray(new File(systemPath + "/testdata/noise_chunks/" + frameDim));
+            noisePacketArray = instance.process(frameDim - 1, chunkSize, chunkByte, maskTO);
+            System.arraycopy(noisePacketArray, 0, noiseTotalArray, 8 * (frameDim - 1), 8);
+            empadMeans = instance.noiseMeans(totalFrames, noisePacketArray);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -159,11 +162,34 @@ public class TestCase {
         bkgodata_means = new MatFileReader(systemPath + "/testdata/matlab/bkgodata_means.mat");
         bkgedata_means = new MatFileReader(systemPath + "/testdata/matlab/bkgedata_means.mat");
 
-        for (int i = 0; i < 128 * 128; i++) {
+        for (int i = 0; i < frameDim * frameDim; i++) {
             bkgodataVal = ((MLSingle) (bkgodata_means.getMLArray("bkgodata"))).get(count);
             bkgedataVal = ((MLSingle) (bkgedata_means.getMLArray("bkgedata"))).get(count);
             count++;
         }
 
+    }
+
+    @Test
+    public void testFinalResults() throws IOException {
+        if (instance == null) {
+            instance = new StreamingSignalProcessing();
+        }
+
+        MatFileReader matOutPut = new MatFileReader(systemPath + "/testdata/matlab/cbed.mat");
+        int count = 0;
+        String empadPath = systemPath + "/testdata/matlab/out_signal_custom.raw";
+
+        try (DataInputStream dataInputStream = new DataInputStream(
+                new BufferedInputStream(
+                        new FileInputStream(empadPath)))) {
+            for (int i = 0; i < totalFrames; i++) {
+                for (int j = 0; j < frameDim; j++) {
+                    for (int k = 0; k < frameDim; k++) {
+                        assertTrue(Math.abs(((MLSingle) (matOutPut.getMLArray("cbed"))).get(count++) - dataInputStream.readFloat()) <= 1);
+                    }
+                }
+            }
+        }
     }
 }
