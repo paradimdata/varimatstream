@@ -109,7 +109,7 @@ public class TestCase {
                 idx = 0;
                 for (int j = i * 8 * frameDim * frameDim; j < (i + 1) * 8 * frameDim * frameDim; j++) {
                     val = ((MLSingle) (noiseFrames.getMLArray("frames"))).get(count++);
-                    assertTrue(packetDataFlatten[idx++] - val < 0.5);
+                    assertTrue(Math.abs(packetDataFlatten[idx++] - val) < 0.5);
                 }
 
             }
