@@ -60,7 +60,7 @@
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TestCase.testFinalResults">
+  <component name="RunManager" selected="JUnit.TestCase.testSignalrames">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -140,9 +140,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestCase.testSignalrames" />
         <item itemvalue="JUnit.TestCase.testFinalResults" />
         <item itemvalue="JUnit.TestCase.testMean" />
-        <item itemvalue="JUnit.TestCase.testSignalrames" />
         <item itemvalue="JUnit.TestCase.testNoiseFrames" />
         <item itemvalue="Application.TestCase" />
       </list>
