@@ -44,6 +44,8 @@ public final class EMPADConstants {
     public final static String precision = "float32";
     /**** MessageUnpacker constants***/
     public final static int MSG_FILE_NAME = 0;
+
+    public final static int MSG_FILE_HASH = 1;
     public final static int MSG_CHUNK_HASH = 2;
     public final static int MSG_CHUNK_I = 4;
     public final static int MSG_N_TOTAL_CHUNKS = 5;

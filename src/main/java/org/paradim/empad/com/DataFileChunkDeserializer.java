@@ -79,6 +79,7 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
             List<Value> list = value.asArrayValue().list();
 
             dataFileChunk.filename = String.valueOf(list.get(EMPADConstants.MSG_FILE_NAME));
+            dataFileChunk.file_hash = list.get(EMPADConstants.MSG_FILE_HASH).asBinaryValue();
             dataFileChunk.chunk_hash = list.get(EMPADConstants.MSG_CHUNK_HASH).asBinaryValue();
 
             dataFileChunk.chunk_i = Long.parseLong(String.valueOf(list.get(EMPADConstants.MSG_CHUNK_I)));

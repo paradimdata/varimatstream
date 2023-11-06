@@ -5,6 +5,8 @@ import com.dynatrace.dynahist.layout.CustomLayout;
 import com.dynatrace.dynahist.layout.Layout;
 import com.jmatio.io.MatFileReader;
 import org.apache.commons.io.FileUtils;
+import org.apache.flink.api.common.serialization.SerializationSchema;
+import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -13,9 +15,12 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.streaming.connectors.kafka.FlinkKafkaProducer;
+import org.apache.flink.streaming.connectors.kafka.internals.KeyedSerializationSchemaWrapper;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 import org.msgpack.value.BinaryValue;
+import org.paradim.empad.dto.DataFileChunk;
 import org.paradim.empad.dto.MaskTO;
 import org.testcontainers.shaded.org.apache.commons.lang3.SerializationUtils;
 
@@ -23,8 +28,6 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.*;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.*;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -43,13 +46,15 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
               #            #         #       #              #         #       #        #
               ######       #         #       #             #           #      #########
 
-         version 1.6
+         version 1.7
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 06/14/2023
-         @last modified: 26/15/2023
+         @last modified: 11/06/2023
 */
 
 public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
+
+    private transient FlinkKafkaProducer<DataFileChunk> kafkaProducer;
     private transient ValueState<MaskTO> maskState;
     private transient ValueState<String> noiseValue;
     //    private transient MapState<String, Instant> timeInstantMapState;
@@ -141,34 +146,9 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
                 }
             }
 
-//            if (timeInstantMapState.get(stateDir) == null) {
-//                Instant now = Instant.now();
-//                timeInstantMapState.put(stateDir, now);
-//
-//                timeDurationMapState.put(stateDir, Duration.between(now, now));
-//            }
-
-//            if (timeInstantMapState.get(stateDir) != null) {
-//                Instant now = Instant.now();
-//                Instant prev = timeInstantMapState.get(stateDir);
-//
-//                timeDurationMapState.put(stateDir, Duration.between(now, prev).plus(timeDurationMapState.get(stateDir)));
-//            }
-
-//            if (timeInstantMapState.get(stateDir) != null) {
-//                Instant now = Instant.now();
-//                Instant prev = timeInstantMapState.get(stateDir);
-//                timeDurationMapState.put(stateDir, Duration.between(prev, now));
-//            }
 
             byte[] chunkByte = raw_data_chunk.asByteArray();
             double[][][] rawFrames = process(chunkId, chunkSize, chunkByte, maskState.value());
-
-//            if (timeInstantMapState.get(stateDir) != null) {
-//                Instant now = Instant.now();
-//                Instant prev = timeInstantMapState.get(stateDir);
-//                timeDurationMapState.put(stateDir, Duration.between(prev, now));
-//            }
 
             SerializationUtils.serialize(rawFrames, new FileOutputStream(statePath + slash + chunkId));
 
@@ -212,24 +192,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
                         s = rawDimension.get(noise);
 
-//                        if (timeInstantMapState.get(noise) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(stateDir);
-//                            timeDurationMapState.put(noise, Duration.between(prev, now).plus(timeDurationMapState.get(noise)));
-//                            System.out.println(timeDurationMapState.get(noise).getSeconds());
-//                        }
-
                         for (int chId = 0; chId < count - 1; chId++) {
                             rawFrames = SerializationUtils.deserialize(new FileInputStream(tempPath + noise + slash + (chId + 1)));
                             System.arraycopy(rawFrames, 0, imageObjArray, s * chId, s);
                         }
-
-//                        if (timeInstantMapState.get(noise) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(stateDir);
-//                            timeDurationMapState.put(noise, Duration.between(prev, now).plus(timeDurationMapState.get(noise)));
-//                            System.out.println(timeDurationMapState.get(noise).getSeconds());
-//                        }
 
                         for (int i = 0; i < finalRawFrameLen; i++) {
                             imageObjArray[totalFrames - (finalRawFrameLen - i)] = finalRawFrame[i];
@@ -280,12 +246,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
                         s = rawDimension.get(signal);
 
-//                        if (timeInstantMapState.get(signal) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(signal);
-//                            timeDurationMapState.put(signal, Duration.between(prev, now).plus(timeDurationMapState.get(signal)));
-//                        }
-
                         for (int chId = 0; chId < count - 1; chId++) {
                             rawFrames = SerializationUtils.deserialize(new FileInputStream(statePath + slash + (chId + 1)));
                             System.arraycopy(rawFrames, 0, imageObjArray, s * chId, s);
@@ -294,19 +254,6 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
                         for (int i = 0; i < finalRawFrameLen; i++) {
                             imageObjArray[totalFrames - (finalRawFrameLen - i)] = finalRawFrame[i];
                         }
-//                        if (timeInstantMapState.get(signal) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(signal);
-//                            timeDurationMapState.put(stateDir, Duration.between(prev, now));
-//                        }
-
-//                        System.arraycopy(finalRawFrame, 0, imageObjArray, (count - 1) * finalRawFrameLen, finalRawFrameLen);
-
-//                        if (!Files.exists(Paths.get(tempPath + "prc"))) {
-//                            Files.createDirectories(Paths.get(tempPath + "prc"));
-//                        }
-
-//                        SerializationUtils.serialize(imageObjArray, new FileOutputStream(tempPath + "prc" + slash + signal + "_prc.raw"));
 
                         try {
                             FileUtils.deleteDirectory(new File(tempPath + signal));
@@ -317,26 +264,10 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
                         System.out.println(signal + " just processed!");
 
-//                        if (timeInstantMapState.get(signal) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(signal);
-//                            timeDurationMapState.put(stateDir, Duration.between(prev, now));
-//                        }
-
                         combine_from_concat_EMPAD2(signal, maskState.value(), slash, totalFrames, imageObjArray, meansObj);
 
                         processedRaw.put(signal, 0L);
 
-//                        FileUtils.delete(new File(tempPath + "prc" + slash + signal + "_prc.raw"));
-
-//                        if (timeInstantMapState.get(signal) != null) {
-//                            Instant now = Instant.now();
-//                            Instant prev = timeInstantMapState.get(signal);
-//                            timeDurationMapState.put(stateDir, Duration.between(prev, now));
-//                        }
-
-//                        System.out.println("The duration of processing " + signal + " was: " + timeDurationMapState.get(stateDir) + " seconds.");
-//                        System.gc();
                     }
                 }
             }
@@ -344,21 +275,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
     }
 
     @Override
-    public void open(Configuration parameters) {
-
-//        MapStateDescriptor<String, Duration> timeDurationStateMapDescriptor =
-//                new MapStateDescriptor<>(
-//                        "timeDurationMapState",
-//                        Types.STRING,
-//                        TypeInformation.of(Duration.class));
-//        timeDurationMapState = getRuntimeContext().getMapState(timeDurationStateMapDescriptor);
-//
-//        MapStateDescriptor<String, Instant> timeInstantStateMapDescriptor =
-//                new MapStateDescriptor<>(
-//                        "timeInstantMapState",
-//                        Types.STRING,
-//                        TypeInformation.of(Instant.class));
-//        timeInstantMapState = getRuntimeContext().getMapState(timeInstantStateMapDescriptor);
+    public void open(Configuration parameters) throws Exception {
 
         ValueStateDescriptor<MaskTO> maskStateDescriptor =
                 new ValueStateDescriptor<>(
@@ -408,6 +325,22 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
                         Types.STRING,
                         Types.LONG);
         processedRaw = getRuntimeContext().getMapState(processedRawDescriptor);
+
+        Properties producerProperties = new Properties();
+
+        producerProperties.setProperty("bootstrap.servers", "pkc-ep9mm.us-east-2.aws.confluent.cloud:9092");
+
+        SerializationSchema<DataFileChunk> serializationSchema = new DataFileChunkSerialization();
+
+        kafkaProducer = new FlinkKafkaProducer<>(
+                "output_topic",
+                new KeyedSerializationSchemaWrapper<>(serializationSchema),
+                producerProperties,
+                FlinkKafkaProducer.Semantic.EXACTLY_ONCE);
+
+        kafkaProducer.setWriteTimestampToKafka(true);
+
+        super.open(parameters);
 
     }
 

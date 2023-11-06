@@ -26,6 +26,7 @@ public class DataFileChunk implements Serializable {
     public long chunk_i;
     public String filename;
     public BinaryValue chunk_hash;
+    public BinaryValue file_hash;
     public String chunk_offset_write;
     public long n_total_chunks;
     public String subdir_str;
@@ -45,18 +46,20 @@ public class DataFileChunk implements Serializable {
      * @param chunk_i
      * @param filename
      * @param chunk_hash
+     * @param file_hash
      * @param chunk_offset_write
      * @param n_total_chunks
      * @param subdir_str
      * @param filename_append
      * @param data
      */
-    public DataFileChunk(String experiment, long chunk_i, String filename, BinaryValue chunk_hash, String chunk_offset_write,
+    public DataFileChunk(String experiment, long chunk_i, String filename, BinaryValue chunk_hash, BinaryValue file_hash, String chunk_offset_write,
                          long n_total_chunks, String subdir_str, String filename_append, BinaryValue data) {
         this.experiment = experiment;
         this.chunk_i = chunk_i;
         this.filename = filename;
         this.chunk_hash = chunk_hash;
+        this.file_hash = file_hash;
         this.chunk_offset_write = chunk_offset_write;
         this.n_total_chunks = n_total_chunks;
         this.subdir_str = subdir_str;
@@ -75,6 +78,7 @@ public class DataFileChunk implements Serializable {
                 ", chunk_i=" + chunk_i + ", n_total_chunks=" + n_total_chunks +
                 ", filename='" + filename + '\'' +
                 ", chunk_hash='" + chunk_hash + '\'' +
+                ", file_hash='" + file_hash + '\'' +
                 ", chunk_offset_write='" + chunk_offset_write + '\'' +
                 ", subdir_str='" + subdir_str + '\'' +
                 ", filename_append='" + filename_append + '\'' +
@@ -100,6 +104,7 @@ public class DataFileChunk implements Serializable {
                 n_total_chunks == dataFileChunk.n_total_chunks &&
                 filename.equals(dataFileChunk.filename) &&
                 chunk_hash.equals(dataFileChunk.chunk_hash) &&
+                file_hash.equals(dataFileChunk.file_hash) &&
                 chunk_offset_write.equals(dataFileChunk.chunk_offset_write) &&
                 subdir_str.equals(dataFileChunk.subdir_str) &&
                 filename_append.equals(dataFileChunk.filename_append) &&
@@ -160,6 +165,22 @@ public class DataFileChunk implements Serializable {
      */
     public void setChunk_hash(BinaryValue chunk_hash) {
         this.chunk_hash = chunk_hash;
+    }
+
+    /**
+     *
+     * @return file_hash
+     */
+    public BinaryValue getFile_hash() {
+        return file_hash;
+    }
+
+    /**
+     *
+     * @param file_hash
+     */
+    public void setFile_hash(BinaryValue file_hash) {
+        this.file_hash = file_hash;
     }
 
     /**
