@@ -1,4 +1,4 @@
-package org.paradim.empad.com;
+package org.paradim.empad.flink;
 
 import org.apache.commons.cli.*;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -12,7 +12,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.types.Row;
-import org.paradim.empad.dto.DataFileChunk;
+import org.paradim.empad.com.EMPADConstants;
+import org.paradim.empad.dto.FlinkDataFileChunk;
+import org.paradim.empad.process.StreamingSignalProcessing;
 
 import java.io.*;
 import java.util.Arrays;
@@ -156,7 +158,7 @@ public class EMPADStreamCommand {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
-        KafkaSource<DataFileChunk> rawSource = KafkaSource.<DataFileChunk>builder().
+        KafkaSource<FlinkDataFileChunk> rawSource = KafkaSource.<FlinkDataFileChunk>builder().
                 setBootstrapServers("pkc-ep9mm.us-east-2.aws.confluent.cloud:9092").
                 setTopics(EMPAD_TOPIC).
                 setGroupId(GROUP_ID).
@@ -169,7 +171,7 @@ public class EMPADStreamCommand {
                 setStartingOffsets(OffsetsInitializer.earliest()).
                 setValueOnlyDeserializer(new DataFileChunkDeserializer()).build();
 
-        DataStream<DataFileChunk> rawDataStream = env.fromSource(rawSource, WatermarkStrategy.noWatermarks(), "EMPAD_TBL");
+        DataStream<FlinkDataFileChunk> rawDataStream = env.fromSource(rawSource, WatermarkStrategy.noWatermarks(), "EMPAD_TBL");
         processWorkflow(tableEnv, rawDataStream);
 
         env.execute();
@@ -209,7 +211,7 @@ public class EMPADStreamCommand {
      * @param rawDataStream
      * @throws Exception
      */
-    private static void processWorkflow(StreamTableEnvironment tableEnv, DataStream<DataFileChunk> rawDataStream) throws Exception {
+    private static void processWorkflow(StreamTableEnvironment tableEnv, DataStream<FlinkDataFileChunk> rawDataStream) throws Exception {
 
         tableEnv.createTemporaryView("EMPAD_TBL", rawDataStream);
 

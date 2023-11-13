@@ -234,7 +234,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>org.paradim.empad.com.EMPADStreamCommand</mainClass>
+                            <mainClass>org.paradim.empad.flink.EMPADStreamCommand</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -248,7 +248,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>org.paradim.empad.com.EMPADStreamCommand</mainClass>
+                            <mainClass>org.paradim.empad.flink.EMPADStreamCommand</mainClass>
                             <classpathPrefix>dependency-jars/</classpathPrefix>
                         </manifest>
                     </archive>

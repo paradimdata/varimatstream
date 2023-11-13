@@ -1,4 +1,4 @@
-package org.paradim.empad.com;
+package org.paradim.empad.flink;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -8,7 +8,8 @@ import org.msgpack.core.MessagePack;
 import org.msgpack.core.MessageUnpacker;
 import org.msgpack.value.ImmutableValue;
 import org.msgpack.value.Value;
-import org.paradim.empad.dto.DataFileChunk;
+import org.paradim.empad.com.EMPADConstants;
+import org.paradim.empad.dto.FlinkDataFileChunk;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -34,7 +35,7 @@ import java.util.List;
 /**
  * DataFileChunkDeserializer
  */
-public class DataFileChunkDeserializer extends AbstractDeserializationSchema<DataFileChunk> {
+public class DataFileChunkDeserializer extends AbstractDeserializationSchema<FlinkDataFileChunk> {
 
     private static final long serialVersionUID = 1L;
 
@@ -61,9 +62,9 @@ public class DataFileChunkDeserializer extends AbstractDeserializationSchema<Dat
      */
 
     @Override
-    public DataFileChunk deserialize(byte[] message) throws IOException {
+    public FlinkDataFileChunk deserialize(byte[] message) throws IOException {
 
-        DataFileChunk dataFileChunk = new DataFileChunk();
+        FlinkDataFileChunk dataFileChunk = new FlinkDataFileChunk();
         MessageDigest md = null;
 
         MessageUnpacker unpacker = MessagePack.newDefaultUnpacker(message);

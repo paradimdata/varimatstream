@@ -1,4 +1,4 @@
-package org.paradim.empad.com;
+package org.paradim.empad.process;
 
 import com.dynatrace.dynahist.Histogram;
 import com.dynatrace.dynahist.layout.CustomLayout;
@@ -6,7 +6,6 @@ import com.dynatrace.dynahist.layout.Layout;
 import com.jmatio.io.MatFileReader;
 import org.apache.commons.io.FileUtils;
 import org.apache.flink.api.common.serialization.SerializationSchema;
-import org.apache.flink.api.common.serialization.SimpleStringSchema;
 import org.apache.flink.api.common.state.*;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -20,7 +19,9 @@ import org.apache.flink.streaming.connectors.kafka.internals.KeyedSerializationS
 import org.apache.flink.types.Row;
 import org.apache.flink.util.Collector;
 import org.msgpack.value.BinaryValue;
-import org.paradim.empad.dto.DataFileChunk;
+import org.paradim.empad.com.DataFileChunkSerialization;
+import org.paradim.empad.com.EMPADConstants;
+import org.paradim.empad.dto.FlinkDataFileChunk;
 import org.paradim.empad.dto.MaskTO;
 import org.testcontainers.shaded.org.apache.commons.lang3.SerializationUtils;
 
@@ -46,7 +47,7 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
               #            #         #       #              #         #       #        #
               ######       #         #       #             #           #      #########
 
-         version 1.7
+         version 1.6.1
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 06/14/2023
          @last modified: 11/06/2023
@@ -54,7 +55,7 @@ import static org.paradim.empad.com.EMPADConstants.EMPAD_HOME;
 
 public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
-    private transient FlinkKafkaProducer<DataFileChunk> kafkaProducer;
+    private transient FlinkKafkaProducer<FlinkDataFileChunk> kafkaProducer;
     private transient ValueState<MaskTO> maskState;
     private transient ValueState<String> noiseValue;
     //    private transient MapState<String, Instant> timeInstantMapState;
@@ -330,7 +331,7 @@ public class StreamingSignalProcessing extends ProcessFunction<Row, String> {
 
         producerProperties.setProperty("bootstrap.servers", "pkc-ep9mm.us-east-2.aws.confluent.cloud:9092");
 
-        SerializationSchema<DataFileChunk> serializationSchema = new DataFileChunkSerialization();
+        SerializationSchema<FlinkDataFileChunk> serializationSchema = new DataFileChunkSerialization();
 
         kafkaProducer = new FlinkKafkaProducer<>(
                 "output_topic",

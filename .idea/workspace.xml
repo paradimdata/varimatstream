@@ -5,12 +5,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkSerialization.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/KafkaDataFileChunk.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/DataFileChunkSerializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/StreamingSignalProcessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/StreamingSignalProcessing.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/DataFileChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/DataFileChunk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/DataFileChunkDeserializer.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/DataFileChunkDeserializer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/EMPADConsumer.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/EMPADConsumer.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/EMPADStreamCommand.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/EMPADStreamCommand.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/StreamingSignalProcessing.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/StreamingSignalProcessing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/dto/DataFileChunk.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/dto/DataFileChunk.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/serialized-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/serialized-form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/DataFileChunkDeserializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkSerialization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/DataFileChunkSerialization.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/EMPADConsumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADStreamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/EMPADStreamCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/StreamingSignalProcessing.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/process/StreamingSignalProcessing.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/DataFileChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/FlinkDataFileChunk.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/TestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCase.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -173,6 +186,7 @@
       <workItem from="1698357640575" duration="14228000" />
       <workItem from="1698789743212" duration="4961000" />
       <workItem from="1699289841153" duration="6407000" />
+      <workItem from="1699900427302" duration="4747000" />
     </task>
     <servers />
   </component>

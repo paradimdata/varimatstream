@@ -3,7 +3,7 @@ import com.jmatio.types.MLSingle;
 import org.apache.commons.io.FileUtils;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.junit.Test;
-import org.paradim.empad.com.StreamingSignalProcessing;
+import org.paradim.empad.process.StreamingSignalProcessing;
 import org.paradim.empad.dto.MaskTO;
 
 import java.io.*;

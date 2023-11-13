@@ -2,7 +2,7 @@ package org.paradim.empad.com;
 
 import org.apache.commons.lang3.SerializationException;
 import org.apache.flink.api.common.serialization.SerializationSchema;
-import org.paradim.empad.dto.DataFileChunk;
+import org.paradim.empad.dto.FlinkDataFileChunk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
@@ -21,7 +21,7 @@ import java.io.ObjectOutputStream;
          @date: 11/06/2023
 */
 
-public class DataFileChunkSerialization implements SerializationSchema<DataFileChunk> {
+public class DataFileChunkSerialization implements SerializationSchema<FlinkDataFileChunk> {
     @Override
     public void open(InitializationContext context) throws Exception {
         SerializationSchema.super.open(context);
@@ -38,7 +38,7 @@ public class DataFileChunkSerialization implements SerializationSchema<DataFileC
      * @throws SerializationError if serialization fails.
      */
     @Override
-    public byte[] serialize(DataFileChunk dataFileChunk) {
+    public byte[] serialize(FlinkDataFileChunk dataFileChunk) {
         assert dataFileChunk != null;
         try {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

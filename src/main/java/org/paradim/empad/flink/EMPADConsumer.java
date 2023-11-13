@@ -1,4 +1,4 @@
-package org.paradim.empad.com;
+package org.paradim.empad.flink;
 
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.types.Row;

@@ -22,7 +22,7 @@ import java.io.Serializable;
 /**
  * Data Transfer Object (DTO) for Serialization
  */
-public class DataFileChunk implements Serializable {
+public class FlinkDataFileChunk implements Serializable {
     public long chunk_i;
     public String filename;
     public BinaryValue chunk_hash;
@@ -38,7 +38,7 @@ public class DataFileChunk implements Serializable {
     /**
      * General constructor
      */
-    public DataFileChunk() {
+    public FlinkDataFileChunk() {
     }
 
     /**
@@ -53,8 +53,8 @@ public class DataFileChunk implements Serializable {
      * @param filename_append
      * @param data
      */
-    public DataFileChunk(String experiment, long chunk_i, String filename, BinaryValue chunk_hash, BinaryValue file_hash, String chunk_offset_write,
-                         long n_total_chunks, String subdir_str, String filename_append, BinaryValue data) {
+    public FlinkDataFileChunk(String experiment, long chunk_i, String filename, BinaryValue chunk_hash, BinaryValue file_hash, String chunk_offset_write,
+                              long n_total_chunks, String subdir_str, String filename_append, BinaryValue data) {
         this.experiment = experiment;
         this.chunk_i = chunk_i;
         this.filename = filename;
@@ -98,7 +98,7 @@ public class DataFileChunk implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        DataFileChunk dataFileChunk = (DataFileChunk) o;
+        FlinkDataFileChunk dataFileChunk = (FlinkDataFileChunk) o;
         return experiment.equals(dataFileChunk.experiment) &&
                 chunk_i == dataFileChunk.chunk_i &&
                 n_total_chunks == dataFileChunk.n_total_chunks &&
