@@ -28,7 +28,7 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
      *
      * @param s
      * @param fileChunk
-     * @return
+     * @return byte array
      */
     @Override
     public byte[] serialize(String s, KafkaDataFileChunk fileChunk) {
