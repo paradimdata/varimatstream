@@ -40,7 +40,6 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
             packer.packString(fileChunk.getFileHash());
             packer.packString(fileChunk.getChunkHash());
 
-            packer.packInt(fileChunk.getChunkOffsetRead());
             packer.packInt(fileChunk.getChunkOffsetWrite());
             packer.packInt(fileChunk.getChunkSize());
             packer.packInt(fileChunk.getChunkIndex());
