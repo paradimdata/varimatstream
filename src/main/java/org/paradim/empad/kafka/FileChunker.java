@@ -33,32 +33,31 @@ public class FileChunker {
     // The defoult CHUNK_SIZE is based on TEST_CHUNK_SIZE = 16384 (2^14) bytes.
     // https://github.com/openmsi/openmsistream/blob/main/test/test_scripts/config.py#L102
     private static final int CHUNK_SIZE = 16384; // 2^14 bytes
-    private Path filePath;
+    private String filePath;
 
-    public FileChunker(Path filePath) {
+    public FileChunker(String filePath) {
         this.filePath = filePath;
     }
 
     /**
      * This method splits the file into the list of chunks (2^14) and generates a list of KafkaDataFileChunk objects
      *
-     * @param absolutePath
      * @return
      * @throws IOException
      * @throws NoSuchAlgorithmException
      */
-    public List<KafkaDataFileChunk> chunkFile(String absolutePath) throws IOException, NoSuchAlgorithmException {
+    public List<KafkaDataFileChunk> chunkFile() throws IOException, NoSuchAlgorithmException {
         List<KafkaDataFileChunk> chunks = new ArrayList<>();
         MessageDigest sha512Digest = MessageDigest.getInstance("SHA-512");
 
-        Path path = Paths.get(absolutePath);
+        Path path = Paths.get(this.filePath = filePath);
         Path fileName = path.getFileName(); // detects the file name
         Path rootPath = path.getRoot(); // detects the root path
 
-        int totalChunks = (int) Math.ceil((double) new File(absolutePath).length() / CHUNK_SIZE);
+        int totalChunks = (int) Math.ceil((double) new File(this.filePath).length() / CHUNK_SIZE);
         int chunkOffsetWrite, bytesRead, chunkIndex = 0;
 
-        try (FileInputStream fis = new FileInputStream(filePath.toFile())) {
+        try (FileInputStream fis = new FileInputStream(this.filePath)) {
             byte[] buffer = new byte[CHUNK_SIZE];
             long offset = 0;
 
@@ -70,7 +69,7 @@ public class FileChunker {
                 chunkOffsetWrite = chunkIndex * CHUNK_SIZE;
 
                 chunks.add(new KafkaDataFileChunk(fileName.toString(), null, new String(chunkHash), chunkOffsetWrite, chunkIndex,
-                        totalChunks, rootPath.toString(), "", buffer));
+                        totalChunks, "kafka/out_signal_custom.raw", "", buffer));
 
                 offset += bytesRead;
                 chunkIndex++;
@@ -78,10 +77,10 @@ public class FileChunker {
         }
 
         byte[] fileHash = sha512Digest.digest();
+        String fileHashStr = new String(fileHash);
 
-        // updating list with the fileHash
-        for (int i = 0; i < chunks.size(); i++) {
-            chunks.get(i).setFileHash(new String(fileHash));
+        for (KafkaDataFileChunk chunk : chunks) {
+            chunk.setFileHash(fileHashStr);
         }
         return chunks;
     }

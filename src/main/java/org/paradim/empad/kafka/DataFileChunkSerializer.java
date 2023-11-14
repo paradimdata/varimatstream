@@ -3,6 +3,8 @@ package org.paradim.empad.kafka;
 import org.apache.kafka.common.serialization.Serializer;
 import org.msgpack.core.MessageBufferPacker;
 import org.msgpack.core.MessagePack;
+import org.msgpack.value.ImmutableValue;
+import org.msgpack.value.Value;
 import org.paradim.empad.dto.KafkaDataFileChunk;
 
 import java.io.IOException;
@@ -35,17 +37,16 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
         MessageBufferPacker packer = MessagePack.newDefaultBufferPacker();
 
         try {
-            packer.packString(fileChunk.getFilepath());
             packer.packString(fileChunk.getFilename());
             packer.packString(fileChunk.getFileHash());
             packer.packString(fileChunk.getChunkHash());
 
             packer.packInt(fileChunk.getChunkOffsetWrite());
-            packer.packInt(fileChunk.getChunkSize());
             packer.packInt(fileChunk.getChunkIndex());
+
             packer.packInt(fileChunk.getTotalChunks());
 
-            packer.packString(fileChunk.getRootDir());
+            packer.packString(fileChunk.getSubdirStr());
             packer.packString(fileChunk.getFilenameAppend());
 
             byte[] data = fileChunk.getData();

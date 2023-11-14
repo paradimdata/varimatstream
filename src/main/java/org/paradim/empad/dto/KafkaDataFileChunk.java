@@ -34,20 +34,21 @@ public class KafkaDataFileChunk implements Serializable {
     private int chunkSize;
     private int chunkIndex;
     private int totalChunks;
+    private String subdirStr;
     private String rootDir;
     private String filenameAppend;
     private byte[] data;
 
     public KafkaDataFileChunk(String filename, String fileHashStr, String chunkHashStr,
                               int chunkOffsetWrite, int chunkIndex,
-                              int totalChunks, String rootDir, String filenameAppend, byte[] data) {
+                              int totalChunks, String subdirStr, String filenameAppend, byte[] data) {
         this.filename = filename;
         this.fileHashStr = fileHashStr;
         this.chunkHashStr = chunkHashStr;
         this.chunkOffsetWrite = chunkOffsetWrite;
         this.chunkIndex = chunkIndex;
         this.totalChunks = totalChunks;
-        this.rootDir = rootDir;
+        this.subdirStr = subdirStr;
         this.filenameAppend = filenameAppend;
         this.data = data;
     }
@@ -68,29 +69,32 @@ public class KafkaDataFileChunk implements Serializable {
                 fileHashStr.equals(dataFileChunk.fileHashStr) &&
                 chunkHashStr.equals(dataFileChunk.chunkHashStr) &&
                 chunkOffsetWrite == dataFileChunk.chunkOffsetWrite &&
-                rootDir.equals(dataFileChunk.rootDir) &&
+                subdirStr.equals(dataFileChunk.subdirStr) &&
                 Arrays.equals(data, dataFileChunk.data) &&
                 filenameAppend.equals(dataFileChunk.filenameAppend);
     }
 
     @Override
     public String toString() {
-        return "DataFileChunk(" +
-                "filename: " + filename + ", " +
-                "file_hash: " + fileHashStr + ", " +
-                "chunk_hash: " + chunkHashStr + ", " +
-                "chunk_offset_write: " + chunkOffsetWrite + ", " +
-                "chunk_i: " + chunkIndex + ", " +
-                "n_total_chunks: " + totalChunks + ", " +
-                "subdir_str: " + rootDir + ", " +
-                "filename_append: " + filenameAppend + ", " +
-                "data: " + Arrays.toString(data) + ")";
+        return "DataFileChunk{" +
+                "filename='" + filename + '\'' +
+                ", file_hash='" + fileHashStr + '\'' +
+                ", chunk_hash='" + chunkHashStr + '\'' +
+                ", chunk_offset_read=" + chunkOffsetRead +
+                ", chunk_offset_write=" + chunkOffsetWrite +
+                ", chunk_size=" + chunkSize +
+                ", chunk_i=" + chunkIndex +
+                ", n_total_chunks=" + totalChunks +
+                ", subdir_str='" + subdirStr + '\'' +
+                ", filename_append='" + filenameAppend + '\'' +
+                ", data=" + (data != null ? Arrays.toString(data) : "null") +
+                '}';
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(filename, fileHashStr, chunkHashStr, chunkOffsetWrite, chunkIndex,
-                totalChunks, rootDir, filenameAppend, Arrays.hashCode(data));
+                totalChunks, subdirStr, filenameAppend, Arrays.hashCode(data));
         result = 31 * result;
         return result;
     }
@@ -115,7 +119,7 @@ public class KafkaDataFileChunk implements Serializable {
         return fileHashStr;
     }
 
-    public void setFileHash(String fileHash) {
+    public void setFileHash(String fileHashStr) {
         this.fileHashStr = fileHashStr;
     }
 
@@ -165,6 +169,30 @@ public class KafkaDataFileChunk implements Serializable {
 
     public void setTotalChunks(int totalChunks) {
         this.totalChunks = totalChunks;
+    }
+
+    public String getFileHashStr() {
+        return fileHashStr;
+    }
+
+    public void setFileHashStr(String fileHashStr) {
+        this.fileHashStr = fileHashStr;
+    }
+
+    public String getChunkHashStr() {
+        return chunkHashStr;
+    }
+
+    public void setChunkHashStr(String chunkHashStr) {
+        this.chunkHashStr = chunkHashStr;
+    }
+
+    public String getSubdirStr() {
+        return subdirStr;
+    }
+
+    public void setSubdirStr(String subdirStr) {
+        this.subdirStr = subdirStr;
     }
 
     public String getRootDir() {
