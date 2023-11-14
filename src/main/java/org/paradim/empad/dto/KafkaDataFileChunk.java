@@ -19,16 +19,14 @@ import java.util.Objects;
 */
 
 /**
- *
  * The KafkaDataFileChunk Transfer Object is implemented Serialization and designed based on OpenMSI DataFileChunk.
  * Reference: https://github.com/openmsi/openmsistream/blob/main/openmsistream/data_file_io/entity/data_file_chunk.py
- *
  */
 public class KafkaDataFileChunk implements Serializable {
     private String filepath;
     private String filename;
-    private String fileHashStr;
-    private String chunkHashStr;
+    private String fileHash;
+    private String chunkHash;
     private int chunkOffsetRead;
     private int chunkOffsetWrite;
     private int chunkSize;
@@ -39,12 +37,16 @@ public class KafkaDataFileChunk implements Serializable {
     private String filenameAppend;
     private byte[] data;
 
-    public KafkaDataFileChunk(String filename, String fileHashStr, String chunkHashStr,
+    public KafkaDataFileChunk() {
+
+    }
+
+    public KafkaDataFileChunk(String filename, String fileHash, String chunkHash,
                               int chunkOffsetWrite, int chunkIndex,
                               int totalChunks, String subdirStr, String filenameAppend, byte[] data) {
         this.filename = filename;
-        this.fileHashStr = fileHashStr;
-        this.chunkHashStr = chunkHashStr;
+        this.fileHash = fileHash;
+        this.chunkHash = chunkHash;
         this.chunkOffsetWrite = chunkOffsetWrite;
         this.chunkIndex = chunkIndex;
         this.totalChunks = totalChunks;
@@ -66,20 +68,20 @@ public class KafkaDataFileChunk implements Serializable {
         return chunkIndex == dataFileChunk.chunkIndex &&
                 totalChunks == dataFileChunk.totalChunks &&
                 filename.equals(dataFileChunk.filename) &&
-                fileHashStr.equals(dataFileChunk.fileHashStr) &&
-                chunkHashStr.equals(dataFileChunk.chunkHashStr) &&
+                fileHash.equals(dataFileChunk.fileHash) &&
+                chunkHash.equals(dataFileChunk.chunkHash) &&
                 chunkOffsetWrite == dataFileChunk.chunkOffsetWrite &&
                 subdirStr.equals(dataFileChunk.subdirStr) &&
-                Arrays.equals(data, dataFileChunk.data) &&
-                filenameAppend.equals(dataFileChunk.filenameAppend);
+                filenameAppend.equals(dataFileChunk.filenameAppend) &&
+                Arrays.equals(data, dataFileChunk.data);
     }
 
     @Override
     public String toString() {
-        return "DataFileChunk{" +
+        return "DataFileChunk(" +
                 "filename='" + filename + '\'' +
-                ", file_hash='" + fileHashStr + '\'' +
-                ", chunk_hash='" + chunkHashStr + '\'' +
+                ", file_hash='" + fileHash + '\'' +
+                ", chunk_hash='" + chunkHash + '\'' +
                 ", chunk_offset_read=" + chunkOffsetRead +
                 ", chunk_offset_write=" + chunkOffsetWrite +
                 ", chunk_size=" + chunkSize +
@@ -88,12 +90,12 @@ public class KafkaDataFileChunk implements Serializable {
                 ", subdir_str='" + subdirStr + '\'' +
                 ", filename_append='" + filenameAppend + '\'' +
                 ", data=" + (data != null ? Arrays.toString(data) : "null") +
-                '}';
+                ')';
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(filename, fileHashStr, chunkHashStr, chunkOffsetWrite, chunkIndex,
+        int result = Objects.hash(filename, fileHash, chunkHash, chunkOffsetWrite, chunkIndex,
                 totalChunks, subdirStr, filenameAppend, Arrays.hashCode(data));
         result = 31 * result;
         return result;
@@ -116,19 +118,19 @@ public class KafkaDataFileChunk implements Serializable {
     }
 
     public String getFileHash() {
-        return fileHashStr;
+        return fileHash;
     }
 
-    public void setFileHash(String fileHashStr) {
-        this.fileHashStr = fileHashStr;
+    public void setFileHash(String fileHash) {
+        this.fileHash = fileHash;
     }
 
     public String getChunkHash() {
-        return chunkHashStr;
+        return chunkHash;
     }
 
-    public void setChunkHash(String chunkHashStr) {
-        this.chunkHashStr = chunkHashStr;
+    public void setChunkHash(String chunkHash) {
+        this.chunkHash = chunkHash;
     }
 
     public int getChunkOffsetRead() {
@@ -169,22 +171,6 @@ public class KafkaDataFileChunk implements Serializable {
 
     public void setTotalChunks(int totalChunks) {
         this.totalChunks = totalChunks;
-    }
-
-    public String getFileHashStr() {
-        return fileHashStr;
-    }
-
-    public void setFileHashStr(String fileHashStr) {
-        this.fileHashStr = fileHashStr;
-    }
-
-    public String getChunkHashStr() {
-        return chunkHashStr;
-    }
-
-    public void setChunkHashStr(String chunkHashStr) {
-        this.chunkHashStr = chunkHashStr;
     }
 
     public String getSubdirStr() {

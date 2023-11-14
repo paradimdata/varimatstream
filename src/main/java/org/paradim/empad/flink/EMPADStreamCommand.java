@@ -169,7 +169,7 @@ public class EMPADStreamCommand {
                 setProperty("sasl.mechanism", "PLAIN").
                 setProperty("enable.auto.commit", "False").
                 setStartingOffsets(OffsetsInitializer.earliest()).
-                setValueOnlyDeserializer(new DataFileChunkDeserializer()).build();
+                setValueOnlyDeserializer(new FlinkDataFileChunkDeserializer()).build();
 
         DataStream<FlinkDataFileChunk> rawDataStream = env.fromSource(rawSource, WatermarkStrategy.noWatermarks(), "EMPAD_TBL");
         processWorkflow(tableEnv, rawDataStream);

@@ -41,11 +41,10 @@ public class TestKafkaProducer {
 
         ProducerRecord<String, KafkaDataFileChunk> record;
 
-        String key, topic = "topic_i";
+        String key, topic = "topic_p";
         for (KafkaDataFileChunk chunk : chunks) {
             key = chunk.getFilename() + "_chunk_" + (chunk.getChunkIndex() + 1) + "_of_" + chunk.getTotalChunks();
-//            TODO
-            record = new ProducerRecord<>(topic, 2, key, chunk);
+            record = new ProducerRecord<>(topic, key, chunk);
             producer.send(record);
         }
 

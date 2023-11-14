@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 /*
@@ -57,6 +58,14 @@ public class FileChunker {
         int totalChunks = (int) Math.ceil((double) new File(this.filePath).length() / CHUNK_SIZE);
         int chunkOffsetWrite, bytesRead, chunkIndex = 0;
 
+        MessageDigest md;
+
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
         try (FileInputStream fis = new FileInputStream(this.filePath)) {
             byte[] buffer = new byte[CHUNK_SIZE];
             long offset = 0;
@@ -68,7 +77,7 @@ public class FileChunker {
                 byte[] chunkHash = chunkDigest.digest();
                 chunkOffsetWrite = chunkIndex * CHUNK_SIZE;
 
-                chunks.add(new KafkaDataFileChunk(fileName.toString(), null, new String(chunkHash), chunkOffsetWrite, chunkIndex,
+                chunks.add(new KafkaDataFileChunk(fileName.toString(), null, Base64.getEncoder().encodeToString(chunkHash), chunkOffsetWrite, chunkIndex,
                         totalChunks, "kafka/out_signal_custom.raw", "", buffer));
 
                 offset += bytesRead;
@@ -77,7 +86,7 @@ public class FileChunker {
         }
 
         byte[] fileHash = sha512Digest.digest();
-        String fileHashStr = new String(fileHash);
+        String fileHashStr = Base64.getEncoder().encodeToString(fileHash);
 
         for (KafkaDataFileChunk chunk : chunks) {
             chunk.setFileHash(fileHashStr);

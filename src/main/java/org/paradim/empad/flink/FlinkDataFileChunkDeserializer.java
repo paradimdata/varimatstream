@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * DataFileChunkDeserializer
  */
-public class DataFileChunkDeserializer extends AbstractDeserializationSchema<FlinkDataFileChunk> {
+public class FlinkDataFileChunkDeserializer extends AbstractDeserializationSchema<FlinkDataFileChunk> {
 
     private static final long serialVersionUID = 1L;
 

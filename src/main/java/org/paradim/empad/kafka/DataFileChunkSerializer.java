@@ -8,6 +8,8 @@ import org.msgpack.value.Value;
 import org.paradim.empad.dto.KafkaDataFileChunk;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
               #######      #         #       ##########          #            #########
@@ -34,9 +36,10 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
      */
     @Override
     public byte[] serialize(String s, KafkaDataFileChunk fileChunk) {
-        MessageBufferPacker packer = MessagePack.newDefaultBufferPacker();
 
+        MessageBufferPacker packer = MessagePack.newDefaultBufferPacker();
         try {
+            packer.packArrayHeader(9);
             packer.packString(fileChunk.getFilename());
             packer.packString(fileChunk.getFileHash());
             packer.packString(fileChunk.getChunkHash());
