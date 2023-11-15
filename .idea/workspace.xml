@@ -6,13 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/DataFileChunkDeserializer.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/org/paradim/empad/com/DataFileChunkDeserializer.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javadoc/javadoc/serialized-form.html" beforeDir="false" afterPath="$PROJECT_DIR$/javadoc/javadoc/serialized-form.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/KafkaDataFileChunk.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/KafkaDataFileChunk.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/DataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/FlinkDataFileChunkDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/EMPADStreamCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/flink/EMPADStreamCommand.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/DataFileChunkSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/DataFileChunkSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -178,7 +175,7 @@
       <workItem from="1698357640575" duration="14228000" />
       <workItem from="1698789743212" duration="4961000" />
       <workItem from="1699289841153" duration="6407000" />
-      <workItem from="1699900427302" duration="30954000" />
+      <workItem from="1699900427302" duration="40028000" />
     </task>
     <servers />
   </component>
@@ -195,7 +192,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java</url>
-          <line>93</line>
+          <line>91</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -215,7 +212,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java</url>
-          <line>60</line>
+          <line>59</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
@@ -242,6 +239,26 @@
           <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java</url>
           <line>33</line>
           <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/TestKafkaProducer.java</url>
+          <line>41</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java</url>
+          <line>95</line>
+          <option name="timeStamp" value="36" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java</url>
+          <line>101</line>
+          <option name="timeStamp" value="37" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/TestKafkaProducer.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

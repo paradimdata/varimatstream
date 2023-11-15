@@ -35,8 +35,8 @@ public class KafkaDataFileChunkDeserializer implements Deserializer<KafkaDataFil
 
                 List<Value> list = value.asArrayValue().list();
                 dataFileChunk.setFilename(String.valueOf(list.get(EMPADConstants.MSG_FILE_NAME)));
-                dataFileChunk.setFileHash(String.valueOf(list.get(EMPADConstants.MSG_FILE_HASH)));
-                dataFileChunk.setChunkHash(String.valueOf(list.get(EMPADConstants.MSG_CHUNK_HASH)));
+                dataFileChunk.setFileHash(list.get(EMPADConstants.MSG_FILE_HASH).asBinaryValue().asByteArray());
+                dataFileChunk.setChunkHash(list.get(EMPADConstants.MSG_CHUNK_HASH).asBinaryValue().asByteArray());
 
                 dataFileChunk.setChunkIndex(Integer.parseInt(String.valueOf(list.get(EMPADConstants.MSG_CHUNK_I))));
                 dataFileChunk.setTotalChunks(Integer.parseInt(String.valueOf(list.get(EMPADConstants.MSG_N_TOTAL_CHUNKS))));
@@ -51,7 +51,6 @@ public class KafkaDataFileChunkDeserializer implements Deserializer<KafkaDataFil
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
 
         return dataFileChunk;
     }

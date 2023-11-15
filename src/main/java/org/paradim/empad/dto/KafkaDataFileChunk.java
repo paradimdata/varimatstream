@@ -25,10 +25,10 @@ import java.util.Objects;
 public class KafkaDataFileChunk implements Serializable {
     private String filepath;
     private String filename;
-    private String fileHash;
-    private String chunkHash;
-    private int chunkOffsetRead;
-    private int chunkOffsetWrite;
+    private byte[] fileHash;
+    private byte[] chunkHash;
+    private long chunkOffsetRead;
+    private long chunkOffsetWrite;
     private int chunkSize;
     private int chunkIndex;
     private int totalChunks;
@@ -40,9 +40,8 @@ public class KafkaDataFileChunk implements Serializable {
     public KafkaDataFileChunk() {
 
     }
-
-    public KafkaDataFileChunk(String filename, String fileHash, String chunkHash,
-                              int chunkOffsetWrite, int chunkIndex,
+    public KafkaDataFileChunk(String filename, byte[] fileHash, byte[] chunkHash,
+                              long chunkOffsetWrite, int chunkIndex,
                               int totalChunks, String subdirStr, String filenameAppend, byte[] data) {
         this.filename = filename;
         this.fileHash = fileHash;
@@ -68,20 +67,20 @@ public class KafkaDataFileChunk implements Serializable {
         return chunkIndex == dataFileChunk.chunkIndex &&
                 totalChunks == dataFileChunk.totalChunks &&
                 filename.equals(dataFileChunk.filename) &&
-                fileHash.equals(dataFileChunk.fileHash) &&
-                chunkHash.equals(dataFileChunk.chunkHash) &&
+                Arrays.equals(fileHash, dataFileChunk.fileHash) &&
+                Arrays.equals(chunkHash, dataFileChunk.chunkHash) &&
                 chunkOffsetWrite == dataFileChunk.chunkOffsetWrite &&
                 subdirStr.equals(dataFileChunk.subdirStr) &&
-                filenameAppend.equals(dataFileChunk.filenameAppend) &&
-                Arrays.equals(data, dataFileChunk.data);
+                Arrays.equals(data, dataFileChunk.data) &&
+                filenameAppend.equals(dataFileChunk.filenameAppend);
     }
 
     @Override
     public String toString() {
         return "DataFileChunk(" +
                 "filename='" + filename + '\'' +
-                ", file_hash='" + fileHash + '\'' +
-                ", chunk_hash='" + chunkHash + '\'' +
+                ", file_hash='" + Arrays.toString(fileHash) + '\'' +
+                ", chunk_hash='" + Arrays.toString(chunkHash) + '\'' +
                 ", chunk_offset_read=" + chunkOffsetRead +
                 ", chunk_offset_write=" + chunkOffsetWrite +
                 ", chunk_size=" + chunkSize +
@@ -95,7 +94,7 @@ public class KafkaDataFileChunk implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(filename, fileHash, chunkHash, chunkOffsetWrite, chunkIndex,
+        int result = Objects.hash(filename, Arrays.hashCode(fileHash), Arrays.hashCode(chunkHash), chunkOffsetWrite, chunkIndex,
                 totalChunks, subdirStr, filenameAppend, Arrays.hashCode(data));
         result = 31 * result;
         return result;
@@ -117,23 +116,23 @@ public class KafkaDataFileChunk implements Serializable {
         this.filename = filename;
     }
 
-    public String getFileHash() {
+    public byte[] getFileHash() {
         return fileHash;
     }
 
-    public void setFileHash(String fileHash) {
+    public void setFileHash(byte[] fileHash) {
         this.fileHash = fileHash;
     }
 
-    public String getChunkHash() {
+    public byte[] getChunkHash() {
         return chunkHash;
     }
 
-    public void setChunkHash(String chunkHash) {
+    public void setChunkHash(byte[] chunkHash) {
         this.chunkHash = chunkHash;
     }
 
-    public int getChunkOffsetRead() {
+    public long getChunkOffsetRead() {
         return chunkOffsetRead;
     }
 
@@ -141,11 +140,11 @@ public class KafkaDataFileChunk implements Serializable {
         this.chunkOffsetRead = chunkOffsetRead;
     }
 
-    public int getChunkOffsetWrite() {
+    public long getChunkOffsetWrite() {
         return chunkOffsetWrite;
     }
 
-    public void setChunkOffsetWrite(int chunkOffsetWrite) {
+    public void setChunkOffsetWrite(long chunkOffsetWrite) {
         this.chunkOffsetWrite = chunkOffsetWrite;
     }
 

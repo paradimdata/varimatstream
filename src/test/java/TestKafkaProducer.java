@@ -37,11 +37,13 @@ public class TestKafkaProducer {
         KafkaProducer<String, KafkaDataFileChunk> producer = new KafkaProducer<>(props);
 
         FileChunker fileChunker = new FileChunker(systemPath + "/testdata/kafka/out_signal_custom.raw");
-        List<KafkaDataFileChunk> chunks = fileChunker.chunkFile();
+//        fileChunker.compareChunks();
+
+        List<KafkaDataFileChunk> chunks = fileChunker.buildListOfFileChunks(systemPath + "/testdata/kafka/out_signal_custom.raw");
 
         ProducerRecord<String, KafkaDataFileChunk> record;
 
-        String key, topic = "topic_p";
+        String key, topic = "topic_a";
         for (KafkaDataFileChunk chunk : chunks) {
             key = chunk.getFilename() + "_chunk_" + (chunk.getChunkIndex() + 1) + "_of_" + chunk.getTotalChunks();
             record = new ProducerRecord<>(topic, key, chunk);
