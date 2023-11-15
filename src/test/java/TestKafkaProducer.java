@@ -36,14 +36,12 @@ public class TestKafkaProducer {
                 KAFKA_TEST_CLUSTER_PASSWORD + "\";");
         KafkaProducer<String, KafkaDataFileChunk> producer = new KafkaProducer<>(props);
 
-        FileChunker fileChunker = new FileChunker(systemPath + "/testdata/kafka/out_signal_custom.raw");
-//        fileChunker.compareChunks();
-
-        List<KafkaDataFileChunk> chunks = fileChunker.buildListOfFileChunks(systemPath + "/testdata/kafka/out_signal_custom.raw");
+        FileChunker fileChunker = new FileChunker();
+        List<KafkaDataFileChunk> chunks = fileChunker.splitAndHashFile(systemPath + "/testdata/kafka/out_signal_custom.raw");
 
         ProducerRecord<String, KafkaDataFileChunk> record;
 
-        String key, topic = "topic_a";
+        String key, topic = "topic_e_small";
         for (KafkaDataFileChunk chunk : chunks) {
             key = chunk.getFilename() + "_chunk_" + (chunk.getChunkIndex() + 1) + "_of_" + chunk.getTotalChunks();
             record = new ProducerRecord<>(topic, key, chunk);

@@ -47,6 +47,8 @@ public final class EMPADConstants {
 
     public final static int MSG_FILE_HASH = 1;
     public final static int MSG_CHUNK_HASH = 2;
+
+    public final static int MSG_OFFSET_WRITE = 3;
     public final static int MSG_CHUNK_I = 4;
     public final static int MSG_N_TOTAL_CHUNKS = 5;
     public final static int MSG_SUBDIR_STR = 6;

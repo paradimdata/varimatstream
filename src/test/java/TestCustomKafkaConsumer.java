@@ -3,7 +3,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.paradim.empad.dto.FlinkDataFileChunk;
+import org.paradim.empad.dto.KafkaDataFileChunk;
 import org.paradim.empad.kafka.KafkaDataFileChunkDeserializer;
 
 import java.io.FileOutputStream;
@@ -33,35 +33,24 @@ public class TestCustomKafkaConsumer {
                 KAFKA_TEST_CLUSTER_USERNAME + "\" password=\"" +
                 KAFKA_TEST_CLUSTER_PASSWORD + "\";");
 
-        KafkaConsumer<String, FlinkDataFileChunk> consumer = new KafkaConsumer<>(props);
+        KafkaConsumer<String, KafkaDataFileChunk> consumer = new KafkaConsumer<>(props);
 
-        String topic = "topic_n";
+        String topic = "topic_e_small";
 
         String outputPath = "/Users/amir/test_data/uuuu.java";
 
         consumer.subscribe(Collections.singletonList(topic));
 
-        FlinkDataFileChunk myDataFileChunk;
+        KafkaDataFileChunk myDataFileChunk;
         int count = 0;
         try (FileOutputStream fos = new FileOutputStream(outputPath)) {
             while (true) {
 
-                ConsumerRecords<String, FlinkDataFileChunk> records = consumer.poll(Duration.ofMillis(100));
-                for (ConsumerRecord<String, FlinkDataFileChunk> record : records) {
+                ConsumerRecords<String, KafkaDataFileChunk> records = consumer.poll(Duration.ofMillis(100));
+
+                for (ConsumerRecord<String, KafkaDataFileChunk> record : records) {
                     myDataFileChunk = record.value();
-//                    System.out.println(myDataFileChunk.getN_total_chunks());
-                    if (count < myDataFileChunk.getN_total_chunks()) {
-                        System.out.println(myDataFileChunk.getData());
-                        System.out.println(myDataFileChunk.getChunk_i());
-//                        fos.write(myDataFileChunk.getData().getBytes());
-                    }
-
-                    count++;
-
-//                    if (count == myDataFileChunk.getnTotalChunks()) {
-//                        fos.flush();
-//                        fos.close();
-//                    }
+                    System.out.println(myDataFileChunk.getFilename());
                 }
                 consumer.commitSync();
             }
@@ -73,4 +62,3 @@ public class TestCustomKafkaConsumer {
     }
 }
 
-// You would need to implement the DataFileChunk and DataFileChunkDeserializer classes according to your data structure.
