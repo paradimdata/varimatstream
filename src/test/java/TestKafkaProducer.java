@@ -3,12 +3,10 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.paradim.empad.dto.DataFileChunkTO;
-import org.paradim.empad.dto.KafkaDataFileChunk;
 import org.paradim.empad.kafka.DataFileChunkSerializer;
 import org.paradim.empad.kafka.FileChunker;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
@@ -42,7 +40,7 @@ public class TestKafkaProducer {
 
         ProducerRecord<String, DataFileChunkTO> record;
 
-        String key, topic = "topic_g_small";
+        String key, topic = "topic_h";
         for (DataFileChunkTO chunk : chunks) {
             key = chunk.getFilename() + "_chunk_" + (chunk.getChunkIndex() + 1) + "_of_" + chunk.getTotalChunks();
             record = new ProducerRecord<>(topic, key, chunk);

@@ -3,7 +3,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.paradim.empad.dto.KafkaDataFileChunk;
+import org.paradim.empad.dto.DataFileChunkTO;
 import org.paradim.empad.kafka.KafkaDataFileChunkDeserializer;
 
 import java.io.FileOutputStream;
@@ -33,7 +33,7 @@ public class TestCustomKafkaConsumer {
                 KAFKA_TEST_CLUSTER_USERNAME + "\" password=\"" +
                 KAFKA_TEST_CLUSTER_PASSWORD + "\";");
 
-        KafkaConsumer<String, KafkaDataFileChunk> consumer = new KafkaConsumer<>(props);
+        KafkaConsumer<String, DataFileChunkTO> consumer = new KafkaConsumer<>(props);
 
         String topic = "topic_g_small";
 
@@ -41,14 +41,14 @@ public class TestCustomKafkaConsumer {
 
         consumer.subscribe(Collections.singletonList(topic));
 
-        KafkaDataFileChunk myDataFileChunk;
+        DataFileChunkTO myDataFileChunk;
         int count = 0;
         try (FileOutputStream fos = new FileOutputStream(outputPath)) {
             while (true) {
 
-                ConsumerRecords<String, KafkaDataFileChunk> records = consumer.poll(Duration.ofMillis(100));
+                ConsumerRecords<String, DataFileChunkTO> records = consumer.poll(Duration.ofMillis(100));
 
-                for (ConsumerRecord<String, KafkaDataFileChunk> record : records) {
+                for (ConsumerRecord<String, DataFileChunkTO> record : records) {
                     myDataFileChunk = record.value();
                     System.out.println(myDataFileChunk.getFilename());
                 }

@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/DataFileChunkSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/DataFileChunkSerializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/DataFileChunkTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/dto/DataFileChunkTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestCustomKafkaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCustomKafkaConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestPacketSerializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestPacketSerializer.java" afterDir="false" />
@@ -79,7 +76,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TestCustomKafkaConsumer">
+  <component name="RunManager" selected="Application.TestKafkaProducer">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -152,8 +149,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestCustomKafkaConsumer" />
         <item itemvalue="Application.TestKafkaProducer" />
+        <item itemvalue="Application.TestCustomKafkaConsumer" />
         <item itemvalue="JUnit.TestPacketSerializer" />
         <item itemvalue="JUnit.TestPacketSerializer.testSerialization" />
         <item itemvalue="Application.TestPacketSerializer" />
@@ -174,7 +171,7 @@
       <workItem from="1698357640575" duration="14228000" />
       <workItem from="1698789743212" duration="4961000" />
       <workItem from="1699289841153" duration="6407000" />
-      <workItem from="1699900427302" duration="76018000" />
+      <workItem from="1699900427302" duration="78048000" />
     </task>
     <servers />
   </component>
@@ -195,13 +192,8 @@
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/test/java/TestCustomKafkaConsumer.java</url>
-          <line>51</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestKafkaProducer.java</url>
-          <line>48</line>
+          <line>46</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>

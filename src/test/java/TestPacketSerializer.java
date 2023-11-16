@@ -61,7 +61,6 @@ public class TestPacketSerializer {
             deserializedDataFileChunk = deserialize(ser);
 
             sha512Digest.update(chunk.getChunk());
-
             originHashedChunkBytes = sha512Digest.digest();
             originHashedChunkBytesStr = Base64.getEncoder().encodeToString(originHashedChunkBytes);
 

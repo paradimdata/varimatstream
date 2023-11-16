@@ -62,6 +62,7 @@ public class KafkaDataFileChunkDeserializer implements Deserializer<DataFileChun
 
                 chunk = list.get(EMPADConstants.MSG_DATA).asBinaryValue().asByteArray();
 
+                sha512Digest.update(chunk);
                 originHashedChunkBytes = sha512Digest.digest();
                 originHashedChunkBytesStr = Base64.getEncoder().encodeToString(originHashedChunkBytes);
 
@@ -80,7 +81,6 @@ public class KafkaDataFileChunkDeserializer implements Deserializer<DataFileChun
 
                 return new DataFileChunkTO(fileName, fileHash, chunkHash,
                         chunkOffsetWrite, chunkIndex, totalChunks, subdirStr, filenameAppend, chunk);
-
 
             }
         } catch (IOException | NoSuchAlgorithmException e) {
