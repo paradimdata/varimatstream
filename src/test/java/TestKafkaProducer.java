@@ -2,6 +2,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.paradim.empad.dto.DataFileChunkTO;
 import org.paradim.empad.dto.KafkaDataFileChunk;
 import org.paradim.empad.kafka.DataFileChunkSerializer;
 import org.paradim.empad.kafka.FileChunker;
@@ -34,17 +35,15 @@ public class TestKafkaProducer {
                 " required username=\"" +
                 KAFKA_TEST_CLUSTER_USERNAME + "\" password=\"" +
                 KAFKA_TEST_CLUSTER_PASSWORD + "\";");
-        KafkaProducer<String, KafkaDataFileChunk> producer = new KafkaProducer<>(props);
+        KafkaProducer<String, DataFileChunkTO> producer = new KafkaProducer<>(props);
 
-        String filePath = "/Users/amir/Documents/Yucatan_Sailfin_Molly.jpeg";
         FileChunker fileChunker = new FileChunker();
-//        List<KafkaDataFileChunk> chunks = fileChunker.splitAndHashFile(systemPath + "/testdata/kafka/out_signal_custom.raw");
-        List<KafkaDataFileChunk> chunks = fileChunker.splitAndHashFile(filePath);
+        List<DataFileChunkTO> chunks = fileChunker.splitAndHashFile(systemPath + "/testdata/kafka/out_signal_custom.raw");
 
-        ProducerRecord<String, KafkaDataFileChunk> record;
+        ProducerRecord<String, DataFileChunkTO> record;
 
-        String key, topic = "topic_d_small";
-        for (KafkaDataFileChunk chunk : chunks) {
+        String key, topic = "topic_g_small";
+        for (DataFileChunkTO chunk : chunks) {
             key = chunk.getFilename() + "_chunk_" + (chunk.getChunkIndex() + 1) + "_of_" + chunk.getTotalChunks();
             record = new ProducerRecord<>(topic, key, chunk);
             producer.send(record);

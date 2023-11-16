@@ -35,7 +35,7 @@ public class TestCustomKafkaConsumer {
 
         KafkaConsumer<String, KafkaDataFileChunk> consumer = new KafkaConsumer<>(props);
 
-        String topic = "topic_d_small";
+        String topic = "topic_g_small";
 
         String outputPath = "/Users/amir/test_data/uuuu.java";
 

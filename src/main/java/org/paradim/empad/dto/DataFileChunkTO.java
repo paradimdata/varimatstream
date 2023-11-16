@@ -1,3 +1,5 @@
+package org.paradim.empad.dto;
+
 import java.io.Serializable;
 
 public class DataFileChunkTO implements Serializable {

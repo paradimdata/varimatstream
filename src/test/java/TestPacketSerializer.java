@@ -5,6 +5,7 @@ import org.msgpack.core.MessageUnpacker;
 import org.msgpack.value.ImmutableValue;
 import org.msgpack.value.Value;
 import org.paradim.empad.com.EMPADConstants;
+import org.paradim.empad.dto.DataFileChunkTO;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -17,6 +18,21 @@ import java.util.Base64;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+/*
+              #######      #         #       ##########          #            #########
+              #            # #     # #       #        #         # #           #        #
+              #            #  #   #  #       #        #        #   #          #         #
+              #######      #   # #   #       ##########       #######         #          #
+              #            #    #    #       #               #       #        #         #
+              #            #         #       #              #         #       #        #
+              ######       #         #       #             #           #      #########
+
+         version 1.6
+         @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
+         @date: 11/15/2023
+         @updated: 11/16/2023
+*/
 
 /**
  * TestPacketSerializer that generates packets from a binary file,
@@ -33,13 +49,26 @@ public class TestPacketSerializer {
     public void testSerialization() throws IOException, NoSuchAlgorithmException {
         List<DataFileChunkTO> serializedDataFileChunks = splitAndHashFile(systemPath + "/testdata/kafka/out_signal_custom.raw");
 
+        MessageDigest sha512Digest = MessageDigest.getInstance("SHA-512");
+
         DataFileChunkTO deserializedDataFileChunk;
-        byte[] ser;
+        byte[] ser, originHashedChunkBytes, secondaryHashedChunkBytes;
+        String originHashedChunkBytesStr, secondaryHashedChunkBytesStr;
 
         for (DataFileChunkTO chunk : serializedDataFileChunks) {
             ser = serialize(chunk);
 
             deserializedDataFileChunk = deserialize(ser);
+
+            sha512Digest.update(chunk.getChunk());
+
+            originHashedChunkBytes = sha512Digest.digest();
+            originHashedChunkBytesStr = Base64.getEncoder().encodeToString(originHashedChunkBytes);
+
+            secondaryHashedChunkBytes = deserializedDataFileChunk.getChunkHash();
+            secondaryHashedChunkBytesStr = Base64.getEncoder().encodeToString(secondaryHashedChunkBytes);
+
+            assertEquals(originHashedChunkBytesStr, secondaryHashedChunkBytesStr);
 
             assertEquals(Base64.getEncoder().encodeToString(chunk.getChunk()), Base64.getEncoder().encodeToString(deserializedDataFileChunk.getChunk()));
             assertEquals(Base64.getEncoder().encodeToString(chunk.getChunkHash()), Base64.getEncoder().encodeToString(deserializedDataFileChunk.getChunkHash()));
@@ -50,9 +79,11 @@ public class TestPacketSerializer {
             assertEquals(chunk.getSubdirStr(), deserializedDataFileChunk.getSubdirStr());
             assertEquals(chunk.getTotalChunks(), deserializedDataFileChunk.getTotalChunks());
             assertEquals(chunk.getChunkIndex(), deserializedDataFileChunk.getChunkIndex());
+
+            sha512Digest.reset();
         }
 
-        System.out.println("All test passed!");
+        System.out.println("All tests passed!");
     }
 
     private static byte[] serialize(DataFileChunkTO fileChunk) {
@@ -156,10 +187,10 @@ public class TestPacketSerializer {
 
     private static List<DataFileChunkTO> splitAndHashFile(String filePath) throws IOException, NoSuchAlgorithmException {
         List<DataFileChunkTO> chunkList = new ArrayList<>();
-        long offset = 0;
-
-        MessageDigest sha512DigestForFile = MessageDigest.getInstance("SHA-512");
         MessageDigest sha512Digest = MessageDigest.getInstance("SHA-512");
+        MessageDigest sha512DigestForFile = MessageDigest.getInstance("SHA-512");
+        long offset = 0; // Track the cumulative number of bytes read
+
 
         Path path = Paths.get(filePath);
         Path fileName = path.getFileName();
@@ -172,7 +203,9 @@ public class TestPacketSerializer {
             int bytesRead;
 
             while ((bytesRead = fis.read(buffer)) != -1) {
-                byte[] actualBytes = bytesRead == CHUNK_SIZE ? buffer : getSubArray(buffer, bytesRead);
+
+                byte[] actualBytes = new byte[bytesRead];
+                System.arraycopy(buffer, 0, actualBytes, 0, bytesRead);
 
                 sha512Digest.update(actualBytes);
                 byte[] chunkHash = sha512Digest.digest();
@@ -183,7 +216,6 @@ public class TestPacketSerializer {
                         offset, chunkIndex++, 0, subDirPath, "", actualBytes));
 
                 offset += bytesRead;
-
                 sha512Digest.reset();
             }
         }
@@ -197,11 +229,5 @@ public class TestPacketSerializer {
         }
 
         return chunkList;
-    }
-
-    private static byte[] getSubArray(byte[] array, int length) {
-        byte[] result = new byte[length];
-        System.arraycopy(array, 0, result, 0, length);
-        return result;
     }
 }

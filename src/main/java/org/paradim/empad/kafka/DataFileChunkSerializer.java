@@ -3,7 +3,7 @@ package org.paradim.empad.kafka;
 import org.apache.kafka.common.serialization.Serializer;
 import org.msgpack.core.MessageBufferPacker;
 import org.msgpack.core.MessagePack;
-import org.paradim.empad.dto.KafkaDataFileChunk;
+import org.paradim.empad.dto.DataFileChunkTO;
 
 import java.io.IOException;
 
@@ -19,8 +19,9 @@ import java.io.IOException;
          version 1.6
          @author: Amir H. Sharifzadeh, The Institute of Data Intensive Engineering and Science, Johns Hopkins University
          @date: 11/13/2023
+         @update: 11/16/2023
 */
-public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
+public class DataFileChunkSerializer implements Serializer<DataFileChunkTO> {
 
     /**
      * The serialize method is designed based on the following Python implementation:
@@ -31,14 +32,16 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
      * @return byte array
      */
     @Override
-    public byte[] serialize(String s, KafkaDataFileChunk fileChunk) {
+    public byte[] serialize(String s, DataFileChunkTO fileChunk) {
 
         MessageBufferPacker packer = MessagePack.newDefaultBufferPacker();
+        byte[] fileHash, chunkHash, chunk;
         try {
             packer.packArrayHeader(9);
+
             packer.packString(fileChunk.getFilename());
 
-            byte[] fileHash = fileChunk.getFileHash();
+            fileHash = fileChunk.getFileHash();
             if (fileHash != null) {
                 packer.packBinaryHeader(fileHash.length);
                 packer.writePayload(fileHash);
@@ -46,7 +49,7 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
                 packer.packNil();
             }
 
-            byte[] chunkHash = fileChunk.getChunkHash();
+            chunkHash = fileChunk.getChunkHash();
             if (chunkHash != null) {
                 packer.packBinaryHeader(chunkHash.length);
                 packer.writePayload(chunkHash);
@@ -55,17 +58,19 @@ public class DataFileChunkSerializer implements Serializer<KafkaDataFileChunk> {
             }
 
             packer.packLong(fileChunk.getChunkOffsetWrite());
+
             packer.packInt(fileChunk.getChunkIndex());
 
             packer.packInt(fileChunk.getTotalChunks());
 
             packer.packString(fileChunk.getSubdirStr());
+
             packer.packString(fileChunk.getFilenameAppend());
 
-            byte[] data = fileChunk.getData();
-            if (data != null) {
-                packer.packBinaryHeader(data.length);
-                packer.writePayload(data);
+            chunk = fileChunk.getChunk();
+            if (chunk != null) {
+                packer.packBinaryHeader(chunk.length);
+                packer.writePayload(chunk);
             } else {
                 packer.packNil();
             }
