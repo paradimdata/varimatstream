@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6caf3c1a-c903-437d-a31a-bf9065983db5" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/test/java/DataFileChunkTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/TestPacketSerializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/com/EMPADConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestCustomKafkaConsumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestCustomKafkaConsumer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/TestKafkaProducer.java" afterDir="false" />
     </list>
@@ -76,7 +76,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.TestCustomKafkaConsumer">
+  <component name="RunManager" selected="JUnit.TestPacketSerializer">
     <configuration default="true" type="AZURE_FUNCTION_SUPPORT" factoryName="Run Functions">
       <option name="appName" />
       <option name="appServicePlanName" />
@@ -121,31 +121,27 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCase.testFinalResults" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestPacketSerializer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TestPacketSerializer" />
       <module name="varimat-stream-processing" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestCase" />
-      <option name="METHOD_NAME" value="testFinalResults" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCase.testMean" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestPacketSerializer" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="varimat-stream-processing" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestCase" />
-      <option name="METHOD_NAME" value="testMean" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="MAIN_CLASS_NAME" value="TestPacketSerializer" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestCase.testSignalrames" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestPacketSerializer.testSerialization" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="varimat-stream-processing" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="TestCase" />
-      <option name="METHOD_NAME" value="testSignalrames" />
+      <option name="MAIN_CLASS_NAME" value="TestPacketSerializer" />
+      <option name="METHOD_NAME" value="testSerialization" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -153,11 +149,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestPacketSerializer" />
+        <item itemvalue="JUnit.TestPacketSerializer.testSerialization" />
+        <item itemvalue="Application.TestPacketSerializer" />
         <item itemvalue="Application.TestCustomKafkaConsumer" />
         <item itemvalue="Application.TestKafkaProducer" />
-        <item itemvalue="JUnit.TestCase.testSignalrames" />
-        <item itemvalue="JUnit.TestCase.testFinalResults" />
-        <item itemvalue="JUnit.TestCase.testMean" />
       </list>
     </recent_temporary>
   </component>
@@ -175,7 +171,7 @@
       <workItem from="1698357640575" duration="14228000" />
       <workItem from="1698789743212" duration="4961000" />
       <workItem from="1699289841153" duration="6407000" />
-      <workItem from="1699900427302" duration="49710000" />
+      <workItem from="1699900427302" duration="64229000" />
     </task>
     <servers />
   </component>
@@ -232,18 +228,33 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestKafkaProducer.java</url>
-          <line>47</line>
+          <line>49</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/test/java/TestKafkaProducer.java</url>
-          <line>45</line>
+          <line>47</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/FileChunker.java</url>
-          <line>73</line>
-          <option name="timeStamp" value="47" />
+          <url>file://$PROJECT_DIR$/src/main/java/org/paradim/empad/kafka/KafkaDataFileChunkDeserializer.java</url>
+          <line>32</line>
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/TestPacketSerializer.java</url>
+          <line>198</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/TestPacketSerializer.java</url>
+          <line>167</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/TestPacketSerializer.java</url>
+          <line>35</line>
+          <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

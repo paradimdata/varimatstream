@@ -69,10 +69,8 @@ public class FileChunker {
 
                 sha512DigestForFile.update(actualBytes);
 
-                System.out.println(offset);
-
                 chunkList.add(new KafkaDataFileChunk(fileName.toString(), null, chunkHash, offset, chunkIndex++,
-                        0, "kafka/out_signal_custom.raw", "", actualBytes));
+                        0, "testdata/kafka", "", actualBytes));
 
                 offset += bytesRead;
                 sha512Digest.reset();
